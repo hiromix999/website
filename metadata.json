@@ -1,0 +1,6 @@
+{
+  "name": "阿波市ボードゲーム交流会「あわボ！」公式サイト",
+  "description": "徳島県阿波市で開催されるボードゲーム交流会「あわボ！」（AWABO）の公式ホームページ。イベント詳細、FAQなど。温かみのある楽しいボードゲームイベントです。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

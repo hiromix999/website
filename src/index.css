@@ -1,0 +1,178 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap');
+
+@theme {
+  --font-sans: "Zen Maru Gothic", "Inter", system-ui, -apple-system, sans-serif;
+  --color-brand-orange: #f97316;
+  --color-brand-green: #0D9488;
+  --color-brand-yellow: #f59e0b;
+  --color-brand-cream: #FFFDF9;
+
+  /* Scale up default font sizes */
+  --text-xs: 0.875rem;     /* 14px equivalent */
+  --text-sm: 1rem;         /* 16px equivalent */
+  --text-base: 1.125rem;   /* 18px equivalent */
+  --text-lg: 1.25rem;      /* 20px equivalent */
+  --text-xl: 1.5rem;       /* 24px equivalent */
+  --text-2xl: 1.75rem;     /* 28px equivalent */
+  --text-3xl: 2.25rem;     /* 36px equivalent */
+  --text-4xl: 3rem;        /* 48px equivalent */
+  --text-5xl: 3.75rem;     /* 60px equivalent */
+  --text-6xl: 4.5rem;      /* 72px equivalent */
+}
+
+/* Base root scaling to make all rem units overall larger */
+html {
+  font-size: 115%; /* 15% larger baseline font size */
+  scroll-behavior: smooth;
+}
+
+/* Elevate arbitrary micro-typography text classes (under 12px) to friendly minimums */
+.text-\[9px\] {
+  font-size: 13px !important;
+}
+.text-\[10px\] {
+  font-size: 14px !important;
+}
+.text-\[11px\] {
+  font-size: 14.5px !important;
+}
+.text-\[12px\] {
+  font-size: 15px !important;
+}
+.text-xs {
+  font-size: 15px !important;
+}
+.text-sm {
+  font-size: 17px !important;
+}
+
+/* Custom styles for board game motif background & Glassmorphism */
+.bg-grid-pattern {
+  background-size: 32px 32px;
+  background-image: radial-gradient(circle, rgba(13, 148, 136, 0.03) 1px, transparent 1px);
+}
+
+/* Premium Apple-style Glassmorphism classes */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.03);
+}
+
+.glass-panel-dark {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: #0D9488;
+  box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.15);
+}
+
+/* Scroll Animation Base Effects */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Keyframe animations for background blob movement and floating meeples */
+@keyframes pulse-slow {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+}
+
+@keyframes pulse-slower {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  50% {
+    transform: translate(-40px, 40px) scale(1.15);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(3deg); }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-16px) rotate(-4deg); }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 12s infinite alternate ease-in-out;
+}
+
+.animate-pulse-slower {
+  animation: pulse-slower 16s infinite alternate ease-in-out;
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 7s ease-in-out infinite;
+}
+
+/* Custom Hide Scrollbar but keep scrolling functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Apple-style smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Print specific layouts */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  .no-print {
+    display: none !important;
+  }
+  #ticket-view {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+}
