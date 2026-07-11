@@ -1154,8 +1154,8 @@ export default function App() {
             <div className="md:col-span-3 space-y-3 text-xs">
               <h4 className="font-extrabold text-white tracking-widest border-l-2 border-[#0D9488] pl-2.5">コンテンツ一覧</h4>
               <ul className="space-y-2.5 pl-3.5 text-slate-400">
-                <li><a href="#section-info" className="hover:text-white transition">開催案内・概要</a></li>
-                <li><a href="#section-faq" className="hover:text-white transition">よくあるご質問一覧</a></li>
+                <li><a href="#section-info" className="hover:text-white transition">開催案内</a></li>
+                <li><a href="#section-faq" className="hover:text-white transition">よくある質問</a></li>
               </ul>
             </div>
 
