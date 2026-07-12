@@ -53,11 +53,11 @@ const MeepleIcon = ({ className = "w-6 h-6", color = "currentColor" }: { classNa
 
 // 別添のロゴ（/logo.png）を入れるためのスペースホルダー兼用のロゴコンポーネントです。
 // 画像ファイルが存在しない場合は、美しいベクターSVGで再現されたプレースホルダーロゴが自動でフォールバック表示されます。
-const AwaboLogo = ({ className = "h-16", headerMode = false }: { className?: string; headerMode?: boolean }) => {
+const AwaboLogo = ({ className = "h-16", headerMode = false, footerMode = false }: { className?: string; headerMode?: boolean; footerMode?: boolean }) => {
   const [hasError, setHasError] = useState(false);
 
   if (hasError) {
-    if (headerMode) {
+    if (headerMode || footerMode) {
       return (
         <div className="flex items-center select-none font-black text-xl md:text-2xl tracking-wider text-[#134E5E]">
           AWA<span className="text-[#D35400]">BO</span>
@@ -80,7 +80,7 @@ const AwaboLogo = ({ className = "h-16", headerMode = false }: { className?: str
     );
   }
 
-  const logoSrc = "/images/awabo_logo_touka.png";
+  const logoSrc = footerMode ? "/images/awabo_logo.png" : "/images/awabo_logo_touka.png";
 
   return (
     <img
@@ -271,7 +271,7 @@ const RulesPage = ({ setActiveTab }: RulesPageProps) => {
           }}
           className="inline-flex items-center gap-2 text-slate-500 hover:text-[#0D9488] font-bold text-sm transition"
         >
-          <span>戻ってイベント詳細を見る</span>
+          <span>トップページへ戻る</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>
@@ -534,15 +534,15 @@ export default function App() {
 
       {/* APPLE-STYLE GLASS NAVIGATION HEADER */}
       <header className="sticky top-0 bg-white/70 backdrop-blur-xl border-b border-slate-200/50 z-40 shadow-sm transition-all duration-300">
-        <div className="max-w-6xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-2.5 xs:px-4 md:px-6 h-16 flex items-center justify-between gap-2">
           
           {/* Logo Brand Accent */}
-          <a href="#" className="flex items-center gap-2 group transition duration-300 hover:opacity-90">
-            <AwaboLogo className="h-10 w-auto" headerMode={true} />
+          <a href="#" className="flex items-center gap-1.5 group transition duration-300 hover:opacity-90 shrink-0">
+            <AwaboLogo className="h-7 xs:h-9 md:h-10 w-auto" headerMode={true} />
           </a>
 
-          {/* Quick Menu Links (Desktop) */}
-          <nav className="hidden md:flex items-center gap-6">
+          {/* Quick Menu Links (Desktop & Mobile) */}
+          <nav className="flex items-center gap-1.5 xs:gap-3.5 md:gap-6">
             <button 
               onClick={() => {
                 setActiveTab('info');
@@ -550,9 +550,9 @@ export default function App() {
                   document.getElementById('section-info')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }, 100);
               }}
-              className={`text-sm font-bold transition flex items-center gap-1 cursor-pointer ${activeTab === 'info' ? 'text-[#0D9488]' : 'text-slate-600 hover:text-teal-600'}`}
+              className={`text-[10px] xs:text-xs md:text-sm font-black transition flex items-center gap-1 cursor-pointer tracking-tight ${activeTab === 'info' ? 'text-[#0D9488]' : 'text-slate-600 hover:text-teal-600'}`}
             >
-              <Info className="w-4 h-4 text-teal-600" />
+              <Info className="w-3.5 h-3.5 text-teal-600 shrink-0" />
               <span>開催案内</span>
             </button>
             <button 
@@ -562,9 +562,9 @@ export default function App() {
                   document.getElementById('section-faq')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }, 100);
               }}
-              className={`text-sm font-bold transition flex items-center gap-1 cursor-pointer ${activeTab === 'info' ? 'text-[#0D9488]' : 'text-slate-600 hover:text-teal-600'}`}
+              className={`text-[10px] xs:text-xs md:text-sm font-black transition flex items-center gap-1 cursor-pointer tracking-tight ${activeTab === 'info' ? 'text-[#0D9488]' : 'text-slate-600 hover:text-teal-600'}`}
             >
-              <HelpCircle className="w-4 h-4 text-teal-600" />
+              <HelpCircle className="w-3.5 h-3.5 text-teal-600 shrink-0" />
               <span>よくある質問</span>
             </button>
             <button 
@@ -574,9 +574,9 @@ export default function App() {
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }, 100);
               }}
-              className={`text-sm font-bold transition flex items-center gap-1 cursor-pointer ${activeTab === 'rules' ? 'text-[#0D9488]' : 'text-slate-600 hover:text-teal-600'}`}
+              className={`text-[10px] xs:text-xs md:text-sm font-black transition flex items-center gap-1 cursor-pointer tracking-tight ${activeTab === 'rules' ? 'text-[#0D9488]' : 'text-slate-600 hover:text-teal-600'}`}
             >
-              <ShieldCheck className="w-4 h-4 text-teal-600" />
+              <ShieldCheck className="w-3.5 h-3.5 text-teal-600 shrink-0" />
               <span>注意事項</span>
             </button>
           </nav>
@@ -589,7 +589,7 @@ export default function App() {
                 document.getElementById('section-access')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }, 100);
             }}
-            className="hidden md:flex items-center gap-1.5 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl shadow transition duration-300 cursor-pointer"
+            className="hidden lg:flex items-center gap-1.5 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl shadow transition duration-300 cursor-pointer shrink-0"
           >
             <MapPin className="w-4 h-4" />
             <span>会場アクセス</span>
@@ -725,55 +725,47 @@ export default function App() {
 
       {/* QUICK SCROLL BAR */}
       {activeTab === 'info' && (
-        <div className="sticky top-16 bg-white/80 backdrop-blur-md border-y border-slate-200/60 z-30 shadow-sm no-print">
-        <div className="max-w-6xl mx-auto px-4 flex items-center justify-start md:justify-center gap-2 overflow-x-auto py-2.5 no-scrollbar">
-          
-          <button 
-            onClick={() => {
-              setActiveTab('info');
-              document.getElementById('section-info')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }}
-            className={`px-4 py-2 rounded-xl text-xs md:text-sm font-bold shrink-0 transition-all flex items-center gap-1.5 ${
-              activeTab === 'info' 
-                ? 'bg-[#0D9488] text-white shadow-md shadow-teal-700/10' 
-                : 'text-slate-600 hover:bg-slate-100'
-            }`}
-          >
-            <Info className="w-4 h-4" />
-            <span>開催案内</span>
-          </button>
+        <div className="sticky top-16 bg-white/85 backdrop-blur-md border-y border-slate-200/50 z-30 shadow-sm no-print">
+          <div className="max-w-6xl mx-auto px-3 md:px-6 flex items-center justify-start md:justify-center gap-1.5 xs:gap-2.5 md:gap-3 overflow-x-auto py-2 flex-nowrap no-scrollbar">
+            
+            <button 
+              onClick={() => {
+                setActiveTab('info');
+                document.getElementById('section-info')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className={`px-3 py-1.5 rounded-lg text-[11px] xs:text-xs md:text-sm font-black shrink-0 transition-all flex items-center gap-1 ${
+                activeTab === 'info' 
+                  ? 'bg-[#0D9488] text-white shadow-md shadow-teal-700/10' 
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              <Info className="w-3.5 h-3.5 shrink-0" />
+              <span>開催案内</span>
+            </button>
 
-          <button 
-            onClick={() => {
-              setActiveTab('info');
-              document.getElementById('section-access')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }}
-            className={`px-4 py-2 rounded-xl text-xs md:text-sm font-bold shrink-0 transition-all flex items-center gap-1.5 ${
-              activeTab === 'info' 
-                ? 'text-slate-600 hover:bg-slate-100'
-                : 'text-slate-600 hover:bg-slate-100'
-            }`}
-          >
-            <MapPin className="w-4 h-4" />
-            <span>会場アクセス</span>
-          </button>
+            <button 
+              onClick={() => {
+                setActiveTab('info');
+                document.getElementById('section-access')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className={`px-3 py-1.5 rounded-lg text-[11px] xs:text-xs md:text-sm font-black shrink-0 transition-all flex items-center gap-1 text-slate-600 hover:bg-slate-100`}
+            >
+              <MapPin className="w-3.5 h-3.5 shrink-0" />
+              <span>会場アクセス</span>
+            </button>
 
-          <button 
-            onClick={() => {
-              setActiveTab('info');
-              document.getElementById('section-faq')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }}
-            className={`px-4 py-2 rounded-xl text-xs md:text-sm font-bold shrink-0 transition-all flex items-center gap-1.5 ${
-              activeTab === 'info' 
-                ? 'text-slate-600 hover:bg-slate-100'
-                : 'text-slate-600 hover:bg-slate-100'
-            }`}
-          >
-            <HelpCircle className="w-4 h-4" />
-            <span>よくある質問</span>
-          </button>
+            <button 
+              onClick={() => {
+                setActiveTab('info');
+                document.getElementById('section-faq')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className={`px-3 py-1.5 rounded-lg text-[11px] xs:text-xs md:text-sm font-black shrink-0 transition-all flex items-center gap-1 text-slate-600 hover:bg-slate-100`}
+            >
+              <HelpCircle className="w-3.5 h-3.5 shrink-0" />
+              <span>Ｑ＆Ａ</span>
+            </button>
+          </div>
         </div>
-      </div>
       )}
 
       {/* MAIN CONTAINER */}
@@ -962,7 +954,7 @@ export default function App() {
                       <span>🚗 お車でのアクセス</span>
                     </p>
                     <p className="pl-5 text-slate-500 leading-normal">
-                      徳島自動車道「土成インターチェンジ」から車で約10分。敷地内に無料の駐車場が広く完備されていますので安心してお車でお越しください。
+                      徳島自動車道「土成インターチェンジ」から車で約10分。敷地内に無料の駐車場が広く完備されていますので安心してお車でお越しください。（県道12号線のセブン-イレブン 阿波市場町香美店を北に曲がるのが一番分かりやすいルートです😊）
                     </p>
                   </div>
 
@@ -1065,68 +1057,64 @@ export default function App() {
         </section>
 
         {/* SECTION 8: SOCIAL MEDIA GATHERING SHARING & ENGAGEMENT DASHBOARD */}
-        <section className="scroll-reveal visible scroll-mt-28">
-          <div className="bg-gradient-to-tr from-slate-900 to-slate-950 text-white rounded-3.5xl p-6 md:p-10 text-center relative overflow-hidden shadow-2xl">
-            
-            {/* Background elements */}
-            <div className="absolute top-2 left-2 text-3xl opacity-15 animate-float select-none pointer-events-none">✨</div>
-            <div className="absolute bottom-4 right-6 text-3xl opacity-15 animate-float-slow select-none pointer-events-none">🎲</div>
-
-            <div className="max-w-2xl mx-auto space-y-6">
-              <span className="inline-block bg-[#0D9488] text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow">
-                AWABO（あわぼ！）をみんなに共有しよう
+        <section className="scroll-reveal visible scroll-mt-28 no-print max-w-2xl mx-auto w-full">
+          <div className="bg-slate-50 border border-slate-200/50 rounded-2xl p-4 text-center shadow-sm">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+              <span className="text-sm font-black text-slate-800 flex items-center gap-1.5 shrink-0">
+                <Share2 className="w-4 h-4 text-[#0D9488]" />
+                <span>シェア</span>
               </span>
-              
-              <h2 className="text-2xl md:text-3.5xl font-black tracking-tight leading-snug">
-                ボードゲームの楽しさを、<br className="sm:hidden" />家族や友達とシェア！
-              </h2>
-
-              <p className="text-slate-300 text-xs md:text-sm leading-relaxed max-w-lg mx-auto">
-                「AWABO（あわぼ！）」の開催情報、このホームページのURLをボタンひとつでお気に入りのSNSで簡単に共有できます。お一人でも、ご友人を誘ってのグループでも、たくさんのご参加をお待ちしています。
-              </p>
-
-              {/* Grid of buttons for SNS */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-xl mx-auto pt-4">
+              <div className="flex flex-wrap items-center justify-center gap-2">
                 
                 {/* X Twitter */}
                 <button 
                   onClick={() => handleShareSNS('x')}
-                  className="bg-slate-800 hover:bg-slate-700 border border-slate-700 font-extrabold text-xs py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition duration-300 shadow"
+                  className="bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs py-2 px-3.5 rounded-xl flex items-center justify-center gap-1.5 transition duration-300 shadow-sm cursor-pointer"
                 >
-                  <span className="text-base font-black">𝕏</span>
-                  <span>X にポスト</span>
+                  <span className="font-black text-xs">𝕏</span>
+                  <span>X</span>
                 </button>
 
                 {/* LINE */}
                 <button 
                   onClick={() => handleShareSNS('line')}
-                  className="bg-[#06C755] hover:bg-[#05b14c] font-extrabold text-xs py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition duration-300 shadow text-white"
+                  className="bg-[#06C755] hover:bg-[#05b14c] font-extrabold text-xs py-2 px-3.5 rounded-xl flex items-center justify-center gap-1.5 transition duration-300 shadow-sm text-white cursor-pointer"
                 >
-                  <MessageCircle className="w-4 h-4 text-white" />
-                  <span>LINEで送る</span>
+                  <MessageCircle className="w-3.5 h-3.5 text-white" />
+                  <span>LINE</span>
                 </button>
 
                 {/* Facebook */}
                 <button 
                   onClick={() => handleShareSNS('facebook')}
-                  className="bg-[#1877F2] hover:bg-[#166fe5] font-extrabold text-xs py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition duration-300 shadow text-white"
+                  className="bg-[#1877F2] hover:bg-[#166fe5] font-extrabold text-xs py-2 px-3.5 rounded-xl flex items-center justify-center gap-1.5 transition duration-300 shadow-sm text-white cursor-pointer"
                 >
-                  <span className="text-sm font-black">f</span>
+                  <span className="text-xs font-black">f</span>
                   <span>Facebook</span>
                 </button>
+
+                {/* Instagram */}
+                <a 
+                  href="https://www.instagram.com/hironanokamo/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] hover:opacity-90 font-extrabold text-xs py-2 px-3.5 rounded-xl flex items-center justify-center gap-1.5 transition duration-300 shadow-sm text-white"
+                >
+                  <Instagram className="w-3.5 h-3.5 text-white" />
+                  <span>Instagram</span>
+                </a>
 
                 {/* Copy Link */}
                 <button 
                   onClick={triggerCopyLink}
-                  className="bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold text-xs py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition duration-300 shadow"
+                  className="bg-slate-200/60 hover:bg-slate-200 text-slate-800 font-extrabold text-xs py-2 px-3.5 rounded-xl flex items-center justify-center gap-1.5 transition duration-300 shadow-sm cursor-pointer"
                 >
-                  <Share2 className="w-4 h-4 text-slate-600" />
-                  <span>URLをコピー</span>
+                  <Share2 className="w-3.5 h-3.5 text-slate-600" />
+                  <span>URLコピー</span>
                 </button>
 
               </div>
             </div>
-
           </div>
         </section>
 
@@ -1144,7 +1132,7 @@ export default function App() {
             
             {/* Column Left logo block */}
             <div className="md:col-span-5 space-y-4">
-              <AwaboLogo className="h-10 w-auto" headerMode={true} />
+              <AwaboLogo className="h-10 w-auto" footerMode={true} />
               <p className="text-slate-400 text-xs leading-relaxed max-w-sm">
                 阿波市ボードゲーム交流コミュニティ（AWABO）は、子どもからシニアの方まで、誰もが等しく対話と笑いを楽しめる地域交流を目指して立ち上げられたボードゲーム有志団体です。
               </p>
