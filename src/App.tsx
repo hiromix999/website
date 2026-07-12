@@ -233,7 +233,7 @@ const RulesPage = ({ setActiveTab }: RulesPageProps) => {
               持ち込む際は、箱や中身に名前を書く、あるいは付箋を貼るなどして、紛失防止の対策をお願いします。
             </p>
             <p className="text-xs text-amber-700 bg-amber-500/5 border border-amber-300/20 p-3 rounded-2xl mt-1">
-              ※万一、破損やパーツの紛失が発生した場合、主催者側では責任を负いかねますので、参加者同士リスペクトを持って管理してください。
+              ※万一、破損やパーツの紛失が発生した場合、主催者側では責任を負いかねますので、参加者同士リスペクトを持って管理してください。
             </p>
           </div>
         </div>
