@@ -431,7 +431,7 @@ export default function App() {
 
     let shareUrl = '';
     if (platform === 'x') {
-      shareUrl = `https://twitter.com/share?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+      shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
     } else if (platform === 'line') {
       shareUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
     } else if (platform === 'facebook') {
