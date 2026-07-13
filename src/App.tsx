@@ -36,7 +36,8 @@ import {
   X,
   Instagram,
   AlertTriangle,
-  Package
+  Package,
+  Download
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Participant, GameRequest } from './types';
@@ -56,45 +57,58 @@ const MeepleIcon = ({ className = "w-6 h-6", color = "currentColor" }: { classNa
 const AwaboLogo = ({ className = "h-16", headerMode = false, footerMode = false }: { className?: string; headerMode?: boolean; footerMode?: boolean }) => {
   const [hasError, setHasError] = useState(false);
 
-  if (hasError) {
-    if (headerMode || footerMode) {
+  const logoContent = (() => {
+    if (hasError) {
+      if (headerMode || footerMode) {
+        return (
+          <div className="flex items-center select-none font-black text-xl md:text-2xl tracking-wider text-[#134E5E]">
+            AWA<span className="text-[#D35400]">BO</span>
+          </div>
+        );
+      }
+      // Beautiful SVG replica fallback if image fails to load
       return (
-        <div className="flex items-center select-none font-black text-xl md:text-2xl tracking-wider text-[#134E5E]">
-          AWA<span className="text-[#D35400]">BO</span>
+        <div className="flex flex-col items-center justify-center select-none py-3 px-5 bg-white/50 backdrop-blur-md rounded-3xl border border-slate-200/50 shadow-md max-w-[280px] md:max-w-xs mx-auto">
+          <div className="flex items-end justify-center relative">
+            <span className="text-[#134E5E] font-black text-3.5xl md:text-4.5xl tracking-tight leading-none">AW</span>
+            <div className="mx-1.5 mb-1 scale-110 relative">
+              <MeepleIcon className="w-7 h-7 text-[#134E5E]" />
+            </div>
+            <span className="text-[#D35400] font-black text-3.5xl md:text-4.5xl tracking-tight leading-none">BO</span>
+          </div>
+          <div className="w-full h-[2px] bg-slate-800 rounded-full mt-2 mb-1" />
+          <div className="text-[9px] md:text-[10px] text-slate-700 font-bold tracking-wider">阿波市ボードゲーム交流会</div>
         </div>
       );
     }
-    // Beautiful SVG replica fallback if image fails to load
-    return (
-      <div className="flex flex-col items-center justify-center select-none py-3 px-5 bg-white/50 backdrop-blur-md rounded-3xl border border-slate-200/50 shadow-md max-w-[280px] md:max-w-xs mx-auto">
-        <div className="flex items-end justify-center relative">
-          <span className="text-[#134E5E] font-black text-3.5xl md:text-4.5xl tracking-tight leading-none">AW</span>
-          <div className="mx-1.5 mb-1 scale-110 relative">
-            <MeepleIcon className="w-7 h-7 text-[#134E5E]" />
-          </div>
-          <span className="text-[#D35400] font-black text-3.5xl md:text-4.5xl tracking-tight leading-none">BO</span>
-        </div>
-        <div className="w-full h-[2px] bg-slate-800 rounded-full mt-2 mb-1" />
-        <div className="text-[9px] md:text-[10px] text-slate-700 font-bold tracking-wider">阿波市ボードゲーム交流会</div>
-      </div>
-    );
-  }
 
-  const logoSrc = footerMode ? "/images/awabo_logo.png" : "/images/awabo_logo_touka.png";
+    const logoSrc = footerMode ? "/images/awabo_logo.png" : "/images/awabo_logo_touka.png";
+
+    return (
+      <img
+        src={logoSrc}
+        alt="AWABO Logo"
+        className={`${className} object-contain`}
+        onLoad={(e) => {
+          if (e.currentTarget.naturalWidth === 0) {
+            setHasError(true);
+          }
+        }}
+        onError={() => setHasError(true)}
+        referrerPolicy="no-referrer"
+      />
+    );
+  })();
 
   return (
-    <img
-      src={logoSrc}
-      alt="AWABO Logo"
-      className={`${className} object-contain`}
-      onLoad={(e) => {
-        if (e.currentTarget.naturalWidth === 0) {
-          setHasError(true);
-        }
-      }}
-      onError={() => setHasError(true)}
-      referrerPolicy="no-referrer"
-    />
+    <a 
+      href="http://awa-bo.com/" 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      className="inline-block hover:opacity-90 transition duration-300 cursor-pointer"
+    >
+      {logoContent}
+    </a>
   );
 };
 
@@ -537,9 +551,9 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-2.5 xs:px-4 md:px-6 h-16 flex items-center justify-between gap-2">
           
           {/* Logo Brand Accent */}
-          <a href="#" className="flex items-center gap-1.5 group transition duration-300 hover:opacity-90 shrink-0">
+          <div className="flex items-center gap-1.5 shrink-0">
             <AwaboLogo className="h-7 xs:h-9 md:h-10 w-auto" headerMode={true} />
-          </a>
+          </div>
 
           {/* Quick Menu Links (Desktop & Mobile) */}
           <nav className="flex items-center gap-1.5 xs:gap-3.5 md:gap-6">
@@ -726,20 +740,20 @@ export default function App() {
       {/* QUICK SCROLL BAR */}
       {activeTab === 'info' && (
         <div className="sticky top-16 bg-white/85 backdrop-blur-md border-y border-slate-200/50 z-30 shadow-sm no-print">
-          <div className="max-w-6xl mx-auto px-3 md:px-6 flex items-center justify-start md:justify-center gap-1.5 xs:gap-2.5 md:gap-3 overflow-x-auto py-2 flex-nowrap no-scrollbar">
+          <div className="max-w-6xl mx-auto px-1.5 xs:px-3 md:px-6 flex items-center justify-center gap-1 xs:gap-2.5 md:gap-3 py-2 no-print">
             
             <button 
               onClick={() => {
                 setActiveTab('info');
                 document.getElementById('section-info')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }}
-              className={`px-3 py-1.5 rounded-lg text-[11px] xs:text-xs md:text-sm font-black shrink-0 transition-all flex items-center gap-1 ${
+              className={`px-2 py-1.5 rounded-lg text-[10px] xs:text-xs md:text-sm font-black shrink-0 transition-all flex items-center gap-0.5 xs:gap-1 ${
                 activeTab === 'info' 
                   ? 'bg-[#0D9488] text-white shadow-md shadow-teal-700/10' 
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
-              <Info className="w-3.5 h-3.5 shrink-0" />
+              <Info className="w-3 h-3 xs:w-3.5 xs:h-3.5 shrink-0" />
               <span>開催案内</span>
             </button>
 
@@ -748,9 +762,9 @@ export default function App() {
                 setActiveTab('info');
                 document.getElementById('section-access')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }}
-              className={`px-3 py-1.5 rounded-lg text-[11px] xs:text-xs md:text-sm font-black shrink-0 transition-all flex items-center gap-1 text-slate-600 hover:bg-slate-100`}
+              className={`px-2 py-1.5 rounded-lg text-[10px] xs:text-xs md:text-sm font-black shrink-0 transition-all flex items-center gap-0.5 xs:gap-1 text-slate-600 hover:bg-slate-100`}
             >
-              <MapPin className="w-3.5 h-3.5 shrink-0" />
+              <MapPin className="w-3 h-3 xs:w-3.5 xs:h-3.5 shrink-0" />
               <span>会場アクセス</span>
             </button>
 
@@ -759,9 +773,9 @@ export default function App() {
                 setActiveTab('info');
                 document.getElementById('section-faq')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }}
-              className={`px-3 py-1.5 rounded-lg text-[11px] xs:text-xs md:text-sm font-black shrink-0 transition-all flex items-center gap-1 text-slate-600 hover:bg-slate-100`}
+              className={`px-2 py-1.5 rounded-lg text-[10px] xs:text-xs md:text-sm font-black shrink-0 transition-all flex items-center gap-0.5 xs:gap-1 text-slate-600 hover:bg-slate-100`}
             >
-              <HelpCircle className="w-3.5 h-3.5 shrink-0" />
+              <HelpCircle className="w-3 h-3 xs:w-3.5 xs:h-3.5 shrink-0" />
               <span>Ｑ＆Ａ</span>
             </button>
           </div>
@@ -793,67 +807,105 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Vertical table entries */}
-                <div className="space-y-5">
+                {/* 2-Column Grid for Table entries and Flyer Thumbnail */}
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
                   
-                  {/* Item 1 */}
-                  <div className="flex items-start gap-4">
-                    <div className="bg-[#EAB308]/20 text-[#854D0E] font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
-                      日時
-                    </div>
-                    <div className="space-y-1">
-                      <p className="font-extrabold text-slate-900 text-base md:text-lg">
-                        8月9日(日) 13:30 〜 17:00
-                      </p>
-                      <p className="text-slate-500 text-xs leading-relaxed">
-                        ※途中参加、途中退室も自由です。
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Item 2 */}
-                  <div className="flex items-start gap-4">
-                    <div className="bg-emerald-500/20 text-emerald-800 font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
-                      会場名
-                    </div>
-                    <div className="space-y-1">
-                      <p className="font-extrabold text-slate-900 text-base">
-                        阿波市市場公民館
-                      </p>
-                      <p className="text-slate-600 text-sm">
-                        徳島県阿波市市場町興崎字北分60-1
-                      </p>
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        <span className="text-[10px] bg-slate-100 text-slate-600 border border-slate-200 font-bold px-2.5 py-0.5 rounded-full">
-                          🚗 駐車場あり（無料）
-                        </span>
+                  {/* Left Column (Table entries) */}
+                  <div className="md:col-span-7 space-y-5">
+                    
+                    {/* Item 1 */}
+                    <div className="flex items-start gap-4">
+                      <div className="bg-[#EAB308]/20 text-[#854D0E] font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
+                        日時
+                      </div>
+                      <div className="space-y-1">
+                        <p className="font-extrabold text-slate-900 text-base md:text-lg">
+                          8月9日(日) 13:30 〜 17:00
+                        </p>
+                        <p className="text-slate-500 text-xs leading-relaxed">
+                          ※途中参加、途中退室も自由です。
+                        </p>
                       </div>
                     </div>
+
+                    {/* Item 2 */}
+                    <div className="flex items-start gap-4">
+                      <div className="bg-emerald-500/20 text-emerald-800 font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
+                        会場名
+                      </div>
+                      <div className="space-y-1">
+                        <p className="font-extrabold text-slate-900 text-base">
+                          阿波市市場公民館
+                        </p>
+                        <p className="text-slate-600 text-sm">
+                          徳島県阿波市市場町興崎字北分60-1
+                        </p>
+                        <div className="flex flex-wrap gap-1.5 pt-1">
+                          <span className="text-[10px] bg-slate-100 text-slate-600 border border-slate-200 font-bold px-2.5 py-0.5 rounded-full">
+                            🚗 駐車場あり（無料）
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Item-style/Item 3 */}
+                    <div className="flex items-start gap-4">
+                      <div className="bg-rose-500/20 text-rose-800 font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
+                        参加費
+                      </div>
+                      <div>
+                        <p className="font-black text-rose-600 text-lg flex items-center gap-1.5">
+                          無料 
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Item 4 */}
+                    <div className="flex items-start gap-4">
+                      <div className="bg-blue-500/20 text-blue-800 font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
+                        持ち物
+                      </div>
+                      <div>
+                        <p className="font-extrabold text-slate-900 text-sm">手ぶらでOK！持ち込みも歓迎です！</p>
+                        <p className="text-slate-500 text-xs mt-0.5 leading-relaxed">
+                          会場に定番・パーティーゲームを多数用意しています。他の方に遊んでもらいたいお気に入りボードゲームの持ち寄りも大歓迎！
+                        </p>
+                      </div>
+                    </div>
+
                   </div>
 
-                  {/* Item-style/Item 3 */}
-                  <div className="flex items-start gap-4">
-                    <div className="bg-rose-500/20 text-rose-800 font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
-                      参加費
-                    </div>
-                    <div>
-                      <p className="font-black text-rose-600 text-lg flex items-center gap-1.5">
-                        無料 
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Item 4 */}
-                  <div className="flex items-start gap-4">
-                    <div className="bg-blue-500/20 text-blue-800 font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
-                      持ち物
-                    </div>
-                    <div>
-                      <p className="font-extrabold text-slate-900 text-sm">手ぶらでOK！持ち込みも歓迎です！</p>
-                      <p className="text-slate-500 text-xs mt-0.5 leading-relaxed">
-                        会場に定番・パーティーゲームを多数用意しています。他の方に遊んでもらいたいお気に入りボードゲームの持ち寄りも大歓迎！
-                      </p>
-                    </div>
+                  {/* Right Column (Flyer Thumbnail) */}
+                  <div className="md:col-span-5 space-y-3 flex flex-col items-center border-t border-slate-100 md:border-t-0 pt-5 md:pt-0">
+                    <p className="text-slate-500 text-xs font-black self-start md:self-center">イベントチラシ</p>
+                    <a 
+                      href="/images/第1回あわボ！チラシ.png" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="group block relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-sm hover:shadow-md hover:border-slate-300 transition duration-300 w-full max-w-[220px] mx-auto cursor-pointer"
+                    >
+                      <img 
+                        src="/images/第1回あわボ！チラシ.png" 
+                        alt="第1回あわボ！チラシ" 
+                        className="w-full h-auto object-cover group-hover:scale-105 transition duration-500"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                        <span className="text-white text-xs font-bold bg-slate-900/80 px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                          <ExternalLink className="w-3.5 h-3.5" />
+                          <span>チラシを拡大表示</span>
+                        </span>
+                      </div>
+                    </a>
+                    <a 
+                      href="/images/第1回あわボ！チラシ.png" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs text-[#0D9488] hover:text-teal-700 font-extrabold transition duration-200 mt-1 cursor-pointer"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>ダウンロード</span>
+                    </a>
                   </div>
 
                 </div>
