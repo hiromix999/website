@@ -1194,8 +1194,45 @@ export default function App() {
             <div className="md:col-span-3 space-y-3 text-xs">
               <h4 className="font-extrabold text-white tracking-widest border-l-2 border-[#0D9488] pl-2.5">コンテンツ一覧</h4>
               <ul className="space-y-2.5 pl-3.5 text-slate-400">
-                <li><a href="#section-info" className="hover:text-white transition">開催案内</a></li>
-                <li><a href="#section-faq" className="hover:text-white transition">よくある質問</a></li>
+                <li>
+                  <button 
+                    onClick={() => {
+                      setActiveTab('info');
+                      setTimeout(() => {
+                        document.getElementById('section-info')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }, 100);
+                    }}
+                    className="hover:text-white transition cursor-pointer text-left"
+                  >
+                    開催案内
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => {
+                      setActiveTab('info');
+                      setTimeout(() => {
+                        document.getElementById('section-faq')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }, 100);
+                    }}
+                    className="hover:text-white transition cursor-pointer text-left"
+                  >
+                    よくある質問
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => {
+                      setActiveTab('rules');
+                      setTimeout(() => {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }, 100);
+                    }}
+                    className="hover:text-white transition cursor-pointer text-left"
+                  >
+                    注意事項
+                  </button>
+                </li>
               </ul>
             </div>
 
