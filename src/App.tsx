@@ -1206,7 +1206,7 @@ export default function App() {
 
                   <div className="space-y-0.5">
                     <h3 className="text-xl font-black flex items-center gap-2">
-                      <span>AWABO実行委員会</span>
+                      <span>AWABO（あわぼ！）実行委員会</span>
                     </h3>
                   </div>
 
@@ -1516,9 +1516,7 @@ export default function App() {
             <div className="md:col-span-4 space-y-3 text-xs text-slate-400">
               <h4 className="font-extrabold text-white tracking-widest border-l-2 border-[#0D9488] pl-2.5">運営情報</h4>
               <p className="font-bold text-white mt-1">AWABO（あわぼ！）実行委員会</p>
-              <p className="leading-relaxed">
-                徳島県阿波市での地域交流、世代間コミュニケーションを広げるための非営利コミュニティです。
-              </p>
+
               <p className="flex items-center gap-1.5 mt-2">
                 <span>代表者Instagram:</span>
                 <a 
