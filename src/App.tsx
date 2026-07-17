@@ -728,8 +728,8 @@ export default function App() {
       a: '手ぶらで来ていただいて全く問題ありません！会場に数多くのゲームを取り揃えております。もしご自身のお気に入りのボードゲームがあれば、持ち込みも大歓迎ですのでぜひお持ち寄りください。'
     },
     {
-      q: '1人で参加しても楽しめますか？友達と一緒でも大丈夫？',
-      a: 'お一人での参加も、お友達やご家族と一緒の参加も大歓迎です！お一人で来られた場合は、スタッフが遊びやすい卓へスムーズにご案内いたします。'
+      q: '1人で参加しても、大人だけでも楽しめますか？友達と一緒でも大丈夫？',
+      a: 'お一人での参加、大人の方のみのご参加、お友達やご家族と一緒の参加もすべて大歓迎です！お一人や大人だけで来られた場合でも、スタッフがすぐに混ざって遊びやすい卓へスムーズにご案内いたします。大人同士でじっくり楽しめる戦略ゲームから、みんなでワイワイ盛り上がれるパーティーゲームまで幅広くご用意していますので安心してお越しください。'
     },
     {
       q: '遅刻しての途中参加や、途中で帰ることはできますか？',
@@ -902,7 +902,7 @@ export default function App() {
             </h1>
 
             <p className="text-slate-600 text-sm md:text-base leading-relaxed max-w-xl mx-auto">
-              「AWABO（あわぼ！）」は子どもから大人、ボードゲームが初めての方からコアなファンまで誰もが温かく楽しめる地域交流イベントです。
+              「AWABO（あわボ！）」は、子どもからシニアまで、初めての方からボードゲームファンまで、誰もが温かくつながれる地域交流を目指しています。
             </p>
 
             {/* Apple style Highlights list */}
@@ -961,6 +961,10 @@ export default function App() {
                 <div className="space-y-1">
                   <span className="text-[10px] font-extrabold uppercase text-[#0D9488] tracking-widest block">AWA BOARDGAME MEETUP</span>
                   <h3 className="text-2xl font-black text-slate-900">AWABO（あわぼ！）第1回交流会</h3>
+                  <p className="text-[11px] font-black text-[#0D9488] flex items-center gap-1 mt-1">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                    <span>夏休みにピッタリ！親子・大人・お一人様も大歓迎の涼しい室内イベント</span>
+                  </p>
                 </div>
 
                 {/* Event core specifics */}
@@ -1069,6 +1073,10 @@ export default function App() {
                     <h2 className="text-xl md:text-2xl font-black text-slate-900">開催内容</h2>
                   </div>
                 </div>
+
+                <p className="text-xs md:text-sm text-slate-600 font-semibold leading-relaxed bg-teal-50/50 p-4 rounded-2xl border border-teal-100/40">
+                  記念すべき第1回は、<strong>夏休みの思い出づくりにぴったりの「親子で楽しめる室内イベント」</strong>として開催します！もちろん、<strong>大人の方のみ、お一人でのご参加も大歓迎！</strong>どなたでもすぐに馴染めるよう、スタッフが最適なゲームとグループ（卓）を丁寧にご案内します。エアコン完備の涼しい室内（市場公民館）で、快適に世界のボードゲームを体験していただけます。参加費無料・手ぶらOK、途中入退室も自由ですので、ぜひお気軽にお越しください。
+                </p>
 
                 {/* 2-Column Grid for Table entries and Flyer Thumbnail */}
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
