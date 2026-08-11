@@ -26,7 +26,7 @@ import photo3 from '../assets/images/IMG_20260809_155812590_AE.jpg';
 import photo4 from '../assets/images/IMG_20260809_155845285_AE.jpg';
 import flyerPhotoAsset from '../assets/images/flyer1.png';
 
-const flyerPhoto = flyerPhotoAsset || '/images/第1回あわボ！チラシ.png';
+const flyerPhoto = flyerPhotoAsset || '/images/flyer1.png';
 
 interface HistoryPageProps {
   setActiveTab: (tab: 'info' | 'greetings' | 'rules' | 'history') => void;
@@ -364,7 +364,13 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ setActiveTab }) => {
                   src={flyerPhoto}
                   alt="第1回あわボ！チラシ"
                   className="w-full h-auto object-cover group-hover:scale-105 transition duration-300"
-                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (!target.dataset.fallbackTried) {
+                      target.dataset.fallbackTried = 'true';
+                      target.src = '/images/flyer1.png';
+                    }
+                  }}
                 />
               </a>
             </div>
@@ -381,7 +387,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ setActiveTab }) => {
               </p>
               <div className="flex flex-wrap gap-2 pt-1">
                 <a
-                  href="/images/第1回あわボ！チラシ.png"
+                  href={flyerPhoto}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-sm"
@@ -390,7 +396,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ setActiveTab }) => {
                   <span>チラシを別タブで開く</span>
                 </a>
                 <a
-                  href="/images/第1回あわボ！チラシ.png"
+                  href={flyerPhoto}
                   download="第1回あわボ！チラシ.png"
                   className="inline-flex items-center gap-1.5 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-sm"
                 >
