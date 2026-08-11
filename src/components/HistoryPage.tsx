@@ -24,9 +24,7 @@ import photo1 from '../assets/images/IMG_20260809_153756209_AE.jpg';
 import photo2 from '../assets/images/IMG_20260809_155800088_MP_AE.jpg';
 import photo3 from '../assets/images/IMG_20260809_155812590_AE.jpg';
 import photo4 from '../assets/images/IMG_20260809_155845285_AE.jpg';
-import flyerPhotoAsset from '../assets/images/flyer1.png';
-
-const flyerPhoto = flyerPhotoAsset || '/images/flyer1.png';
+const flyerPhoto = '/images/第1回あわボ！チラシ.png';
 
 interface HistoryPageProps {
   setActiveTab: (tab: 'info' | 'greetings' | 'rules' | 'history') => void;
