@@ -117,7 +117,8 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ setActiveTab }) => {
                   className="max-h-[72vh] w-auto object-contain"
                   onError={(e) => {
                     const target = e.currentTarget;
-                    if (selectedPhoto.fallbackSrc && target.src !== selectedPhoto.fallbackSrc) {
+                    if (selectedPhoto.fallbackSrc && !target.dataset.fallbackTried) {
+                      target.dataset.fallbackTried = 'true';
                       target.src = selectedPhoto.fallbackSrc;
                     }
                   }}
@@ -239,7 +240,8 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ setActiveTab }) => {
                     className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                     onError={(e) => {
                       const target = e.currentTarget;
-                      if (photo.fallbackSrc && target.src !== photo.fallbackSrc) {
+                      if (photo.fallbackSrc && !target.dataset.fallbackTried) {
+                        target.dataset.fallbackTried = 'true';
                         target.src = photo.fallbackSrc;
                       }
                     }}
