@@ -1,0 +1,40 @@
+{
+  "entities": {
+    "stats": {
+      "title": "Stats",
+      "description": "Global statistics including interested count",
+      "type": "object",
+      "properties": {
+        "count": { "type": "number", "description": "Interested count" }
+      },
+      "required": ["count"]
+    },
+    "participants": {
+      "title": "Participants",
+      "description": "RSVP participant submissions",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "adults": { "type": "number" },
+        "children": { "type": "number" },
+        "bringing": { "type": "string" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["name"]
+    },
+    "custom_requests": {
+      "title": "Custom Requests",
+      "description": "Requested board games",
+      "type": "object",
+      "properties": {
+        "gameName": { "type": "string" },
+        "requester": { "type": "string" },
+        "comment": { "type": "string" },
+        "votes": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["gameName"]
+    }
+  }
+}

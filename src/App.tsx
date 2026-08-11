@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
+import { db, doc, onSnapshot, runTransaction, collection, setDoc, addDoc, updateDoc, increment } from './lib/firebase';
 import { 
   Calendar, 
   MapPin, 
@@ -584,40 +585,100 @@ export default function App() {
 
   // Interested count state ("行こうかな")
   const [interestedCount, setInterestedCount] = useState<number>(() => {
-    // Reset stored state if version key is not updated to v3
-    const version = localStorage.getItem('awabo_interested_version');
-    if (version !== 'v3') {
-      localStorage.setItem('awabo_interested_version', 'v3');
-      localStorage.removeItem('awabo_interested_count');
-      localStorage.removeItem('awabo_has_interested');
-      return 6;
-    }
     const saved = localStorage.getItem('awabo_interested_count');
     return saved ? parseInt(saved, 10) : 6;
   });
   const [hasInterested, setHasInterested] = useState<boolean>(() => {
-    const version = localStorage.getItem('awabo_interested_version');
-    if (version !== 'v3') {
-      return false;
-    }
     return localStorage.getItem('awabo_has_interested') === 'true';
   });
 
-  const handleToggleInterested = (e?: React.MouseEvent<HTMLElement>) => {
-    if (hasInterested) {
-      setHasInterested(false);
-      const newCount = Math.max(0, interestedCount - 1);
-      setInterestedCount(newCount);
-      localStorage.setItem('awabo_has_interested', 'false');
-      localStorage.setItem('awabo_interested_count', String(newCount));
-    } else {
-      setHasInterested(true);
-      const newCount = interestedCount + 1;
-      setInterestedCount(newCount);
-      localStorage.setItem('awabo_has_interested', 'true');
-      localStorage.setItem('awabo_interested_count', String(newCount));
+  // Real-time Firestore synchronization for "行こうかな" (interested count)
+  useEffect(() => {
+    const statsRef = doc(db, 'stats', 'interested');
+    const unsubscribe = onSnapshot(
+      statsRef,
+      (snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.data();
+          if (typeof data.count === 'number') {
+            setInterestedCount(data.count);
+            localStorage.setItem('awabo_interested_count', String(data.count));
+          }
+        } else {
+          setDoc(statsRef, { count: 6 }).catch((err) =>
+            console.error('Firestore init error:', err)
+          );
+        }
+      },
+      (error) => {
+        console.error('Firestore onSnapshot error for interested count:', error);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
 
-      // Cracker / Confetti popping animation
+  // Real-time Firestore synchronization for RSVP participants
+  useEffect(() => {
+    const participantsCol = collection(db, 'participants');
+    const unsubscribe = onSnapshot(
+      participantsCol,
+      (snapshot) => {
+        if (!snapshot.empty) {
+          const loaded: Participant[] = snapshot.docs.map((docSnap) => {
+            const data = docSnap.data();
+            return {
+              id: docSnap.id,
+              name: data.name || '',
+              guestCount: data.guestCount || 1,
+              email: data.email || undefined,
+              bringingGame: data.bringingGame || undefined,
+              comment: data.comment || undefined,
+              registeredAt: data.registeredAt || new Date().toISOString(),
+              ticketId: data.ticketId || `AWB-2026-0809-${docSnap.id.slice(0, 4)}`,
+            };
+          });
+          setParticipants(loaded);
+        }
+      },
+      (error) => {
+        console.error('Participants onSnapshot error:', error);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
+
+  // Real-time Firestore synchronization for game requests
+  useEffect(() => {
+    const requestsCol = collection(db, 'custom_requests');
+    const unsubscribe = onSnapshot(
+      requestsCol,
+      (snapshot) => {
+        if (!snapshot.empty) {
+          const loaded: GameRequest[] = snapshot.docs.map((docSnap) => {
+            const data = docSnap.data();
+            return {
+              id: docSnap.id,
+              gameName: data.gameName || '',
+              requesterName: data.requesterName || '',
+              comment: data.comment || undefined,
+              votes: data.votes || 1,
+              createdAt: data.createdAt || new Date().toISOString().split('T')[0],
+            };
+          });
+          setCustomRequests(loaded);
+        }
+      },
+      (error) => {
+        console.error('Requests onSnapshot error:', error);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
+
+  const handleToggleInterested = async (e?: React.MouseEvent<HTMLElement>) => {
+    const statsRef = doc(db, 'stats', 'interested');
+
+    const triggerConfetti = () => {
       if (e) {
         const rect = e.currentTarget.getBoundingClientRect();
         const x = (rect.left + rect.width / 2) / window.innerWidth;
@@ -640,6 +701,48 @@ export default function App() {
           ticks: 180,
         });
       }
+    };
+
+    if (hasInterested) {
+      setHasInterested(false);
+      localStorage.setItem('awabo_has_interested', 'false');
+      // Optimistic update
+      setInterestedCount((prev) => Math.max(0, prev - 1));
+
+      try {
+        await runTransaction(db, async (transaction) => {
+          const sfDoc = await transaction.get(statsRef);
+          if (sfDoc.exists()) {
+            const currentCount = sfDoc.data().count ?? 1;
+            const newCount = Math.max(0, currentCount - 1);
+            transaction.update(statsRef, { count: newCount });
+          } else {
+            transaction.set(statsRef, { count: 5 });
+          }
+        });
+      } catch (err) {
+        console.error('Failed to update interested count in Firestore:', err);
+      }
+    } else {
+      setHasInterested(true);
+      localStorage.setItem('awabo_has_interested', 'true');
+      // Optimistic update
+      setInterestedCount((prev) => prev + 1);
+      triggerConfetti();
+
+      try {
+        await runTransaction(db, async (transaction) => {
+          const sfDoc = await transaction.get(statsRef);
+          if (sfDoc.exists()) {
+            const currentCount = sfDoc.data().count ?? 6;
+            transaction.update(statsRef, { count: currentCount + 1 });
+          } else {
+            transaction.set(statsRef, { count: 7 });
+          }
+        });
+      } catch (err) {
+        console.error('Failed to update interested count in Firestore:', err);
+      }
     }
   };
 
@@ -647,7 +750,7 @@ export default function App() {
   const [showShareAlert, setShowShareAlert] = useState(false);
   const [shareAlertText, setShareAlertText] = useState('');
 
-  // Save to local storage whenever state changes
+  // Save to local storage whenever state changes (as local backup)
   useEffect(() => {
     localStorage.setItem('awabo_participants', JSON.stringify(participants));
   }, [participants]);
@@ -657,31 +760,38 @@ export default function App() {
   }, [customRequests]);
 
   // --- ACTIONS ---
-  const handleRsvpSubmit = (e: React.FormEvent) => {
+  const handleRsvpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!rsvpName.trim()) return;
 
     setIsSubmittingRsvp(true);
 
-    // Simulate real-time database insertion delay
-    setTimeout(() => {
-      const randomId = 'p-' + Math.random().toString(36).substr(2, 9);
+    try {
       const ticketId = `AWB-2026-0809-${String(participants.length + 1).padStart(4, '0')}`;
       const nowString = new Date().toISOString().replace('T', ' ').substr(0, 16);
 
+      const newParticipantData = {
+        name: rsvpName,
+        guestCount: rsvpCount,
+        email: rsvpEmail || null,
+        bringingGame: rsvpBringing || null,
+        comment: rsvpComment || null,
+        registeredAt: nowString,
+        ticketId: ticketId,
+      };
+
+      const docRef = await addDoc(collection(db, 'participants'), newParticipantData);
       const newParticipant: Participant = {
-        id: randomId,
+        id: docRef.id,
         name: rsvpName,
         guestCount: rsvpCount,
         email: rsvpEmail || undefined,
         bringingGame: rsvpBringing || undefined,
         comment: rsvpComment || undefined,
         registeredAt: nowString,
-        ticketId: ticketId
+        ticketId: ticketId,
       };
 
-      const updatedList = [newParticipant, ...participants];
-      setParticipants(updatedList);
       setRegisteredTicket(newParticipant);
 
       // Clean up form
@@ -692,48 +802,49 @@ export default function App() {
       setRsvpComment('');
       setIsSubmittingRsvp(false);
 
-      // Scroll to ticket screen nicely
       setTimeout(() => {
         const ticketElement = document.getElementById('ticket-view');
         if (ticketElement) {
           ticketElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }, 100);
-    }, 1200);
+    } catch (err) {
+      console.error('Error submitting RSVP:', err);
+      setIsSubmittingRsvp(false);
+    }
   };
 
-  const handleVoteRequest = (reqId: string) => {
-    const updated = customRequests.map(r => {
-      if (r.id === reqId) {
-        return { ...r, votes: r.votes + 1 };
-      }
-      return r;
-    });
-    setCustomRequests(updated);
+  const handleVoteRequest = async (reqId: string) => {
+    try {
+      const reqRef = doc(db, 'custom_requests', reqId);
+      await updateDoc(reqRef, { votes: increment(1) });
+    } catch (err) {
+      console.error('Error voting for request:', err);
+      setCustomRequests((prev) =>
+        prev.map((r) => (r.id === reqId ? { ...r, votes: r.votes + 1 } : r))
+      );
+    }
 
-    // Quick notification toast
-    setShareAlertText("リクエストを応援しました！投票完了。");
+    setShareAlertText('リクエストを応援しました！投票完了。');
     setShowShareAlert(true);
     setTimeout(() => setShowShareAlert(false), 2500);
   };
 
-  const handleAddRequest = (e: React.FormEvent) => {
+  const handleAddRequest = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!requestGameName.trim() || !requestRequester.trim()) return;
 
     setIsSubmittingRequest(true);
 
-    setTimeout(() => {
-      const newRequest: GameRequest = {
-        id: 'r-' + Math.random().toString(36).substr(2, 9),
+    try {
+      await addDoc(collection(db, 'custom_requests'), {
         gameName: requestGameName,
         requesterName: requestRequester,
-        comment: requestComment || undefined,
+        comment: requestComment || null,
         votes: 1,
-        createdAt: new Date().toISOString().split('T')[0]
-      };
+        createdAt: new Date().toISOString().split('T')[0],
+      });
 
-      setCustomRequests([newRequest, ...customRequests]);
       setRequestGameName('');
       setRequestRequester('');
       setRequestComment('');
@@ -741,7 +852,10 @@ export default function App() {
       setRequestSuccess(true);
 
       setTimeout(() => setRequestSuccess(false), 4000);
-    }, 600);
+    } catch (err) {
+      console.error('Error adding game request:', err);
+      setIsSubmittingRequest(false);
+    }
   };
 
 
