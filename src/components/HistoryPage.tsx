@@ -34,6 +34,7 @@ interface HistoryPageProps {
 
 interface PhotoItem {
   src: string;
+  fallbackSrc?: string;
   title: string;
   subtitle: string;
   description: string;
@@ -46,6 +47,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ setActiveTab }) => {
   const eventPhotos: PhotoItem[] = [
     {
       src: photo1,
+      fallbackSrc: '/images/IMG_20260809_153756209_AE.webp',
       title: '🐱 クソデカ短歌',
       subtitle: 'ビッグなキーワードを組み合わせて詠む大喜利カードゲーム',
       description: 'デカすぎるキーワードでどれだけナイスな短歌が読めるか！？という大喜利ゲーム。意外な組み合わせに笑いが起こっていました。',
@@ -53,6 +55,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ setActiveTab }) => {
     },
     {
       src: photo2,
+      fallbackSrc: '/images/IMG_20260809_155800088_MP_AE.webp',
       title: '🟡 アクションゲーム「バウンス・オフ！」',
       subtitle: 'ピンポン玉を弾ませて狙い通りの形を作る白熱バトル',
       description: 'ワンバウンドさせてピンポン玉を狙い通りに入れる白熱バトル。大人も子どもも夢中でボールを弾ませていました。',
@@ -60,6 +63,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ setActiveTab }) => {
     },
     {
       src: photo3,
+      fallbackSrc: '/images/IMG_20260809_155812590_AE.webp',
       title: '🧩 テトリスボードゲーム',
       subtitle: 'ブロックを組み合わせて消していく落ちゲー風パズル',
       description: 'ブロックを落として横一列を作る落ちゲー風パズル。このボードゲームで初めてテトリスを知った子もいました。',
@@ -67,6 +71,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ setActiveTab }) => {
     },
     {
       src: photo4,
+      fallbackSrc: '/images/IMG_20260809_155845285_AE.webp',
       title: '🃏 会話型心理ゲーム「itoレインボー」',
       subtitle: '数字を言葉に例えて伝える大人気協力カードゲーム',
       description: '「好きなおにぎりの具」などのテーマで数字を言葉に例えて小さい順に手札を出す協力ゲーム。ぴったり数字が揃った瞬間は大爆笑！',
@@ -110,7 +115,12 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ setActiveTab }) => {
                   src={selectedPhoto.src}
                   alt={selectedPhoto.title}
                   className="max-h-[72vh] w-auto object-contain"
-                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (selectedPhoto.fallbackSrc && target.src !== selectedPhoto.fallbackSrc) {
+                      target.src = selectedPhoto.fallbackSrc;
+                    }
+                  }}
                 />
               </div>
               <div className="p-6 space-y-3 bg-white text-left">
@@ -227,7 +237,12 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ setActiveTab }) => {
                     src={photo.src}
                     alt={photo.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (photo.fallbackSrc && target.src !== photo.fallbackSrc) {
+                        target.src = photo.fallbackSrc;
+                      }
+                    }}
                   />
                   <div className="absolute top-3 left-3">
                     <span className="bg-slate-900/80 backdrop-blur-md text-amber-300 text-[10px] font-black px-3 py-1 rounded-full shadow-md">
