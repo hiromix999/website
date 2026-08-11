@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import confetti from 'canvas-confetti';
 import { 
   Calendar, 
   MapPin, 
@@ -37,10 +38,12 @@ import {
   Instagram,
   AlertTriangle,
   Package,
-  Download
+  Download,
+  History
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Participant, GameRequest } from './types';
+import { HistoryPage } from './components/HistoryPage';
 
 // Custom SVG Meeple Component
 const MeepleIcon = ({ className = "w-6 h-6", color = "currentColor" }: { className?: string; color?: string }) => (
@@ -126,7 +129,7 @@ const MEEPLE_COLORS = [
 
 // --- RULES & CHARTER COMPONENT ---
 interface RulesPageProps {
-  setActiveTab: (tab: 'info' | 'greetings' | 'rules') => void;
+  setActiveTab: (tab: 'info' | 'greetings' | 'rules' | 'history') => void;
 }
 
 const RulesPage = ({ setActiveTab }: RulesPageProps) => {
@@ -297,7 +300,7 @@ const RulesPage = ({ setActiveTab }: RulesPageProps) => {
 
 // --- GREETINGS PAGE (ごあいさつ) COMPONENT ---
 interface GreetingsPageProps {
-  setActiveTab: (tab: 'info' | 'greetings' | 'rules') => void;
+  setActiveTab: (tab: 'info' | 'greetings' | 'rules' | 'history') => void;
 }
 
 const GreetingsPage = ({ setActiveTab }: GreetingsPageProps) => {
@@ -547,7 +550,7 @@ const GreetingsPage = ({ setActiveTab }: GreetingsPageProps) => {
 
 export default function App() {
   // --- STATE ---
-  const [activeTab, setActiveTab] = useState<'info' | 'greetings' | 'rules'>('info');
+  const [activeTab, setActiveTab] = useState<'info' | 'greetings' | 'rules' | 'history'>('info');
 
   // Persistence loaded from localStorage or fallback
   const [participants, setParticipants] = useState<Participant[]>(() => {
@@ -578,6 +581,67 @@ export default function App() {
 
   // FAQ Accordion states
   const [openFaqs, setOpenFaqs] = useState<number[]>([]);
+
+  // Interested count state ("行こうかな")
+  const [interestedCount, setInterestedCount] = useState<number>(() => {
+    // Reset stored state if version key is not updated to v3
+    const version = localStorage.getItem('awabo_interested_version');
+    if (version !== 'v3') {
+      localStorage.setItem('awabo_interested_version', 'v3');
+      localStorage.removeItem('awabo_interested_count');
+      localStorage.removeItem('awabo_has_interested');
+      return 6;
+    }
+    const saved = localStorage.getItem('awabo_interested_count');
+    return saved ? parseInt(saved, 10) : 6;
+  });
+  const [hasInterested, setHasInterested] = useState<boolean>(() => {
+    const version = localStorage.getItem('awabo_interested_version');
+    if (version !== 'v3') {
+      return false;
+    }
+    return localStorage.getItem('awabo_has_interested') === 'true';
+  });
+
+  const handleToggleInterested = (e?: React.MouseEvent<HTMLElement>) => {
+    if (hasInterested) {
+      setHasInterested(false);
+      const newCount = Math.max(0, interestedCount - 1);
+      setInterestedCount(newCount);
+      localStorage.setItem('awabo_has_interested', 'false');
+      localStorage.setItem('awabo_interested_count', String(newCount));
+    } else {
+      setHasInterested(true);
+      const newCount = interestedCount + 1;
+      setInterestedCount(newCount);
+      localStorage.setItem('awabo_has_interested', 'true');
+      localStorage.setItem('awabo_interested_count', String(newCount));
+
+      // Cracker / Confetti popping animation
+      if (e) {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = (rect.left + rect.width / 2) / window.innerWidth;
+        const y = (rect.top + rect.height / 2) / window.innerHeight;
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { x, y },
+          colors: ['#f59e0b', '#f97316', '#10b981', '#06b6d4', '#ec4899', '#8b5cf6', '#eab308'],
+          scalar: 1.1,
+          ticks: 180,
+        });
+      } else {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#f59e0b', '#f97316', '#10b981', '#06b6d4', '#ec4899', '#8b5cf6', '#eab308'],
+          scalar: 1.1,
+          ticks: 180,
+        });
+      }
+    }
+  };
 
   // Share Notification Alert
   const [showShareAlert, setShowShareAlert] = useState(false);
@@ -690,8 +754,8 @@ export default function App() {
   };
 
   const handleShareSNS = (platform: 'x' | 'line' | 'facebook') => {
-    const title = 'ボードゲーム交流会「AWABO（あわぼ！）」公式サイト';
-    const text = 'みんなで遊ぼう！無料のボードゲーム交流会「AWABO（あわぼ！）」8月9日(日)開催！初心者・手ぶら参加大歓迎！';
+    const title = 'ボードゲーム交流会「AWABO（あわボ！）」公式サイト';
+    const text = 'みんなで遊ぼう！無料のボードゲーム交流会「AWABO（あわボ！）」8月9日(日)開催！初心者・手ぶら参加大歓迎！';
     const url = window.location.href;
 
     let shareUrl = '';
@@ -709,6 +773,8 @@ export default function App() {
   const handlePrintTicket = () => {
     window.print();
   };
+
+  const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('AWABO（あわボ！）第2回ボードゲーム交流会')}&dates=20260920T040000Z/20260920T083000Z&details=${encodeURIComponent('【AWABO（あわボ！）第2回ボードゲーム交流会】\n子どもから大人・シニア・お一人様までどなたでもご参加いただけます！\n参加費無料・手ぶらOK・途中入退室自由です。\n\n会場：阿波市立市場図書館\n住所：徳島県阿波市市場町市場上野段212-2')}&location=${encodeURIComponent('阿波市立市場図書館（徳島県阿波市市場町市場上野段212-2）')}`;
 
   // Calculate total registered headcount
   const totalExpectedParticipants = participants.reduce((acc, curr) => acc + curr.guestCount, 0);
@@ -733,7 +799,7 @@ export default function App() {
     },
     {
       q: '遅刻しての途中参加や、途中で帰ることはできますか？',
-      a: '13:30〜17:00の間でしたら、いつ来て、いつ帰っても大丈夫です。ただし、プレイ中のゲームを抜けると他のプレイヤーに影響することがあるため、ゲームが一区切りついた段階で退出いただけますと幸いです。'
+      a: '開催時間中でしたら、いつ来て、いつ帰っても大丈夫です。ただし、プレイ中のゲームを抜けると他のプレイヤーに影響することがあるため、ゲームが一区切りついた段階で退出いただけますと幸いです。'
     },
     {
       q: '事前予約は必要ですか？',
@@ -742,6 +808,10 @@ export default function App() {
     {
       q: '年齢制限はありますか？子供と一緒に参加できますか？',
       a: '子供からシニアの方まで、どなたでも参加いただけます！小学生以下の小さなお子様の場合は、ルール理解や安全を考慮し、必ず保護者の方の同伴をお願いしております。'
+    },
+    {
+      q: '図書館だけど騒いでも大丈夫？',
+      a: '図書館のイベントルームなので、騒いでも大丈夫です！'
     }
   ];
 
@@ -832,6 +902,16 @@ export default function App() {
             </button>
             <button 
               onClick={() => {
+                setActiveTab('history');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className={`text-[10px] xs:text-xs md:text-sm font-black transition flex items-center gap-1 cursor-pointer tracking-tight ${activeTab === 'history' ? 'text-[#0D9488]' : 'text-slate-600 hover:text-teal-600'}`}
+            >
+              <History className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+              <span>開催履歴</span>
+            </button>
+            <button 
+              onClick={() => {
                 setActiveTab('info');
                 setTimeout(() => {
                   document.getElementById('section-faq')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -896,7 +976,7 @@ export default function App() {
               <span className="block mt-2 bg-gradient-to-r from-orange-600 via-rose-500 to-[#0D9488] bg-clip-text text-transparent font-black relative">
                 阿波市ボードゲーム交流会
                 <span className="block text-2xl md:text-3.5xl lg:text-4xl text-[#0D9488] mt-1 font-bold">
-                  「AWABO（あわぼ！）」公式サイト
+                  「AWABO（あわボ！）」公式サイト
                 </span>
               </span>
             </h1>
@@ -960,28 +1040,41 @@ export default function App() {
               <div className="text-left space-y-5">
                 <div className="space-y-1">
                   <span className="text-[10px] font-extrabold uppercase text-[#0D9488] tracking-widest block">AWA BOARDGAME MEETUP</span>
-                  <h3 className="text-2xl font-black text-slate-900">AWABO（あわぼ！）第1回交流会</h3>
+                  <h3 className="text-2xl font-black text-slate-900">AWABO（あわボ！）第2回交流会</h3>
                   <p className="text-[11px] font-black text-[#0D9488] flex items-center gap-1 mt-1">
                     <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                    <span>夏休みにピッタリ！親子・大人・お一人様も大歓迎の涼しい室内イベント</span>
+                    <span>秋の連休にピッタリ！親子・大人・お一人様も大歓迎の室内イベント</span>
                   </p>
                 </div>
 
                 {/* Event core specifics */}
                 <div className="space-y-3 bg-white/40 border border-white/50 p-4 rounded-2xl shadow-inner">
-                  <div className="flex items-center gap-3">
-                    <Calendar className="w-5 h-5 text-rose-500 shrink-0" />
-                    <div>
-                      <p className="text-[10px] text-slate-400 leading-none">開催日程</p>
-                      <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">2026年 8月9日(日)</p>
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <div className="flex items-center gap-3">
+                      <Calendar className="w-5 h-5 text-rose-500 shrink-0" />
+                      <div>
+                        <p className="text-[10px] text-slate-400 leading-none">開催日程</p>
+                        <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">2026年 9月20日(日)</p>
+                      </div>
                     </div>
+                    <a
+                      href={googleCalendarUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-[11px] px-3 py-1.5 rounded-xl shadow-sm hover:shadow transition-all shrink-0 cursor-pointer"
+                      title="Googleカレンダーに予定を追加"
+                    >
+                      <Calendar className="w-3.5 h-3.5 text-white" />
+                      <span>カレンダーに追加</span>
+                      <ExternalLink className="w-3 h-3 text-blue-200" />
+                    </a>
                   </div>
 
                   <div className="flex items-center gap-3">
                     <Clock className="w-5 h-5 text-teal-600 shrink-0" />
                     <div>
                       <p className="text-[10px] text-slate-400 leading-none">時間</p>
-                      <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">13:30 〜 17:00</p>
+                      <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">13:00 〜 17:30</p>
                     </div>
                   </div>
 
@@ -989,8 +1082,26 @@ export default function App() {
                     <MapPin className="w-5 h-5 text-emerald-600 shrink-0" />
                     <div>
                       <p className="text-[10px] text-slate-400 leading-none">会場場所</p>
-                      <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">阿波市市場公民館</p>
+                      <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">阿波市立市場図書館</p>
                     </div>
+                  </div>
+
+                  {/* 行こうかな Quick Button */}
+                  <div className="pt-3 border-t border-slate-200/60 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <button
+                      onClick={handleToggleInterested}
+                      className={`w-full sm:w-auto px-4 py-2 rounded-xl font-extrabold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-95 ${
+                        hasInterested
+                          ? 'bg-amber-500 text-slate-950 ring-2 ring-amber-300'
+                          : 'bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-slate-900'
+                      }`}
+                    >
+                      <Sparkles className="w-4 h-4 text-slate-900 shrink-0" />
+                      <span>{hasInterested ? '行こうかな！ (登録済み)' : '行こうかな！'}</span>
+                    </button>
+                    <p className="text-xs font-bold text-slate-700 text-center sm:text-right">
+                      「行こうかな」と思っている人が <span className="text-amber-600 font-black text-sm px-1.5 py-0.5 bg-amber-100/80 rounded-md border border-amber-300/50">{interestedCount}</span> 組います
+                    </p>
                   </div>
                 </div>
 
@@ -1054,6 +1165,8 @@ export default function App() {
           <RulesPage setActiveTab={setActiveTab} />
         ) : activeTab === 'greetings' ? (
           <GreetingsPage setActiveTab={setActiveTab} />
+        ) : activeTab === 'history' ? (
+          <HistoryPage setActiveTab={setActiveTab} />
         ) : (
           <>
             {/* SECTION 1: DETAILED INFRASTRUCTURE & ORGANIZER PROFILE */}
@@ -1075,8 +1188,36 @@ export default function App() {
                 </div>
 
                 <p className="text-xs md:text-sm text-slate-600 font-semibold leading-relaxed bg-teal-50/50 p-4 rounded-2xl border border-teal-100/40">
-                  記念すべき第1回は、<strong>夏休みの思い出づくりにぴったりの「親子で楽しめる室内イベント」</strong>として開催します！もちろん、<strong>大人の方のみ、お一人でのご参加も大歓迎！</strong>どなたでもすぐに馴染めるよう、スタッフが最適なゲームとグループ（卓）を丁寧にご案内します。エアコン完備の涼しい室内（市場公民館）で、快適に世界のボードゲームを体験していただけます。参加費無料・手ぶらOK、途中入退室も自由ですので、ぜひお気軽にお越しください。
+                  第2回となる今回は、場所を変更して、<span className="font-black text-slate-900 bg-amber-200/90 px-2 py-0.5 rounded-md border border-amber-300/80 shadow-xs inline-block my-0.5">阿波市立市場図書館</span> にて開催いたします！時間も開始が30分早まり、終了も30分延びて、<span className="font-black text-[#0D9488] bg-teal-100/90 px-2 py-0.5 rounded-md border border-teal-200/80 shadow-xs inline-block my-0.5">合計1時間延長</span> で開催します！<br className="hidden sm:inline" />
+                  秋の連休にぴったりな室内イベントとして、子どもから大人・シニア・お一人様までどなたでもご参加いただけます。<br className="hidden sm:inline" />
+                  たくさんの世界のボードゲームを体験していただけます。参加費無料・手ぶらOK、途中入退室も自由ですので、ぜひお気軽にお越しください。
                 </p>
+
+                {/* 行こうかな Interactive Banner */}
+                <div className="bg-gradient-to-r from-amber-50 via-orange-50 to-teal-50 border border-amber-200/80 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+                  <div className="flex items-center gap-3 text-left">
+                    <div className="w-10 h-10 rounded-2xl bg-amber-400/20 flex items-center justify-center text-xl shrink-0 shadow-inner">
+                      🙋‍♂️
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-slate-500 font-bold">気軽に参加の気持ちを表明！</p>
+                      <p className="text-sm md:text-base font-black text-slate-800">
+                        「行こうかな」と思っている人が <span className="text-amber-600 text-lg font-black underline decoration-amber-400 decoration-2 underline-offset-2 mx-0.5">{interestedCount}</span> 組います
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleToggleInterested}
+                    className={`w-full sm:w-auto px-5 py-2.5 rounded-xl font-extrabold text-xs md:text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-sm cursor-pointer active:scale-95 shrink-0 ${
+                      hasInterested
+                        ? 'bg-amber-500 text-slate-950 ring-2 ring-amber-300 shadow-amber-500/20'
+                        : 'bg-gradient-to-r from-amber-400 via-amber-500 to-orange-400 text-slate-900 hover:brightness-105 shadow-orange-500/10'
+                    }`}
+                  >
+                    <Sparkles className="w-4 h-4 text-slate-900" />
+                    <span>{hasInterested ? '行こうかな！ (登録済み)' : '「行こうかなボタン」を押してみる'}</span>
+                  </button>
+                </div>
 
                 {/* 2-Column Grid for Table entries and Flyer Thumbnail */}
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
@@ -1089,13 +1230,25 @@ export default function App() {
                       <div className="bg-[#EAB308]/20 text-[#854D0E] font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
                         日時
                       </div>
-                      <div className="space-y-1">
-                        <p className="font-extrabold text-slate-900 text-base md:text-lg">
-                          8月9日(日) 13:30 〜 17:00
-                        </p>
-                        <p className="text-slate-500 text-xs leading-relaxed">
-                          ※途中参加、途中退室も自由です。
-                        </p>
+                      <div className="space-y-2">
+                        <div>
+                          <p className="font-extrabold text-slate-900 text-base md:text-lg">
+                            9月20日(日) 13:00 〜 17:30
+                          </p>
+                          <p className="text-slate-500 text-xs leading-relaxed mt-0.5">
+                            ※途中参加、途中退室も自由です。
+                          </p>
+                        </div>
+                        <a
+                          href={googleCalendarUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold text-xs px-3.5 py-2 rounded-xl shadow-sm hover:shadow transition-all group cursor-pointer"
+                        >
+                          <Calendar className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
+                          <span>Googleカレンダーに追加</span>
+                          <ExternalLink className="w-3.5 h-3.5 text-blue-200" />
+                        </a>
                       </div>
                     </div>
 
@@ -1106,14 +1259,17 @@ export default function App() {
                       </div>
                       <div className="space-y-1">
                         <p className="font-extrabold text-slate-900 text-base">
-                          阿波市市場公民館
+                          阿波市立市場図書館
                         </p>
                         <p className="text-slate-600 text-sm">
-                          徳島県阿波市市場町興崎字北分60-1
+                          徳島県阿波市市場町市場上野段212-2
                         </p>
                         <div className="flex flex-wrap gap-1.5 pt-1">
                           <span className="text-[10px] bg-slate-100 text-slate-600 border border-slate-200 font-bold px-2.5 py-0.5 rounded-full">
                             🚗 駐車場あり（無料）
+                          </span>
+                          <span className="text-[10px] bg-teal-50 text-teal-700 border border-teal-200 font-bold px-2.5 py-0.5 rounded-full">
+                            📚 館内エアコン完備
                           </span>
                         </div>
                       </div>
@@ -1146,37 +1302,21 @@ export default function App() {
 
                   </div>
 
-                  {/* Right Column (Flyer Thumbnail) */}
+                  {/* Right Column (Flyer Status Notice) */}
                   <div className="md:col-span-5 space-y-3 flex flex-col items-center border-t border-slate-100 md:border-t-0 pt-5 md:pt-0">
                     <p className="text-slate-500 text-xs font-black self-start md:self-center">イベントチラシ</p>
-                    <a 
-                      href="/images/第1回あわボ！チラシ.png" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="group block relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-sm hover:shadow-md hover:border-slate-300 transition duration-300 w-full max-w-[220px] mx-auto cursor-pointer"
-                    >
-                      <img 
-                        src="/images/第1回あわボ！チラシ.png" 
-                        alt="第1回あわボ！チラシ" 
-                        className="w-full h-auto object-cover group-hover:scale-105 transition duration-500"
-                        referrerPolicy="no-referrer"
-                      />
-                      <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
-                        <span className="text-white text-xs font-bold bg-slate-900/80 px-3 py-1.5 rounded-full flex items-center gap-1.5">
-                          <ExternalLink className="w-3.5 h-3.5" />
-                          <span>チラシを拡大表示</span>
-                        </span>
+                    <div className="bg-gradient-to-br from-teal-50/80 to-amber-50/80 border border-teal-200/80 rounded-2.5xl p-5 text-center shadow-sm w-full max-w-[240px] space-y-3">
+                      <div className="w-12 h-12 rounded-2xl bg-teal-100 text-[#0D9488] flex items-center justify-center mx-auto shadow-inner">
+                        <Layers className="w-6 h-6" />
                       </div>
-                    </a>
-                    <a 
-                      href="/images/第1回あわボ！チラシ.png" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs text-[#0D9488] hover:text-teal-700 font-extrabold transition duration-200 mt-1 cursor-pointer"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      <span>ダウンロード</span>
-                    </a>
+                      <div className="space-y-1">
+                        <span className="bg-amber-500/20 text-amber-800 text-[10px] font-black px-2.5 py-0.5 rounded-full">第2回チラシ作成中</span>
+                        <p className="font-black text-slate-900 text-sm pt-0.5">完成次第、公開いたします！</p>
+                      </div>
+                      <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
+                        9月20日開催（第2回）の公式チラシは制作中です。出来上がり次第、こちらのWebサイトに掲載いたします。
+                      </p>
+                    </div>
                   </div>
 
                 </div>
@@ -1193,7 +1333,7 @@ export default function App() {
                   <span>参加する方へのお約束</span>
                 </h3>
                 <p className="text-slate-600 text-xs leading-relaxed max-w-xl">
-                  誰もが安心して楽しめるよう、AWABO（あわぼ！）では「負けても怒らない」「ゲームを優しく扱う」などの思いやりマナーを大切にしています。勝ち負けよりも、みんなでおしゃべりしながら笑い合う時間そのものを楽しみましょう！
+                  誰もが安心して楽しめるよう、AWABO（あわボ！）では「負けても怒らない」「ゲームを優しく扱う」などの思いやりマナーを大切にしています。勝ち負けよりも、みんなでおしゃべりしながら笑い合う時間そのものを楽しみましょう！
                 </p>
               </div>
 
@@ -1214,7 +1354,7 @@ export default function App() {
 
                   <div className="space-y-0.5">
                     <h3 className="text-xl font-black flex items-center gap-2">
-                      <span>AWABO（あわぼ！）実行委員会</span>
+                      <span>AWABO（あわボ！）実行委員会</span>
                     </h3>
                   </div>
 
@@ -1261,7 +1401,7 @@ export default function App() {
                 <div className="inline-block bg-emerald-500/10 text-emerald-800 border border-emerald-300/30 text-xs font-black px-3 py-1 rounded-full">
                   会場へのアクセス
                 </div>
-                <h3 className="text-2xl font-black text-slate-900 tracking-tight">阿波市市場公民館（会場）</h3>
+                <h3 className="text-2xl font-black text-slate-900 tracking-tight">阿波市立市場図書館（会場）</h3>
 
                 <div className="space-y-3.5 text-xs text-slate-600 pt-2 border-t border-slate-100">
                   <div className="space-y-0.5">
@@ -1269,7 +1409,7 @@ export default function App() {
                       <MapPin className="w-4 h-4 text-[#0D9488]" />
                       <span>📍 住所・所在地</span>
                     </p>
-                    <p className="pl-5 text-slate-500 font-medium">徳島県阿波市市場町興崎字北分60-1</p>
+                    <p className="pl-5 text-slate-500 font-medium">徳島県阿波市市場町市場上野段212-2</p>
                   </div>
 
                   <div className="space-y-0.5">
@@ -1277,7 +1417,7 @@ export default function App() {
                       <span>🚗 お車でのアクセス</span>
                     </p>
                     <p className="pl-5 text-slate-500 leading-normal">
-                      徳島自動車道「土成インターチェンジ」から車で約10分。敷地内に無料の駐車場が広く完備されていますので安心してお車でお越しください。（県道12号線のセブン-イレブン 阿波市場町香美店で北に曲がるのが一番分かりやすいルートです😊）
+                      阿波市立市場図書館内にて開催いたします。敷地内に無料の駐車場が広く完備されていますので安心してお車でお越しください。
                     </p>
                   </div>
 
@@ -1287,7 +1427,7 @@ export default function App() {
                 {/* Map quick external buttons */}
                 <div className="pt-4 flex flex-wrap gap-2">
                   <a 
-                    href="https://www.google.com/maps/place/%E5%B8%82%E5%A0%B4%E5%85%AC%E6%B0%91%E9%A4%A8/@34.0984213,134.2883737,18.75z/data=!4m6!3m5!1s0x3553a47ee38d1ad9:0x6cdf4a623414052d!8m2!3d34.0981368!4d134.2884328!16s%2Fg%2F11bccmg_0l?hl=ja&entry=ttu&g_ep=EgoyMDI2MDcwOC4wIKXMDSoASAFQAw%3D%3D" 
+                    href="https://maps.app.goo.gl/jG2p5g3RWGjAo2eJ8?g_st=ac" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 bg-white border border-slate-200 hover:border-slate-400 text-slate-700 font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-sm"
@@ -1302,14 +1442,14 @@ export default function App() {
               {/* Map embed iframe Right */}
               <div className="lg:col-span-7 h-80 md:h-[380px] rounded-3xl overflow-hidden border-2 border-slate-200 shadow-inner relative bg-slate-50 shrink-0">
                 <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3303.468822502804!2d134.28624407677843!3d34.09813677314227!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3553a47ee38d1ad9%3A0x6cdf4a623414052d!2z5biC6aG65YWs5rCR6aGo!5e0!3m2!1sja!2sjp!4v1720684281000!5m2!1sja!2sjp" 
+                  src={`https://maps.google.com/maps?q=${encodeURIComponent('徳島県阿波市市場町市場上野段212-2 阿波市立市場図書館')}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
                   width="100%" 
                   height="100%" 
                   style={{ border: 0 }} 
                   allowFullScreen={true} 
                   loading="lazy" 
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="阿波市市場公民館のGoogleマップ案内"
+                  title="阿波市立市場図書館のGoogleマップ案内"
                   className="absolute inset-0 w-full h-full"
                 />
               </div>
@@ -1494,6 +1634,19 @@ export default function App() {
                 <li>
                   <button 
                     onClick={() => {
+                      setActiveTab('history');
+                      setTimeout(() => {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }, 100);
+                    }}
+                    className="hover:text-white transition cursor-pointer text-left"
+                  >
+                    開催履歴
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => {
                       setActiveTab('info');
                       setTimeout(() => {
                         document.getElementById('section-faq')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1523,7 +1676,7 @@ export default function App() {
             {/* Column Right specific flyers summary */}
             <div className="md:col-span-4 space-y-3 text-xs text-slate-400">
               <h4 className="font-extrabold text-white tracking-widest border-l-2 border-[#0D9488] pl-2.5">運営情報</h4>
-              <p className="font-bold text-white mt-1">AWABO（あわぼ！）実行委員会</p>
+              <p className="font-bold text-white mt-1">AWABO（あわボ！）実行委員会</p>
 
               <p className="flex items-center gap-1.5 mt-2">
                 <span>代表者Instagram:</span>
@@ -1544,7 +1697,7 @@ export default function App() {
           {/* Low footer copyright */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-medium">
             <div className="text-left space-y-0.5">
-              <p>主催：AWABO（あわぼ！）実行委員会</p>
+              <p>主催：AWABO（あわボ！）実行委員会</p>
             </div>
             <p className="text-[10px] text-slate-500">
               &copy; 2026 AWA BOard Game Community. All Rights Reserved.
