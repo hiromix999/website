@@ -20,7 +20,13 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-const flyerPhoto = '/images/第1回あわボ！チラシ.png';
+import photo1 from '../assets/images/IMG_20260809_153756209_AE.webp';
+import photo2 from '../assets/images/IMG_20260809_155800088_MP_AE.webp';
+import photo3 from '../assets/images/IMG_20260809_155812590_AE.webp';
+import photo4 from '../assets/images/IMG_20260809_155845285_AE.webp';
+import flyerPhotoAsset from '../assets/images/flyer1.png';
+
+const flyerPhoto = flyerPhotoAsset || '/images/第1回あわボ！チラシ.png';
 
 interface HistoryPageProps {
   setActiveTab: (tab: 'info' | 'greetings' | 'rules' | 'history') => void;
@@ -39,28 +45,28 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ setActiveTab }) => {
 
   const eventPhotos: PhotoItem[] = [
     {
-      src: '/images/IMG_20260809_153756209_AE.webp',
+      src: photo1,
       title: '🐱 クソデカ短歌',
       subtitle: 'ビッグなキーワードを組み合わせて詠む大喜利カードゲーム',
       description: 'デカすぎるキーワードでどれだけナイスな短歌が読めるか！？という大喜利ゲーム。意外な組み合わせに笑いが起こっていました。',
       badge: '大喜利ゲーム'
     },
     {
-      src: '/images/IMG_20260809_155800088_MP_AE.webp',
+      src: photo2,
       title: '🟡 アクションゲーム「バウンス・オフ！」',
       subtitle: 'ピンポン玉を弾ませて狙い通りの形を作る白熱バトル',
       description: 'ワンバウンドさせてピンポン玉を狙い通りに入れる白熱バトル。大人も子どもも夢中でボールを弾ませていました。',
       badge: 'アクション'
     },
     {
-      src: '/images/IMG_20260809_155812590_AE.webp',
+      src: photo3,
       title: '🧩 テトリスボードゲーム',
       subtitle: 'ブロックを組み合わせて消していく落ちゲー風パズル',
       description: 'ブロックを落として横一列を作る落ちゲー風パズル。このボードゲームで初めてテトリスを知った子もいました。',
       badge: 'パズル'
     },
     {
-      src: '/images/IMG_20260809_155845285_AE.webp',
+      src: photo4,
       title: '🃏 会話型心理ゲーム「itoレインボー」',
       subtitle: '数字を言葉に例えて伝える大人気協力カードゲーム',
       description: '「好きなおにぎりの具」などのテーマで数字を言葉に例えて小さい順に手札を出す協力ゲーム。ぴったり数字が揃った瞬間は大爆笑！',
