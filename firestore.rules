@@ -1,26 +1,29 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Helper function for validating stats counter documents
+    function isValidStats(data) {
+      return data.size() == 1
+        && 'count' in data
+        && (data.count is int || data.count is number)
+        && data.count >= 0
+        && data.count <= 1000000;
+    }
+
     // Stats collection for global counters ("行こうかな")
     match /stats/{docId} {
       allow read: if true;
-      allow create, update: if true;
+      allow create, update: if docId is string
+                            && docId.size() <= 64
+                            && isValidStats(request.resource.data);
       allow delete: if false;
     }
 
-    // Participants RSVP collection
-    match /participants/{participantId} {
-      allow read: if true;
-      allow create: if true;
-      allow update, delete: if false;
-    }
-
-    // Custom game requests collection
-    match /custom_requests/{requestId} {
-      allow read: if true;
-      allow create, update: if true;
-      allow delete: if false;
+    // Default deny for all other paths
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
+
 

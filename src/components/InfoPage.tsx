@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { db, doc, onSnapshot, runTransaction, setDoc } from '../lib/firebase';
+import { db, doc, onSnapshot, setDoc, increment } from '../lib/firebase';
 import { 
   Calendar, 
   MapPin, 
@@ -74,6 +74,7 @@ export const InfoPage: React.FC = () => {
     const statsRef = doc(db, 'stats', 'interested');
 
     if (!hasInterested) {
+      // 登録処理 (+1)
       setHasInterested(true);
       setInterestedCount((prev) => prev + 1);
       localStorage.setItem('awabo_has_interested', 'true');
@@ -84,22 +85,21 @@ export const InfoPage: React.FC = () => {
         origin: { y: 0.8 },
       });
 
-      setShareAlertText('「行こうかな！」ありがとうございます！当日お待ちしています。');
-      setShowShareAlert(true);
-      setTimeout(() => setShowShareAlert(false), 3000);
-
       try {
-        await runTransaction(db, async (transaction) => {
-          const docSnap = await transaction.get(statsRef);
-          if (docSnap.exists()) {
-            const currentCount = docSnap.data().count || 6;
-            transaction.update(statsRef, { count: currentCount + 1 });
-          } else {
-            transaction.set(statsRef, { count: 7 });
-          }
-        });
+        await setDoc(statsRef, { count: increment(1) }, { merge: true });
       } catch (err) {
         console.error('Failed to update interested count in Firestore:', err);
+      }
+    } else {
+      // 取消処理 (-1)
+      setHasInterested(false);
+      setInterestedCount((prev) => Math.max(0, prev - 1));
+      localStorage.removeItem('awabo_has_interested');
+
+      try {
+        await setDoc(statsRef, { count: increment(-1) }, { merge: true });
+      } catch (err) {
+        console.error('Failed to decrement interested count in Firestore:', err);
       }
     }
   };
@@ -323,14 +323,24 @@ export const InfoPage: React.FC = () => {
                   <div className="pt-3 border-t border-slate-200/60 flex flex-col sm:flex-row items-center justify-between gap-3">
                     <button
                       onClick={handleToggleInterested}
+                      title={hasInterested ? 'クリックで登録を取り消せます' : 'クリックして参加の気持ちを表明'}
                       className={`w-full sm:w-auto px-4 py-2 rounded-xl font-extrabold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-95 ${
                         hasInterested
-                          ? 'bg-amber-500 text-slate-950 ring-2 ring-amber-300'
-                          : 'bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-slate-900'
+                          ? 'bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 ring-2 ring-amber-400/50'
+                          : 'bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-slate-900 shadow-amber-500/20'
                       }`}
                     >
-                      <Sparkles className="w-4 h-4 text-slate-900 shrink-0" />
-                      <span>{hasInterested ? '行こうかな！ (登録済み)' : '行こうかな！'}</span>
+                      {hasInterested ? (
+                        <>
+                          <CheckCircle2 className="w-4 h-4 text-amber-700 shrink-0" />
+                          <span>行こうかな！ (登録中・タップで取消)</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-4 h-4 text-slate-900 shrink-0" />
+                          <span>行こうかな！</span>
+                        </>
+                      )}
                     </button>
                     <p className="text-xs font-bold text-slate-700 text-center sm:text-right">
                       「行こうかな」と思っている人が <span className="text-amber-600 font-black text-sm px-1.5 py-0.5 bg-amber-100/80 rounded-md border border-amber-300/50">{interestedCount}</span> 組います
@@ -419,14 +429,24 @@ export const InfoPage: React.FC = () => {
                 </div>
                 <button
                   onClick={handleToggleInterested}
+                  title={hasInterested ? 'クリックで登録を取り消せます' : 'クリックして参加の気持ちを表明'}
                   className={`w-full sm:w-auto px-5 py-2.5 rounded-xl font-extrabold text-xs md:text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-sm cursor-pointer active:scale-95 shrink-0 ${
                     hasInterested
-                      ? 'bg-amber-500 text-slate-950 ring-2 ring-amber-300 shadow-amber-500/20'
+                      ? 'bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 ring-2 ring-amber-400/50'
                       : 'bg-gradient-to-r from-amber-400 via-amber-500 to-orange-400 text-slate-900 hover:brightness-105 shadow-orange-500/10'
                   }`}
                 >
-                  <Sparkles className="w-4 h-4 text-slate-900" />
-                  <span>{hasInterested ? '行こうかな！ (登録済み)' : '「行こうかなボタン」を押してみる'}</span>
+                  {hasInterested ? (
+                    <>
+                      <CheckCircle2 className="w-4 h-4 text-amber-700 shrink-0" />
+                      <span>行こうかな！ (登録中・タップで取消)</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4 text-slate-900 shrink-0" />
+                      <span>「行こうかなボタン」を押してみる</span>
+                    </>
+                  )}
                 </button>
               </div>
 
