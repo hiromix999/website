@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   History, 
   Calendar, 
@@ -27,7 +28,7 @@ import photo4 from '../assets/images/IMG_20260809_155845285_AE.jpg';
 const flyerPhoto = '/images/第1回あわボ！チラシ.png';
 
 interface HistoryPageProps {
-  setActiveTab: (tab: 'info' | 'greetings' | 'rules' | 'history') => void;
+  setActiveTab?: (tab: 'info' | 'greetings' | 'rules' | 'history') => void;
 }
 
 interface PhotoItem {
@@ -39,8 +40,13 @@ interface PhotoItem {
   badge: string;
 }
 
-export const HistoryPage: React.FC<HistoryPageProps> = ({ setActiveTab }) => {
+export const HistoryPage: React.FC<HistoryPageProps> = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoItem | null>(null);
+
+  useEffect(() => {
+    document.title = '開催履歴・第1回レポート | 阿波市ボードゲーム交流会「AWABO（あわボ！）」';
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
 
   const eventPhotos: PhotoItem[] = [
     {
@@ -418,16 +424,13 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ setActiveTab }) => {
           <p className="text-xs md:text-sm text-slate-600 font-medium">
             会場は「阿波市立市場図書館」！途中入退室OK・参加費無料です。
           </p>
-          <button
-            onClick={() => {
-              setActiveTab('info');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
+          <Link
+            to="/"
             className="mt-2 inline-flex items-center gap-2 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-black text-xs md:text-sm px-6 py-3 rounded-xl transition shadow-md active:scale-95 cursor-pointer"
           >
             <span>次回開催案内へ戻る</span>
             <ArrowRight className="w-4 h-4" />
-          </button>
+          </Link>
         </div>
       </div>
 
