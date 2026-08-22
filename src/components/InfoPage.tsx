@@ -666,7 +666,7 @@ export const InfoPage: React.FC = () => {
 
                     <div className="space-y-1 text-left">
                       <p className="font-black text-slate-900 text-xs flex items-center gap-1">
-                        <span>第2回 開催告知チラシ</span>
+                        <span>第2回交流会 開催告知チラシ</span>
                       </p>
                       <p className="text-[11px] text-slate-500 leading-tight">
                         A4印刷用PDF・画像データを配布中！

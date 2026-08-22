@@ -68,7 +68,7 @@ export const AwaboLogo = ({ className = "h-16", headerMode = false, footerMode =
 
   return (
     <a 
-      href="http://awa-bo.com/" 
+      href="https://awa-bo.com/" 
       target="_blank" 
       rel="noopener noreferrer" 
       className="inline-block hover:opacity-90 transition duration-300 cursor-pointer"
