@@ -19,10 +19,16 @@ import {
   MessageCircle,
   X,
   Instagram,
-  Layers
+  Layers,
+  Download,
+  FileText,
+  ZoomIn
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { AwaboLogo, MeepleIcon } from './Logo';
+
+const flyer2ImgSrc = '/images/第2回あわボ！チラシs.png';
+const flyer2PdfSrc = '/images/第2回あわボ！チラシ.pdf';
 
 export const InfoPage: React.FC = () => {
   useEffect(() => {
@@ -31,6 +37,9 @@ export const InfoPage: React.FC = () => {
 
   // FAQ Accordion states
   const [openFaqs, setOpenFaqs] = useState<number[]>([]);
+
+  // Flyer Modal state
+  const [showFlyerModal, setShowFlyerModal] = useState<boolean>(false);
 
   // Interested count state ("行こうかな")
   const [interestedCount, setInterestedCount] = useState<number>(() => {
@@ -186,6 +195,92 @@ export const InfoPage: React.FC = () => {
             <button onClick={() => setShowShareAlert(false)} className="text-slate-400 hover:text-white transition cursor-pointer">
               <X className="w-4 h-4" />
             </button>
+          </motion.div>
+        )}
+
+        {/* Flyer High-Resolution Lightbox Modal */}
+        {showFlyerModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowFlyerModal(false)}
+            className="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-3 md:p-6 cursor-pointer"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl overflow-hidden max-w-2xl w-full shadow-2xl relative border border-white/20 cursor-default max-h-[92vh] flex flex-col"
+            >
+              {/* Modal Header */}
+              <div className="p-4 md:px-6 bg-slate-900 text-white flex items-center justify-between shrink-0">
+                <div className="flex items-center gap-2">
+                  <span className="bg-[#EAB308] text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-md tracking-wider">
+                    第2回 公式チラシ
+                  </span>
+                  <p className="font-extrabold text-xs md:text-sm">2026年9月20日(日) 阿波市立市場図書館</p>
+                </div>
+                <button
+                  onClick={() => setShowFlyerModal(false)}
+                  className="bg-white/10 hover:bg-white/20 text-white p-1.5 rounded-full transition cursor-pointer"
+                  aria-label="閉じる"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Flyer Image Container */}
+              <div className="bg-slate-950/90 flex-1 overflow-auto flex items-center justify-center p-3 md:p-6 min-h-0">
+                <img
+                  src={flyer2ImgSrc}
+                  alt="第2回 AWABO（あわボ！）イベントチラシ"
+                  className="max-h-[62vh] w-auto object-contain rounded-xl shadow-2xl"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (!target.dataset.fallbackTried) {
+                      target.dataset.fallbackTried = 'true';
+                      target.src = '/images/flyer2.png';
+                    }
+                  }}
+                />
+              </div>
+
+              {/* Modal Footer Actions */}
+              <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
+                <p className="text-xs text-slate-500 font-bold hidden sm:block">
+                  ※ ご自由にダウンロード・印刷してご活用いただけます
+                </p>
+                <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
+                  <a
+                    href={flyer2PdfSrc}
+                    download="第2回あわボ！チラシ.pdf"
+                    className="inline-flex items-center gap-1.5 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-extrabold text-xs px-4 py-2 rounded-xl transition shadow-sm"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>PDFダウンロード (印刷用)</span>
+                  </a>
+                  <a
+                    href={flyer2ImgSrc}
+                    download="第2回あわボ！チラシ.png"
+                    className="inline-flex items-center gap-1.5 bg-white border border-slate-300 hover:border-slate-400 text-slate-700 font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-2xs"
+                  >
+                    <Download className="w-3.5 h-3.5 text-[#0D9488]" />
+                    <span>画像保存</span>
+                  </a>
+                  <a
+                    href={flyer2PdfSrc}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 bg-white border border-slate-300 hover:border-slate-400 text-slate-700 font-extrabold text-xs px-3 py-2 rounded-xl transition shadow-2xs"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
+                    <span>別タブ</span>
+                  </a>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -533,20 +628,81 @@ export const InfoPage: React.FC = () => {
 
                 </div>
 
-                {/* Right Column (Flyer Status Notice) */}
+                {/* Right Column (Flyer Showcase) */}
                 <div className="md:col-span-5 space-y-3 flex flex-col items-center border-t border-slate-100 md:border-t-0 pt-5 md:pt-0">
-                  <p className="text-slate-500 text-xs font-black self-start md:self-center">イベントチラシ</p>
-                  <div className="bg-gradient-to-br from-teal-50/80 to-amber-50/80 border border-teal-200/80 rounded-2.5xl p-5 text-center shadow-xs w-full max-w-[240px] space-y-3">
-                    <div className="w-12 h-12 rounded-2xl bg-teal-100 text-[#0D9488] flex items-center justify-center mx-auto shadow-inner">
-                      <Layers className="w-6 h-6" />
+                  <div className="w-full flex items-center justify-between">
+                    <p className="text-slate-500 text-xs font-black">公式イベントチラシ</p>
+                    <span className="bg-teal-500/15 text-[#0D9488] text-[10px] font-black px-2 py-0.5 rounded-full border border-teal-200/60 flex items-center gap-1">
+                      <Sparkles className="w-3 h-3 text-amber-500" /> 公開中
+                    </span>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-teal-50/90 to-amber-50/90 border border-teal-200/80 rounded-2.5xl p-3.5 text-center shadow-xs w-full max-w-[260px] space-y-3">
+                    {/* Clickable Flyer Preview Thumbnail */}
+                    <div 
+                      onClick={() => setShowFlyerModal(true)}
+                      className="relative rounded-2xl overflow-hidden border border-slate-200/80 shadow-md group cursor-pointer bg-white"
+                      title="クリックして拡大表示"
+                    >
+                      <img
+                        src={flyer2ImgSrc}
+                        alt="第2回 AWABO イベントチラシ"
+                        className="w-full h-auto object-cover group-hover:scale-105 transition duration-300"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (!target.dataset.fallbackTried) {
+                            target.dataset.fallbackTried = 'true';
+                            target.src = '/images/flyer2.png';
+                          }
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-slate-950/30 opacity-0 group-hover:opacity-100 transition duration-200 flex items-center justify-center backdrop-blur-[2px]">
+                        <span className="bg-white/95 text-slate-900 text-xs font-black px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 transform translate-y-2 group-hover:translate-y-0 transition duration-200">
+                          <ZoomIn className="w-3.5 h-3.5 text-[#0D9488]" />
+                          拡大して見る
+                        </span>
+                      </div>
                     </div>
-                    <div className="space-y-1">
-                      <span className="bg-amber-500/20 text-amber-800 text-[10px] font-black px-2.5 py-0.5 rounded-full">第2回チラシ作成中</span>
-                      <p className="font-black text-slate-900 text-sm pt-0.5">完成次第、公開いたします！</p>
+
+                    <div className="space-y-1 text-left">
+                      <p className="font-black text-slate-900 text-xs flex items-center gap-1">
+                        <span>第2回 開催告知チラシ</span>
+                      </p>
+                      <p className="text-[11px] text-slate-500 leading-tight">
+                        A4印刷用PDF・画像データを配布中！
+                      </p>
                     </div>
-                    <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
-                      9月20日開催（第2回）の公式チラシは制作中です。出来上がり次第、こちらのWebサイトに掲載いたします。
-                    </p>
+
+                    {/* Direct Action Buttons */}
+                    <div className="space-y-2 pt-1 w-full">
+                      <a
+                        href={flyer2PdfSrc}
+                        download="第2回あわボ！チラシ.pdf"
+                        className="w-full inline-flex items-center justify-center gap-2 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-sm cursor-pointer active:scale-98"
+                      >
+                        <FileText className="w-3.5 h-3.5 shrink-0" />
+                        <span>PDFダウンロード</span>
+                        <Download className="w-3 h-3 ml-auto opacity-70" />
+                      </a>
+                      
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          onClick={() => setShowFlyerModal(true)}
+                          className="inline-flex items-center justify-center gap-1 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-extrabold text-[11px] py-1.5 px-2 rounded-xl transition shadow-2xs cursor-pointer"
+                        >
+                          <ZoomIn className="w-3 h-3 text-[#0D9488]" />
+                          <span>拡大表示</span>
+                        </button>
+                        <a
+                          href={flyer2ImgSrc}
+                          download="第2回あわボ！チラシ.png"
+                          className="inline-flex items-center justify-center gap-1 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-extrabold text-[11px] py-1.5 px-2 rounded-xl transition shadow-2xs cursor-pointer"
+                        >
+                          <Download className="w-3 h-3 text-[#0D9488]" />
+                          <span>画像保存</span>
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 </div>
 

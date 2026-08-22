@@ -26,6 +26,8 @@ import photo2 from '../assets/images/IMG_20260809_155800088_MP_AE.jpg';
 import photo3 from '../assets/images/IMG_20260809_155812590_AE.jpg';
 import photo4 from '../assets/images/IMG_20260809_155845285_AE.jpg';
 const flyerPhoto = '/images/第1回あわボ！チラシ.png';
+const flyer2Photo = '/images/第2回あわボ！チラシs.png';
+const flyer2Pdf = '/images/第2回あわボ！チラシ.pdf';
 
 interface HistoryPageProps {
   setActiveTab?: (tab: 'info' | 'greetings' | 'rules' | 'history') => void;
@@ -350,63 +352,122 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
         </section>
 
         {/* Flyer Archive Section */}
-        <section className="space-y-4 pt-6 border-t border-slate-200/80">
+        <section className="space-y-6 pt-6 border-t border-slate-200/80">
           <h3 className="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
             <Layers className="w-5 h-5 text-[#0D9488]" />
-            <span>第1回 イベントチラシ（告知ポスター）</span>
+            <span>公式イベントチラシ・アーカイブ</span>
           </h3>
 
-          <div className="bg-slate-50/90 rounded-3xl p-5 border border-slate-200/80 flex flex-col sm:flex-row items-center gap-6">
-            <div className="w-36 md:w-44 shrink-0 rounded-2xl overflow-hidden border border-slate-200 shadow-md group relative">
-              <a 
-                href={flyerPhoto} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="block"
-              >
-                <img
-                  src={flyerPhoto}
-                  alt="第1回あわボ！チラシ"
-                  className="w-full h-auto object-cover group-hover:scale-105 transition duration-300"
-                  onError={(e) => {
-                    const target = e.currentTarget;
-                    if (!target.dataset.fallbackTried) {
-                      target.dataset.fallbackTried = 'true';
-                      target.src = '/images/flyer1.png';
-                    }
-                  }}
-                />
-              </a>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* 2nd Flyer (Latest) */}
+            <div className="bg-gradient-to-br from-teal-50/80 to-amber-50/80 rounded-3xl p-5 border border-teal-200/80 flex flex-col sm:flex-row items-center gap-5 shadow-xs">
+              <div className="w-32 md:w-36 shrink-0 rounded-2xl overflow-hidden border border-slate-200 shadow-md group relative bg-white">
+                <a 
+                  href={flyer2Photo} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="block"
+                >
+                  <img
+                    src={flyer2Photo}
+                    alt="第2回あわボ！チラシ"
+                    className="w-full h-auto object-cover group-hover:scale-105 transition duration-300"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (!target.dataset.fallbackTried) {
+                        target.dataset.fallbackTried = 'true';
+                        target.src = '/images/flyer2.png';
+                      }
+                    }}
+                  />
+                </a>
+              </div>
+
+              <div className="space-y-2 text-left flex-1 min-w-0">
+                <span className="bg-teal-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded-md">
+                  第2回 最新チラシ
+                </span>
+                <h4 className="font-black text-slate-900 text-sm md:text-base">
+                  第2回 開催告知チラシ
+                </h4>
+                <p className="text-slate-600 text-xs leading-relaxed">
+                  2026年9月20日(日) 市場図書館開催の公式チラシです。
+                </p>
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  <a
+                    href={flyer2Pdf}
+                    download="第2回あわボ！チラシ.pdf"
+                    className="inline-flex items-center gap-1 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-extrabold text-xs px-3 py-1.5 rounded-xl transition shadow-sm"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>PDF保存</span>
+                  </a>
+                  <a
+                    href={flyer2Photo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-2.5 py-1.5 rounded-xl transition shadow-2xs"
+                  >
+                    <ExternalLink className="w-3 h-3 text-[#0D9488]" />
+                    <span>別タブ</span>
+                  </a>
+                </div>
+              </div>
             </div>
 
-            <div className="space-y-3 text-left flex-1">
-              <span className="bg-teal-500/10 text-[#0D9488] text-[10px] font-black px-2.5 py-0.5 rounded-md border border-teal-200/50">
-                広報チラシ・アーカイブ
-              </span>
-              <h4 className="font-black text-slate-900 text-base">
-                第1回 AWABO（あわボ！）開催告知チラシ
-              </h4>
-              <p className="text-slate-600 text-xs leading-relaxed">
-                阿波市内の各公共施設や店舗様にて掲示・配布させていただいた公式チラシです。
-              </p>
-              <div className="flex flex-wrap gap-2 pt-1">
-                <a
-                  href={flyerPhoto}
-                  target="_blank"
+            {/* 1st Flyer (Archive) */}
+            <div className="bg-slate-50/90 rounded-3xl p-5 border border-slate-200/80 flex flex-col sm:flex-row items-center gap-5 shadow-xs">
+              <div className="w-32 md:w-36 shrink-0 rounded-2xl overflow-hidden border border-slate-200 shadow-md group relative bg-white">
+                <a 
+                  href={flyerPhoto} 
+                  target="_blank" 
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-sm"
+                  className="block"
                 >
-                  <ExternalLink className="w-3.5 h-3.5 text-[#0D9488]" />
-                  <span>チラシを別タブで開く</span>
+                  <img
+                    src={flyerPhoto}
+                    alt="第1回あわボ！チラシ"
+                    className="w-full h-auto object-cover group-hover:scale-105 transition duration-300"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (!target.dataset.fallbackTried) {
+                        target.dataset.fallbackTried = 'true';
+                        target.src = '/images/flyer1.png';
+                      }
+                    }}
+                  />
                 </a>
-                <a
-                  href={flyerPhoto}
-                  download="第1回あわボ！チラシ.png"
-                  className="inline-flex items-center gap-1.5 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-sm"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>画像を保存</span>
-                </a>
+              </div>
+
+              <div className="space-y-2 text-left flex-1 min-w-0">
+                <span className="bg-slate-200 text-slate-700 text-[10px] font-black px-2.5 py-0.5 rounded-md">
+                  第1回 アーカイブ
+                </span>
+                <h4 className="font-black text-slate-900 text-sm md:text-base">
+                  第1回 開催告知チラシ
+                </h4>
+                <p className="text-slate-600 text-xs leading-relaxed">
+                  2026年8月9日(日) アエルワ開催時の記念すべき第1回チラシです。
+                </p>
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  <a
+                    href={flyerPhoto}
+                    download="第1回あわボ！チラシ.png"
+                    className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-3 py-1.5 rounded-xl transition shadow-2xs"
+                  >
+                    <Download className="w-3.5 h-3.5 text-[#0D9488]" />
+                    <span>画像保存</span>
+                  </a>
+                  <a
+                    href={flyerPhoto}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-2.5 py-1.5 rounded-xl transition shadow-2xs"
+                  >
+                    <ExternalLink className="w-3 h-3 text-slate-500" />
+                    <span>別タブ</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -419,7 +480,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
         <div className="bg-gradient-to-r from-amber-400/20 via-orange-400/20 to-teal-400/20 rounded-2.5xl p-6 border border-amber-300/60 max-w-2xl mx-auto space-y-3">
           <p className="text-xs font-black text-amber-800 uppercase tracking-wider">次回（第2回）のご案内</p>
           <h4 className="text-lg md:text-xl font-black text-slate-900">
-            次回「AWABI（あわボ！）第2回交流会」は2026年 9月20日(日) に開催決定！
+            次回「AWABO（あわボ！）第2回交流会」は2026年 9月20日(日) に開催決定！
           </h4>
           <p className="text-xs md:text-sm text-slate-600 font-medium">
             会場は「阿波市立市場図書館」！途中入退室OK・参加費無料です。
