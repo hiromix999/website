@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { db, doc, onSnapshot, setDoc, increment } from '../lib/firebase';
 import { 
@@ -22,7 +23,10 @@ import {
   Layers,
   Download,
   FileText,
-  ZoomIn
+  ZoomIn,
+  UserPlus,
+  Mail,
+  ArrowRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { AwaboLogo, MeepleIcon } from './Logo';
@@ -452,7 +456,7 @@ export const InfoPage: React.FC = () => {
 
       {/* QUICK SCROLL BAR */}
       <div className="sticky top-16 bg-white/85 backdrop-blur-md border-y border-slate-200/50 z-30 shadow-xs no-print">
-        <div className="max-w-6xl mx-auto px-1.5 xs:px-3 md:px-6 flex items-center justify-center gap-1 xs:gap-2.5 md:gap-3 py-2 no-print">
+        <div className="max-w-6xl mx-auto px-1.5 xs:px-3 md:px-6 flex items-center justify-center gap-1 xs:gap-2.5 md:gap-3 py-2 no-print overflow-x-auto">
           
           <button 
             onClick={() => {
@@ -462,6 +466,16 @@ export const InfoPage: React.FC = () => {
           >
             <Info className="w-3.5 h-3.5 shrink-0" />
             <span>開催案内</span>
+          </button>
+
+          <button 
+            onClick={() => {
+              document.getElementById('section-register')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
+            className="px-3 py-1.5 rounded-lg text-[10px] xs:text-xs md:text-sm font-black shrink-0 transition-all flex items-center gap-1 bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 shadow-xs cursor-pointer"
+          >
+            <UserPlus className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+            <span>会員登録</span>
           </button>
 
           <button 
@@ -768,6 +782,81 @@ export const InfoPage: React.FC = () => {
             </div>
           </div>
 
+        </div>
+      </section>
+
+      {/* SECTION: MEMBER REGISTRATION */}
+      <section id="section-register" className="scroll-mt-28">
+        <div className="max-w-3xl mx-auto">
+          <div className="glass-panel rounded-3.5xl p-6 md:p-9 text-left space-y-6 bg-white/85 shadow-xl border-amber-200/80 relative overflow-hidden">
+            
+            {/* Header Accent */}
+            <div className="absolute top-0 right-0 bg-[#EAB308] text-slate-950 font-black px-4 py-1 text-xs rounded-bl-2xl tracking-wider shadow">
+              無料・1分で登録完了
+            </div>
+
+            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+              <div className="p-2.5 bg-amber-400/20 text-amber-900 rounded-2xl">
+                <UserPlus className="w-6 h-6 text-amber-700" />
+              </div>
+              <div>
+                <span className="text-[10px] font-black text-amber-700 uppercase tracking-widest block">
+                  AWABO OFFICIAL MEMBERSHIP
+                </span>
+                <h2 className="text-xl md:text-2xl font-black text-slate-900">
+                  AWABO（あわボ！） 会員登録フォーム
+                </h2>
+              </div>
+            </div>
+
+            <p className="text-xs md:text-sm text-slate-700 leading-relaxed font-medium bg-amber-50/70 p-4 rounded-2xl border border-amber-200/60">
+              ご登録いただいたメールアドレス宛に、<strong>今後の交流会やイベントのお知らせ</strong>をお送りいたします。
+            </p>
+
+            {/* Questions preview summary */}
+            <div className="space-y-2.5 pt-1">
+              <p className="text-xs font-black text-slate-800 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#0D9488]" />
+                <span>ご登録いただく情報</span>
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div className="bg-slate-50 border border-slate-200/80 p-3.5 rounded-2xl space-y-1">
+                  <p className="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-rose-500" />
+                    <span>1. ニックネーム（必須）</span>
+                  </p>
+                  <p className="text-[11px] text-slate-500">
+                    交流会等で呼んでほしいお名前やニックネーム
+                  </p>
+                </div>
+
+                <div className="bg-slate-50 border border-slate-200/80 p-3.5 rounded-2xl space-y-1">
+                  <p className="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-rose-500" />
+                    <span>2. メールアドレス（必須）</span>
+                  </p>
+                  <p className="text-[11px] text-slate-500">
+                    交流会のお知らせを送付するメールアドレス
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Action buttons */}
+            <div className="space-y-2 pt-2 text-center">
+              <a
+                href="https://forms.gle/ZWJ7Vug4XgpzRJTBA"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-slate-950 font-black text-sm md:text-base py-3.5 px-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 transform active:scale-98 cursor-pointer group"
+              >
+                <Mail className="w-5 h-5 text-slate-950 group-hover:scale-110 transition-transform" />
+                <span>Googleフォームを開いて登録する</span>
+                <ExternalLink className="w-4 h-4 text-slate-800" />
+              </a>
+            </div>
+
+          </div>
         </div>
       </section>
 

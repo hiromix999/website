@@ -240,6 +240,22 @@ export const GreetingsPage: React.FC<GreetingsPageProps> = () => {
               あなたとお会いできるのを、心から楽しみにしています！
             </p>
           </div>
+
+          <div className="pt-3 flex flex-col sm:flex-row items-center gap-3">
+            <Link
+              to="/#section-register"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#EAB308] hover:bg-amber-500 text-slate-950 font-black text-xs md:text-sm px-5 py-3 rounded-2xl shadow-sm transition cursor-pointer"
+            >
+              <span>✨ 会員登録（お知らせ配信）はこちら</span>
+            </Link>
+            <Link
+              to="/"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-extrabold text-xs md:text-sm px-5 py-3 rounded-2xl shadow-sm transition cursor-pointer"
+            >
+              <span>次回開催の案内を見る</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
 
       </div>

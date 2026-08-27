@@ -8,7 +8,8 @@ import {
   ShieldCheck, 
   MapPin, 
   Share2, 
-  Check 
+  Check,
+  UserPlus 
 } from 'lucide-react';
 import { AwaboLogo } from './Logo';
 
@@ -27,6 +28,17 @@ export const Header: React.FC = () => {
     navigator.clipboard.writeText(window.location.href);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleScrollToRegister = (e: React.MouseEvent) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      const elem = document.getElementById('section-register');
+      if (elem) {
+        elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.history.pushState(null, '', '/#section-register');
+      }
+    }
   };
 
   return (
@@ -91,6 +103,16 @@ export const Header: React.FC = () => {
 
         {/* Action Buttons */}
         <div className="flex items-center gap-2">
+          {/* Member Register Link to scroll to registration section */}
+          <Link
+            to="/#section-register"
+            onClick={handleScrollToRegister}
+            className="hidden sm:inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs px-3 py-2 md:px-3.5 md:py-2 rounded-xl shadow-xs transition duration-200 cursor-pointer shrink-0"
+          >
+            <UserPlus className="w-3.5 h-3.5 text-slate-950" />
+            <span>会員登録</span>
+          </Link>
+
           {/* Share / Copy URL button */}
           <button
             onClick={handleCopyCurrentUrl}

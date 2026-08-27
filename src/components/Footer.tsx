@@ -1,9 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Instagram } from 'lucide-react';
 import { AwaboLogo } from './Logo';
 
 export const Footer: React.FC = () => {
+  const location = useLocation();
+
+  const handleScrollToRegister = (e: React.MouseEvent) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      const elem = document.getElementById('section-register');
+      if (elem) {
+        elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.history.pushState(null, '', '/#section-register');
+      }
+    }
+  };
+
   return (
     <footer className="bg-slate-950 text-white pt-16 pb-8 px-4 text-center border-t border-slate-900 relative">
       <div className="max-w-6xl mx-auto space-y-12">
@@ -60,6 +73,15 @@ export const Footer: React.FC = () => {
                   className="hover:text-white transition cursor-pointer text-left inline-block"
                 >
                   守っていただきたいルール・注意事項
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/#section-register"
+                  onClick={handleScrollToRegister}
+                  className="text-amber-400 hover:text-amber-300 font-bold transition cursor-pointer text-left inline-flex items-center gap-1"
+                >
+                  <span>✨ 会員登録（お知らせ配信）</span>
                 </Link>
               </li>
             </ul>

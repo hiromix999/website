@@ -62,6 +62,9 @@ export default function App() {
             {/* Aliases & Anchor Deep-links */}
             <Route path="/info" element={<Navigate to="/" replace />} />
             <Route path="/event" element={<Navigate to="/" replace />} />
+            <Route path="/register" element={<RedirectWithHash hash="#section-register" />} />
+            <Route path="/form" element={<RedirectWithHash hash="#section-register" />} />
+            <Route path="/member" element={<RedirectWithHash hash="#section-register" />} />
             <Route path="/access" element={<RedirectWithHash hash="#section-access" />} />
             <Route path="/faq" element={<RedirectWithHash hash="#section-faq" />} />
             <Route path="/qa" element={<RedirectWithHash hash="#section-faq" />} />
