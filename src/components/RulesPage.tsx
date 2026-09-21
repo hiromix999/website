@@ -112,7 +112,7 @@ export const RulesPage: React.FC<RulesPageProps> = () => {
           </div>
           <div className="text-slate-600 text-xs md:text-sm pl-0 md:pl-13 mt-2 leading-relaxed font-medium space-y-2">
             <p>
-              小学生以下のお子様が参加される場合は、<strong>必ず保護者の方の同席</strong>をお願いいたします。
+              小学生低学年以下のお子様が参加される場合は、<strong>必ず保護者の方の同席</strong>をお願いいたします。
             </p>
             <p>
               会場内を走り回るなど、他の方のプレイや安全の妨げになる行為がないよう、見守りをお願いいたします。

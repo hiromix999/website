@@ -31,8 +31,8 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { AwaboLogo, MeepleIcon } from './Logo';
 
-const flyer2ImgSrc = '/images/第2回あわボ！チラシs.png';
-const flyer2PdfSrc = '/images/第2回あわボ！チラシ.pdf';
+const flyer3ImgSrc = '/images/flyer/第3回あわボ！チラシ.png';
+const flyer3PdfSrc = '/images/flyer/第3回あわボ！チラシ.pdf';
 
 export const InfoPage: React.FC = () => {
   useEffect(() => {
@@ -47,8 +47,14 @@ export const InfoPage: React.FC = () => {
 
   // Interested count state ("行こうかな")
   const [interestedCount, setInterestedCount] = useState<number>(() => {
-    const saved = localStorage.getItem('awabo_interested_count');
-    return saved ? parseInt(saved, 10) : 6;
+    const saved = localStorage.getItem('awabo_interested_count_v3');
+    if (saved) return parseInt(saved, 10);
+    // Legacy migration: if previously cached as 6, reset to 3
+    const old = localStorage.getItem('awabo_interested_count');
+    if (old && old !== '6') {
+      return parseInt(old, 10);
+    }
+    return 3;
   });
   const [hasInterested, setHasInterested] = useState<boolean>(() => {
     return localStorage.getItem('awabo_has_interested') === 'true';
@@ -68,10 +74,10 @@ export const InfoPage: React.FC = () => {
           const data = snapshot.data();
           if (typeof data.count === 'number') {
             setInterestedCount(data.count);
-            localStorage.setItem('awabo_interested_count', String(data.count));
+            localStorage.setItem('awabo_interested_count_v3', String(data.count));
           }
         } else {
-          setDoc(statsRef, { count: 6 }).catch((err) =>
+          setDoc(statsRef, { count: 3 }).catch((err) =>
             console.error('Firestore init error:', err)
           );
         }
@@ -126,7 +132,7 @@ export const InfoPage: React.FC = () => {
 
   const handleShareSNS = (platform: 'x' | 'line' | 'facebook') => {
     const title = 'ボードゲーム交流会「AWABO（あわボ！）」公式サイト';
-    const text = 'みんなで遊ぼう！無料のボードゲーム交流会「AWABO（あわボ！）」9月20日(日)開催！初心者・手ぶら参加大歓迎！';
+    const text = 'みんなで遊ぼう！無料のボードゲーム交流会「AWABO（あわボ！）」10月4日(日)開催！初心者・手ぶら参加大歓迎！';
     const url = window.location.href;
 
     let shareUrl = '';
@@ -141,7 +147,7 @@ export const InfoPage: React.FC = () => {
     window.open(shareUrl, '_blank', 'width=600,height=400');
   };
 
-  const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('AWABO（あわボ！）第2回ボードゲーム交流会')}&dates=20260920T040000Z/20260920T083000Z&details=${encodeURIComponent('【AWABO（あわボ！）第2回ボードゲーム交流会】\n子どもから大人・シニア・お一人様までどなたでもご参加いただけます！\n参加費無料・手ぶらOK・途中入退室自由です。\n\n会場：阿波市立市場図書館\n住所：徳島県阿波市市場町市場上野段212-2')}&location=${encodeURIComponent('阿波市立市場図書館（徳島県阿波市市場町市場上野段212-2）')}`;
+  const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('AWABO（あわボ！）第3回ボードゲーム交流会')}&dates=20261004T040000Z/20261004T080000Z&details=${encodeURIComponent('【AWABO（あわボ！）第3回ボードゲーム交流会】\n子どもから大人・シニア・お一人様までどなたでもご参加いただけます！\n参加費無料・手ぶらOK・途中入退室自由です。\n\n⚠️【会場と時間のお知らせ】\n会場は土成中央公民館です。会場がとても広いため、人数の心配はまったくありません！\n\n日時：10月4日(日) 13:00〜17:00\n会場：阿波市立 土成図書館（土成中央公民館）\n住所：徳島県阿波市土成町土成字漆畑220')}&location=${encodeURIComponent('阿波市立 土成図書館（土成中央公民館）（徳島県阿波市土成町土成字漆畑220）')}`;
 
   const faqData = [
     {
@@ -165,16 +171,16 @@ export const InfoPage: React.FC = () => {
       a: '開催時間中でしたら、いつ来て、いつ帰っても大丈夫です。ただし、プレイ中のゲームを抜けると他のプレイヤーに影響することがあるため、ゲームが一区切りついた段階で退出いただけますと幸いです。'
     },
     {
-      q: '事前予約は必要ですか？',
-      a: '不要です！誰でも手ぶらでふらっとお越しいただき、その場でゲームを始めていただけます。当日そのままお気軽にお越しください！'
+      q: '事前予約は必要ですか？人数制限はありますか？',
+      a: '不要です！第3回会場の土成中央公民館は会場がとても広く、人数の心配はまったくありません。誰でも手ぶらでふらっとお越しいただき、その場でゲームを始めていただけます。当日そのままお気軽にお越しください！'
     },
     {
       q: '年齢制限はありますか？子供と一緒に参加できますか？',
-      a: '子供からシニアの方まで、どなたでも参加いただけます！小学生以下の小さなお子様の場合は、ルール理解や安全を考慮し、必ず保護者の方の同伴をお願いしております。'
+      a: '子供からシニアの方まで、どなたでも参加いただけます！小学生低学年以下の小さなお子様の場合は、ルール理解や安全を考慮し、必ず保護者の方の同伴をお願いしております。'
     },
     {
       q: '図書館だけど騒いでも大丈夫？',
-      a: '図書館のイベントルームなので、騒いでも大丈夫です！'
+      a: '図書館に併設された土成中央公民館なので、騒いでも大丈夫です！'
     }
   ];
 
@@ -222,9 +228,9 @@ export const InfoPage: React.FC = () => {
               <div className="p-4 md:px-6 bg-slate-900 text-white flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-2">
                   <span className="bg-[#EAB308] text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-md tracking-wider">
-                    第2回 公式チラシ
+                    第3回 公式チラシ
                   </span>
-                  <p className="font-extrabold text-xs md:text-sm">2026年9月20日(日) 阿波市立市場図書館</p>
+                  <p className="font-extrabold text-xs md:text-sm">2026年10月4日(日) 阿波市立 土成図書館（土成中央公民館）</p>
                 </div>
                 <button
                   onClick={() => setShowFlyerModal(false)}
@@ -238,14 +244,14 @@ export const InfoPage: React.FC = () => {
               {/* Flyer Image Container */}
               <div className="bg-slate-950/90 flex-1 overflow-auto flex items-center justify-center p-3 md:p-6 min-h-0">
                 <img
-                  src={flyer2ImgSrc}
-                  alt="第2回 AWABO（あわボ！）イベントチラシ"
+                  src={flyer3ImgSrc}
+                  alt="第3回 AWABO（あわボ！）イベントチラシ"
                   className="max-h-[62vh] w-auto object-contain rounded-xl shadow-2xl"
                   onError={(e) => {
                     const target = e.currentTarget;
-                    if (!target.dataset.fallbackTried) {
-                      target.dataset.fallbackTried = 'true';
-                      target.src = '/images/flyer2.png';
+                    if (!target.dataset.fallbackCount) {
+                      target.dataset.fallbackCount = '1';
+                      target.src = '/images/flyer/flyer3.png';
                     }
                   }}
                 />
@@ -258,23 +264,23 @@ export const InfoPage: React.FC = () => {
                 </p>
                 <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
                   <a
-                    href={flyer2PdfSrc}
-                    download="第2回あわボ！チラシ.pdf"
+                    href={flyer3PdfSrc}
+                    download="第3回あわボ！チラシ.pdf"
                     className="inline-flex items-center gap-1.5 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-extrabold text-xs px-4 py-2 rounded-xl transition shadow-sm"
                   >
                     <FileText className="w-3.5 h-3.5" />
                     <span>PDFダウンロード (印刷用)</span>
                   </a>
                   <a
-                    href={flyer2ImgSrc}
-                    download="第2回あわボ！チラシ.png"
+                    href={flyer3ImgSrc}
+                    download="第3回あわボ！チラシ.png"
                     className="inline-flex items-center gap-1.5 bg-white border border-slate-300 hover:border-slate-400 text-slate-700 font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-2xs"
                   >
                     <Download className="w-3.5 h-3.5 text-[#0D9488]" />
                     <span>画像保存</span>
                   </a>
                   <a
-                    href={flyer2PdfSrc}
+                    href={flyer3PdfSrc}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 bg-white border border-slate-300 hover:border-slate-400 text-slate-700 font-extrabold text-xs px-3 py-2 rounded-xl transition shadow-2xs"
@@ -372,10 +378,10 @@ export const InfoPage: React.FC = () => {
               <div className="text-left space-y-5">
                 <div className="space-y-1">
                   <span className="text-[10px] font-extrabold uppercase text-[#0D9488] tracking-widest block">AWA BOARDGAME MEETUP</span>
-                  <h3 className="text-2xl font-black text-slate-900">AWABO（あわボ！）第2回交流会</h3>
-                  <p className="text-[11px] font-black text-[#0D9488] flex items-center gap-1 mt-1">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                    <span>秋の連休にピッタリ！親子・大人・お一人様も大歓迎の室内イベント</span>
+                  <h3 className="text-2xl font-black text-slate-900">AWABO（あわボ！）第3回交流会</h3>
+                  <p className="text-[11px] font-black text-amber-700 bg-amber-100/90 border border-amber-300/80 px-2 py-1 rounded-lg flex items-center gap-1.5 mt-1">
+                    <span className="text-sm shrink-0">⚠️</span>
+                    <span>第2回から「会場」と「開催時間」が変更になりました！</span>
                   </p>
                 </div>
 
@@ -386,7 +392,7 @@ export const InfoPage: React.FC = () => {
                       <Calendar className="w-5 h-5 text-rose-500 shrink-0" />
                       <div>
                         <p className="text-[10px] text-slate-400 leading-none">開催日程</p>
-                        <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">2026年 9月20日(日)</p>
+                        <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">2026年 10月4日(日)</p>
                       </div>
                     </div>
                     <a
@@ -406,15 +412,18 @@ export const InfoPage: React.FC = () => {
                     <Clock className="w-5 h-5 text-teal-600 shrink-0" />
                     <div>
                       <p className="text-[10px] text-slate-400 leading-none">時間</p>
-                      <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">13:00 〜 17:30</p>
+                      <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">13:00 〜 17:00</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3">
-                    <MapPin className="w-5 h-5 text-emerald-600 shrink-0" />
+                  <div className="flex items-start gap-3">
+                    <MapPin className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                     <div>
                       <p className="text-[10px] text-slate-400 leading-none">会場場所</p>
-                      <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">阿波市立市場図書館</p>
+                      <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">阿波市立 土成図書館（土成中央公民館）</p>
+                      <span className="inline-flex items-center gap-1 mt-1 text-[11px] bg-emerald-100/90 text-emerald-800 font-extrabold px-2 py-0.5 rounded-md border border-emerald-300 shadow-2xs">
+                        <span>🏢</span> 会場が超広々！人数の心配ゼロ
+                      </span>
                     </div>
                   </div>
 
@@ -517,9 +526,21 @@ export const InfoPage: React.FC = () => {
                 </div>
               </div>
 
+              {/* ⚠️ 重要なお知らせ Banner */}
+              <div className="bg-amber-50/90 border-2 border-amber-400/90 rounded-2.5xl p-4 md:p-5 text-left space-y-2 shadow-xs">
+                <div className="flex items-center gap-2 text-amber-900 font-black text-sm md:text-base">
+                  <span className="text-xl">⚠️</span>
+                  <span>【重要なお知らせ】</span>
+                </div>
+                <p className="text-slate-800 text-xs md:text-sm font-bold leading-relaxed">
+                  第2回から<span className="bg-amber-200/90 text-slate-900 px-1.5 py-0.5 rounded font-black border border-amber-300">「会場」</span>と<span className="bg-amber-200/90 text-slate-900 px-1.5 py-0.5 rounded font-black border border-amber-300">「開催時間」</span>が変更になっております！お間違えのないようご確認の上、ご参加ください。
+                </p>
+              </div>
+
               <p className="text-xs md:text-sm text-slate-600 font-semibold leading-relaxed bg-teal-50/50 p-4 rounded-2xl border border-teal-100/40">
-                第2回となる今回は、場所を変更して、<span className="font-black text-slate-900 bg-amber-200/90 px-2 py-0.5 rounded-md border border-amber-300/80 shadow-xs inline-block my-0.5">阿波市立市場図書館</span> にて開催いたします！時間も開始が30分早まり、終了も30分延びて、<span className="font-black text-[#0D9488] bg-teal-100/90 px-2 py-0.5 rounded-md border border-teal-200/80 shadow-xs inline-block my-0.5">合計1時間延長</span> で開催します！<br className="hidden sm:inline" />
-                秋の連休にぴったりな室内イベントとして、子どもから大人・シニア・お一人様までどなたでもご参加いただけます。<br className="hidden sm:inline" />
+                第3回となる今回は、会場を「阿波市立 土成図書館（土成中央公民館）」に変更し、13:00〜17:00にて開催いたします！<br className="hidden sm:inline" />
+                会場の土成中央公民館は<strong>とても広く開放的なスペース</strong>ですので、<strong>人数の心配はまったくありません！</strong>ゆったりと快適にお楽しみいただけます。<br className="hidden sm:inline" />
+                秋の休日にぴったりな室内イベントとして、子どもから大人・シニア・お一人様までどなたでもご参加いただけます。<br className="hidden sm:inline" />
                 たくさんの世界のボードゲームを体験していただけます。参加費無料・手ぶらOK、途中入退室も自由ですので、ぜひお気軽にお越しください。
               </p>
 
@@ -573,7 +594,7 @@ export const InfoPage: React.FC = () => {
                     <div className="space-y-2">
                       <div>
                         <p className="font-extrabold text-slate-900 text-base md:text-lg">
-                          9月20日(日) 13:00 〜 17:30
+                          10月4日(日) 13:00 〜 17:00
                         </p>
                         <p className="text-slate-500 text-xs leading-relaxed mt-0.5">
                           ※途中参加、途中退室も自由です。
@@ -599,23 +620,38 @@ export const InfoPage: React.FC = () => {
                     </div>
                     <div className="space-y-1">
                       <p className="font-extrabold text-slate-900 text-base">
-                        阿波市立市場図書館
+                        阿波市立 土成図書館（土成中央公民館）
                       </p>
                       <p className="text-slate-600 text-sm">
-                        徳島県阿波市市場町市場上野段212-2
+                        徳島県阿波市土成町土成字漆畑220
                       </p>
                       <div className="flex flex-wrap gap-1.5 pt-1">
+                        <span className="text-[10px] bg-emerald-100 text-emerald-900 border border-emerald-300 font-extrabold px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-2xs">
+                          🏢 会場が超広々！人数の心配なし
+                        </span>
                         <span className="text-[10px] bg-slate-100 text-slate-600 border border-slate-200 font-bold px-2.5 py-0.5 rounded-full">
                           🚗 駐車場あり（無料）
-                        </span>
-                        <span className="text-[10px] bg-teal-50 text-teal-700 border border-teal-200 font-bold px-2.5 py-0.5 rounded-full">
-                          📚 館内エアコン完備
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Item 3 */}
+                  {/* Item 3 (定員) */}
+                  <div className="flex items-start gap-4">
+                    <div className="bg-indigo-500/20 text-indigo-800 font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
+                      定員
+                    </div>
+                    <div>
+                      <p className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
+                        <span>人数の心配はまったくありません！</span>
+                      </p>
+                      <p className="text-slate-500 text-xs mt-0.5 leading-relaxed">
+                        会場の土成中央公民館は<strong>とても広いスペース</strong>が確保されており、満席の心配は一切ございません。ご家族・ご友人同士・お一人様でも安心してお越しください。
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Item 4 */}
                   <div className="flex items-start gap-4">
                     <div className="bg-rose-500/20 text-rose-800 font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
                       参加費
@@ -659,14 +695,14 @@ export const InfoPage: React.FC = () => {
                       title="クリックして拡大表示"
                     >
                       <img
-                        src={flyer2ImgSrc}
-                        alt="第2回 AWABO イベントチラシ"
+                        src={flyer3ImgSrc}
+                        alt="第3回 AWABO イベントチラシ"
                         className="w-full h-auto object-cover group-hover:scale-105 transition duration-300"
                         onError={(e) => {
                           const target = e.currentTarget;
-                          if (!target.dataset.fallbackTried) {
-                            target.dataset.fallbackTried = 'true';
-                            target.src = '/images/flyer2.png';
+                          if (!target.dataset.fallbackCount) {
+                            target.dataset.fallbackCount = '1';
+                            target.src = '/images/flyer/flyer3.png';
                           }
                         }}
                       />
@@ -680,7 +716,7 @@ export const InfoPage: React.FC = () => {
 
                     <div className="space-y-1 text-left">
                       <p className="font-black text-slate-900 text-xs flex items-center gap-1">
-                        <span>第2回交流会 開催告知チラシ</span>
+                        <span>第3回交流会 開催告知チラシ</span>
                       </p>
                       <p className="text-[11px] text-slate-500 leading-tight">
                         A4印刷用PDF・画像データを配布中！
@@ -690,8 +726,8 @@ export const InfoPage: React.FC = () => {
                     {/* Direct Action Buttons */}
                     <div className="space-y-2 pt-1 w-full">
                       <a
-                        href={flyer2PdfSrc}
-                        download="第2回あわボ！チラシ.pdf"
+                        href={flyer3PdfSrc}
+                        download="第3回あわボ！チラシ.pdf"
                         className="w-full inline-flex items-center justify-center gap-2 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-sm cursor-pointer active:scale-98"
                       >
                         <FileText className="w-3.5 h-3.5 shrink-0" />
@@ -708,8 +744,8 @@ export const InfoPage: React.FC = () => {
                           <span>拡大表示</span>
                         </button>
                         <a
-                          href={flyer2ImgSrc}
-                          download="第2回あわボ！チラシ.png"
+                          href={flyer3ImgSrc}
+                          download="第3回あわボ！チラシ.png"
                           className="inline-flex items-center justify-center gap-1 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-extrabold text-[11px] py-1.5 px-2 rounded-xl transition shadow-2xs cursor-pointer"
                         >
                           <Download className="w-3 h-3 text-[#0D9488]" />
@@ -870,7 +906,7 @@ export const InfoPage: React.FC = () => {
               <div className="inline-block bg-emerald-500/10 text-emerald-800 border border-emerald-300/30 text-xs font-black px-3 py-1 rounded-full">
                 会場へのアクセス
               </div>
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight">阿波市立市場図書館（会場）</h3>
+              <h3 className="text-2xl font-black text-slate-900 tracking-tight">阿波市立 土成図書館（土成中央公民館）（会場）</h3>
 
               <div className="space-y-3.5 text-xs text-slate-600 pt-2 border-t border-slate-100">
                 <div className="space-y-0.5">
@@ -878,7 +914,7 @@ export const InfoPage: React.FC = () => {
                     <MapPin className="w-4 h-4 text-[#0D9488]" />
                     <span>📍 住所・所在地</span>
                   </p>
-                  <p className="pl-5 text-slate-500 font-medium">徳島県阿波市市場町市場上野段212-2</p>
+                  <p className="pl-5 text-slate-500 font-medium">徳島県阿波市土成町土成字漆畑220</p>
                 </div>
 
                 <div className="space-y-0.5">
@@ -886,7 +922,16 @@ export const InfoPage: React.FC = () => {
                     <span>🚗 お車でのアクセス</span>
                   </p>
                   <p className="pl-5 text-slate-500 leading-normal">
-                    阿波市立市場図書館内にて開催いたします。敷地内に無料の駐車場が広く完備されていますので安心してお車でお越しください。
+                    阿波市立 土成図書館（土成中央公民館）敷地内に無料の駐車場が広く完備されていますので安心してお車でお越しください。
+                  </p>
+                </div>
+
+                <div className="space-y-0.5">
+                  <p className="font-extrabold text-emerald-800 flex items-center gap-1">
+                    <span>🏢 会場の広さ・スペース</span>
+                  </p>
+                  <p className="pl-5 text-slate-600 font-medium leading-relaxed">
+                    土成中央公民館は<strong>会場がとても広く開放的</strong>で、ゆったりとテーブルを配置できます。<strong>人数の心配はまったくありません</strong>ので、大人数やお子様連れのご家族、お一人様も安心してお越しください！
                   </p>
                 </div>
 
@@ -895,7 +940,7 @@ export const InfoPage: React.FC = () => {
               {/* Map quick external buttons */}
               <div className="pt-4 flex flex-wrap gap-2">
                 <a 
-                  href="https://maps.app.goo.gl/jG2p5g3RWGjAo2eJ8?g_st=ac" 
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('阿波市立土成図書館 徳島県阿波市土成町土成字漆畑220')}`}
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 bg-white border border-slate-200 hover:border-slate-400 text-slate-700 font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-xs"
@@ -910,14 +955,14 @@ export const InfoPage: React.FC = () => {
             {/* Map embed iframe Right */}
             <div className="lg:col-span-7 h-80 md:h-[380px] rounded-3xl overflow-hidden border-2 border-slate-200 shadow-inner relative bg-slate-50 shrink-0">
               <iframe 
-                src={`https://maps.google.com/maps?q=${encodeURIComponent('徳島県阿波市市場町市場上野段212-2 阿波市立市場図書館')}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
+                src={`https://maps.google.com/maps?q=${encodeURIComponent('徳島県阿波市土成町土成字漆畑220 阿波市立土成図書館')}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
                 width="100%" 
                 height="100%" 
                 style={{ border: 0 }} 
                 allowFullScreen={true} 
                 loading="lazy" 
                 referrerPolicy="no-referrer-when-downgrade"
-                title="阿波市立市場図書館のGoogleマップ案内"
+                title="阿波市立土成図書館のGoogleマップ案内"
                 className="absolute inset-0 w-full h-full"
               />
             </div>
