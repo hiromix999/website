@@ -99,8 +99,15 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
     }
   ];
 
-  // 第2回のスナップ写真（全8枚：当日のプレイゲーム紹介）
+  // 第2回のスナップ写真（全9枚：会場風景＆当日のプレイゲーム紹介）
   const event2Photos: PhotoItem[] = [
+    {
+      src: `${encodeURI('/images/event_archive/20260920_2/20260920_会場.jpg')}?t=${Date.now()}`,
+      title: '🏛️ 会場全体の熱気・大盛況の様子',
+      subtitle: '46名が来場！机が足りなくなるほどの賑わいと笑顔',
+      description: '子どもから大人、シニアの方まで46名もの皆様にお集まりいただき、会場の市場図書館は大盛況！どのテーブルも笑顔と歓声に包まれ、机が埋まるほどの熱気あふれる時間となりました。',
+      badge: '会場風景'
+    },
     {
       src: '/images/event_archive/20260920_2/IMG_20260920_131246001_HDR_AEs.jpg',
       title: '🧩 数字パズルの金字塔「ラミィキューブ」',
@@ -414,7 +421,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
                 <h3 className="text-xl md:text-2xl font-black text-slate-900 flex items-center gap-2">
                   <Camera className="w-6 h-6 text-[#0D9488]" />
-                  <span>当日のスナップ＆フォトギャラリー（全8枚）</span>
+                  <span>当日のスナップ＆フォトギャラリー（全9枚）</span>
                 </h3>
                 <span className="text-xs text-slate-400 font-bold flex items-center gap-1">
                   <ZoomIn className="w-3.5 h-3.5 text-[#0D9488]" />
@@ -427,9 +434,11 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
                   <div
                     key={index}
                     onClick={() => setSelectedPhoto(photo)}
-                    className="group relative bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-md hover:shadow-xl transition duration-300 cursor-pointer flex flex-col"
+                    className={`group relative bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-md hover:shadow-xl transition duration-300 cursor-pointer flex flex-col ${
+                      index === 0 ? 'md:col-span-2 border-teal-200/80 bg-gradient-to-b from-white to-teal-50/20' : ''
+                    }`}
                   >
-                    <div className="aspect-[16/10] w-full overflow-hidden bg-slate-100 relative">
+                    <div className={`w-full overflow-hidden bg-slate-100 relative ${index === 0 ? 'aspect-[16/9] md:aspect-[21/10]' : 'aspect-[16/10]'}`}>
                       <img
                         src={photo.src}
                         alt={photo.title}
@@ -443,7 +452,11 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
                         }}
                       />
                       <div className="absolute top-3 left-3">
-                        <span className="bg-slate-900/80 backdrop-blur-md text-amber-300 text-[10px] font-black px-3 py-1 rounded-full shadow-md">
+                        <span className={`backdrop-blur-md text-[10px] font-black px-3 py-1 rounded-full shadow-md ${
+                          index === 0 
+                            ? 'bg-[#0D9488] text-white' 
+                            : 'bg-slate-900/80 text-amber-300'
+                        }`}>
                           {photo.badge}
                         </span>
                       </div>
@@ -454,16 +467,16 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
                         </span>
                       </div>
                     </div>
-                    <div className="p-5 space-y-2 flex-1 flex flex-col justify-between text-left">
+                    <div className="p-5 md:p-6 space-y-2 flex-1 flex flex-col justify-between text-left">
                       <div>
-                        <h4 className="font-black text-slate-900 text-base md:text-lg leading-snug group-hover:text-[#0D9488] transition">
+                        <h4 className="font-black text-slate-900 text-base md:text-lg lg:text-xl leading-snug group-hover:text-[#0D9488] transition">
                           {photo.title}
                         </h4>
                         <p className="text-xs font-bold text-amber-600 mt-0.5">
                           {photo.subtitle}
                         </p>
                       </div>
-                      <p className="text-xs text-slate-600 leading-relaxed pt-1">
+                      <p className="text-xs md:text-sm text-slate-600 leading-relaxed pt-1">
                         {photo.description}
                       </p>
                     </div>

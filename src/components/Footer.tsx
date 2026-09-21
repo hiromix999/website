@@ -56,7 +56,7 @@ export const Footer: React.FC = () => {
                   to="/history"
                   className="hover:text-white transition cursor-pointer text-left inline-block"
                 >
-                  開催履歴・第1回レポート
+                  開催履歴
                 </Link>
               </li>
               <li>
