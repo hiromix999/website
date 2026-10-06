@@ -1,20 +1,5 @@
 {
-  "entities": {
-    "stats": {
-      "title": "Stats",
-      "description": "Global statistics including interested count",
-      "type": "object",
-      "properties": {
-        "count": { "type": "number", "description": "Interested count" }
-      },
-      "required": ["count"]
-    }
-  },
-  "firestore": {
-    "/stats/{docId}": {
-      "schema": "stats",
-      "description": "Global counters such as interested count"
-    }
-  }
+  "entities": {},
+  "firestore": {}
 }
 

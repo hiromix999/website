@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import confetti from 'canvas-confetti';
-import { db, doc, onSnapshot, setDoc, increment } from '../lib/firebase';
 import { 
   Calendar, 
   MapPin, 
@@ -31,8 +29,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { AwaboLogo, MeepleIcon } from './Logo';
 
-const flyer3ImgSrc = '/images/flyer/第3回あわボ！チラシ.png';
-const flyer3PdfSrc = '/images/flyer/第3回あわボ！チラシ.pdf';
+const flyerToshokanImgSrc = '/images/flyer/20261011_としょかんまつり.png';
 
 export const InfoPage: React.FC = () => {
   useEffect(() => {
@@ -45,83 +42,9 @@ export const InfoPage: React.FC = () => {
   // Flyer Modal state
   const [showFlyerModal, setShowFlyerModal] = useState<boolean>(false);
 
-  // Interested count state ("行こうかな")
-  const [interestedCount, setInterestedCount] = useState<number>(() => {
-    const saved = localStorage.getItem('awabo_interested_count_v3');
-    if (saved) return parseInt(saved, 10);
-    // Legacy migration: if previously cached as 6, reset to 3
-    const old = localStorage.getItem('awabo_interested_count');
-    if (old && old !== '6') {
-      return parseInt(old, 10);
-    }
-    return 3;
-  });
-  const [hasInterested, setHasInterested] = useState<boolean>(() => {
-    return localStorage.getItem('awabo_has_interested') === 'true';
-  });
-
   // Share Notification Alert
   const [showShareAlert, setShowShareAlert] = useState(false);
   const [shareAlertText, setShareAlertText] = useState('');
-
-  // Real-time Firestore synchronization for "行こうかな" (interested count)
-  useEffect(() => {
-    const statsRef = doc(db, 'stats', 'interested');
-    const unsubscribe = onSnapshot(
-      statsRef,
-      (snapshot) => {
-        if (snapshot.exists()) {
-          const data = snapshot.data();
-          if (typeof data.count === 'number') {
-            setInterestedCount(data.count);
-            localStorage.setItem('awabo_interested_count_v3', String(data.count));
-          }
-        } else {
-          setDoc(statsRef, { count: 3 }).catch((err) =>
-            console.error('Firestore init error:', err)
-          );
-        }
-      },
-      (error) => {
-        console.error('Firestore onSnapshot error for interested count:', error);
-      }
-    );
-    return () => unsubscribe();
-  }, []);
-
-  const handleToggleInterested = async () => {
-    const statsRef = doc(db, 'stats', 'interested');
-
-    if (!hasInterested) {
-      // 登録処理 (+1)
-      setHasInterested(true);
-      setInterestedCount((prev) => prev + 1);
-      localStorage.setItem('awabo_has_interested', 'true');
-
-      confetti({
-        particleCount: 50,
-        spread: 60,
-        origin: { y: 0.8 },
-      });
-
-      try {
-        await setDoc(statsRef, { count: increment(1) }, { merge: true });
-      } catch (err) {
-        console.error('Failed to update interested count in Firestore:', err);
-      }
-    } else {
-      // 取消処理 (-1)
-      setHasInterested(false);
-      setInterestedCount((prev) => Math.max(0, prev - 1));
-      localStorage.removeItem('awabo_has_interested');
-
-      try {
-        await setDoc(statsRef, { count: increment(-1) }, { merge: true });
-      } catch (err) {
-        console.error('Failed to decrement interested count in Firestore:', err);
-      }
-    }
-  };
 
   const triggerCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -132,7 +55,7 @@ export const InfoPage: React.FC = () => {
 
   const handleShareSNS = (platform: 'x' | 'line' | 'facebook') => {
     const title = 'ボードゲーム交流会「AWABO（あわボ！）」公式サイト';
-    const text = 'みんなで遊ぼう！無料のボードゲーム交流会「AWABO（あわボ！）」10月4日(日)開催！初心者・手ぶら参加大歓迎！';
+    const text = '無料のボードゲーム交流会「AWABO（あわボ！）」10/11(日)阿波図書館「としょかんまつり」にて体験会開催！手ぶら・参加無料！';
     const url = window.location.href;
 
     let shareUrl = '';
@@ -147,7 +70,7 @@ export const InfoPage: React.FC = () => {
     window.open(shareUrl, '_blank', 'width=600,height=400');
   };
 
-  const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('AWABO（あわボ！）第3回ボードゲーム交流会')}&dates=20261004T040000Z/20261004T080000Z&details=${encodeURIComponent('【AWABO（あわボ！）第3回ボードゲーム交流会】\n子どもから大人・シニア・お一人様までどなたでもご参加いただけます！\n参加費無料・手ぶらOK・途中入退室自由です。\n\n⚠️【会場と時間のお知らせ】\n会場は土成中央公民館です。会場がとても広いため、人数の心配はまったくありません！\n\n日時：10月4日(日) 13:00〜17:00\n会場：阿波市立 土成図書館（土成中央公民館）\n住所：徳島県阿波市土成町土成字漆畑220')}&location=${encodeURIComponent('阿波市立 土成図書館（土成中央公民館）（徳島県阿波市土成町土成字漆畑220）')}`;
+  const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('阿波図書館としょかんまつり ボードゲーム体験会（AWABO協力）')}&dates=20261011T010000Z/20261011T050000Z&details=${encodeURIComponent('【阿波図書館としょかんまつり ボードゲーム体験会】\nAWABOがイベント協力として参加いたします！\n子どもから大人まで誰でも手ぶら・無料で楽しめます。\n\n日時：10月11日(日) 10:00〜14:00\n会場：阿波農村環境改善センター')}&location=${encodeURIComponent('阿波農村環境改善センター')}`;
 
   const faqData = [
     {
@@ -172,15 +95,11 @@ export const InfoPage: React.FC = () => {
     },
     {
       q: '事前予約は必要ですか？人数制限はありますか？',
-      a: '不要です！第3回会場の土成中央公民館は会場がとても広く、人数の心配はまったくありません。誰でも手ぶらでふらっとお越しいただき、その場でゲームを始めていただけます。当日そのままお気軽にお越しください！'
+      a: '不要です！事前の参加予約は一切不要です。誰でも手ぶらでふらっとお越しいただき、その場でゲームを始めていただけます。当日そのままお気軽にお越しください！'
     },
     {
       q: '年齢制限はありますか？子供と一緒に参加できますか？',
       a: '子供からシニアの方まで、どなたでも参加いただけます！小学生低学年以下の小さなお子様の場合は、ルール理解や安全を考慮し、必ず保護者の方の同伴をお願いしております。'
-    },
-    {
-      q: '図書館だけど騒いでも大丈夫？',
-      a: '図書館に併設された土成中央公民館なので、騒いでも大丈夫です！'
     }
   ];
 
@@ -228,9 +147,11 @@ export const InfoPage: React.FC = () => {
               <div className="p-4 md:px-6 bg-slate-900 text-white flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-2">
                   <span className="bg-[#EAB308] text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-md tracking-wider">
-                    第3回 公式チラシ
+                    イベント協力チラシ
                   </span>
-                  <p className="font-extrabold text-xs md:text-sm">2026年10月4日(日) 阿波市立 土成図書館（土成中央公民館）</p>
+                  <p className="font-extrabold text-xs md:text-sm">
+                    2026年10月11日(日) 阿波図書館「としょかんまつり」ボードゲーム体験会
+                  </p>
                 </div>
                 <button
                   onClick={() => setShowFlyerModal(false)}
@@ -244,16 +165,9 @@ export const InfoPage: React.FC = () => {
               {/* Flyer Image Container */}
               <div className="bg-slate-950/90 flex-1 overflow-auto flex items-center justify-center p-3 md:p-6 min-h-0">
                 <img
-                  src={flyer3ImgSrc}
-                  alt="第3回 AWABO（あわボ！）イベントチラシ"
+                  src={flyerToshokanImgSrc}
+                  alt="阿波図書館 としょかんまつり チラシ"
                   className="max-h-[62vh] w-auto object-contain rounded-xl shadow-2xl"
-                  onError={(e) => {
-                    const target = e.currentTarget;
-                    if (!target.dataset.fallbackCount) {
-                      target.dataset.fallbackCount = '1';
-                      target.src = '/images/flyer/flyer3.png';
-                    }
-                  }}
                 />
               </div>
 
@@ -264,29 +178,21 @@ export const InfoPage: React.FC = () => {
                 </p>
                 <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
                   <a
-                    href={flyer3PdfSrc}
-                    download="第3回あわボ！チラシ.pdf"
+                    href={flyerToshokanImgSrc}
+                    download="20261011_としょかんまつり.png"
                     className="inline-flex items-center gap-1.5 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-extrabold text-xs px-4 py-2 rounded-xl transition shadow-sm"
                   >
-                    <FileText className="w-3.5 h-3.5" />
-                    <span>PDFダウンロード (印刷用)</span>
+                    <Download className="w-3.5 h-3.5" />
+                    <span>チラシ画像保存</span>
                   </a>
                   <a
-                    href={flyer3ImgSrc}
-                    download="第3回あわボ！チラシ.png"
-                    className="inline-flex items-center gap-1.5 bg-white border border-slate-300 hover:border-slate-400 text-slate-700 font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-2xs"
-                  >
-                    <Download className="w-3.5 h-3.5 text-[#0D9488]" />
-                    <span>画像保存</span>
-                  </a>
-                  <a
-                    href={flyer3PdfSrc}
+                    href={flyerToshokanImgSrc}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 bg-white border border-slate-300 hover:border-slate-400 text-slate-700 font-extrabold text-xs px-3 py-2 rounded-xl transition shadow-2xs"
+                    className="inline-flex items-center gap-1.5 bg-white border border-slate-300 hover:border-slate-400 text-slate-700 font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-2xs"
                   >
                     <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
-                    <span>別タブ</span>
+                    <span>別タブで開く</span>
                   </a>
                 </div>
               </div>
@@ -372,18 +278,38 @@ export const InfoPage: React.FC = () => {
             >
               
               <div className="absolute top-0 right-0 bg-[#EAB308] text-slate-950 font-bold px-4 py-1.5 text-xs rounded-bl-2xl tracking-wider shadow">
-                次回開催情報
+                イベント協力・直近情報
               </div>
 
               <div className="text-left space-y-5">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-extrabold uppercase text-[#0D9488] tracking-widest block">AWA BOARDGAME MEETUP</span>
-                  <h3 className="text-2xl font-black text-slate-900">AWABO（あわボ！）第3回交流会</h3>
-                  <p className="text-[11px] font-black text-amber-700 bg-amber-100/90 border border-amber-300/80 px-2 py-1 rounded-lg flex items-center gap-1.5 mt-1">
-                    <span className="text-sm shrink-0">⚠️</span>
-                    <span>第2回から「会場」と「開催時間」が変更になりました！</span>
+                  <span className="text-[10px] font-extrabold uppercase text-[#0D9488] tracking-widest block">EVENT COOPERATION</span>
+                  <h3 className="text-2xl font-black text-slate-900">10/11(日) としょかんまつり ボードゲーム体験会</h3>
+                  <p className="text-[11px] font-black text-teal-800 bg-teal-50 border border-teal-200 px-2.5 py-1 rounded-lg flex items-center gap-1.5 mt-1">
+                    <span className="text-sm shrink-0">🎪</span>
+                    <span>阿波市立阿波図書館「としょかんまつり」にAWABOがイベント協力参加！</span>
                   </p>
                 </div>
+
+                {/* 10/4 第3回終了御礼リンクバナー */}
+                <Link
+                  to="/history"
+                  className="block bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-teal-500/10 border border-amber-300/80 hover:border-amber-400 p-3 rounded-2xl transition group cursor-pointer shadow-2xs"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="bg-amber-500 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-full">
+                        第3回御礼
+                      </span>
+                      <p className="text-xs font-black text-slate-800">
+                        10/4は34名来場で大盛況！
+                      </p>
+                    </div>
+                    <span className="text-xs font-bold text-[#0D9488] flex items-center gap-1 group-hover:translate-x-1 transition">
+                      開催レポートを見る <ArrowRight className="w-3.5 h-3.5" />
+                    </span>
+                  </div>
+                </Link>
 
                 {/* Event core specifics */}
                 <div className="space-y-3 bg-white/60 border border-slate-200/50 p-4 rounded-2xl shadow-inner">
@@ -392,7 +318,7 @@ export const InfoPage: React.FC = () => {
                       <Calendar className="w-5 h-5 text-rose-500 shrink-0" />
                       <div>
                         <p className="text-[10px] text-slate-400 leading-none">開催日程</p>
-                        <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">2026年 10月4日(日)</p>
+                        <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">2026年 10月11日(日)</p>
                       </div>
                     </div>
                     <a
@@ -412,7 +338,7 @@ export const InfoPage: React.FC = () => {
                     <Clock className="w-5 h-5 text-teal-600 shrink-0" />
                     <div>
                       <p className="text-[10px] text-slate-400 leading-none">時間</p>
-                      <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">13:00 〜 17:00</p>
+                      <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">10:00 〜 14:00</p>
                     </div>
                   </div>
 
@@ -420,39 +346,11 @@ export const InfoPage: React.FC = () => {
                     <MapPin className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                     <div>
                       <p className="text-[10px] text-slate-400 leading-none">会場場所</p>
-                      <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">阿波市立 土成図書館（土成中央公民館）</p>
+                      <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">阿波農村環境改善センター</p>
                       <span className="inline-flex items-center gap-1 mt-1 text-[11px] bg-emerald-100/90 text-emerald-800 font-extrabold px-2 py-0.5 rounded-md border border-emerald-300 shadow-2xs">
-                        <span>🏢</span> 会場が超広々！人数の心配ゼロ
+                        <span>🎪</span> 阿波図書館「としょかんまつり」内 / 参加費無料・手ぶらOK
                       </span>
                     </div>
-                  </div>
-
-                  {/* 行こうかな Quick Button */}
-                  <div className="pt-3 border-t border-slate-200/60 flex flex-col sm:flex-row items-center justify-between gap-3">
-                    <button
-                      onClick={handleToggleInterested}
-                      title={hasInterested ? 'クリックで登録を取り消せます' : 'クリックして参加の気持ちを表明'}
-                      className={`w-full sm:w-auto px-4 py-2 rounded-xl font-extrabold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-95 ${
-                        hasInterested
-                          ? 'bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 ring-2 ring-amber-400/50'
-                          : 'bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-slate-900 shadow-amber-500/20'
-                      }`}
-                    >
-                      {hasInterested ? (
-                        <>
-                          <CheckCircle2 className="w-4 h-4 text-amber-700 shrink-0" />
-                          <span>行こうかな！ (登録中・タップで取消)</span>
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="w-4 h-4 text-slate-900 shrink-0" />
-                          <span>行こうかな！</span>
-                        </>
-                      )}
-                    </button>
-                    <p className="text-xs font-bold text-slate-700 text-center sm:text-right">
-                      「行こうかな」と思っている人が <span className="text-amber-600 font-black text-sm px-1.5 py-0.5 bg-amber-100/80 rounded-md border border-amber-300/50">{interestedCount}</span> 組います
-                    </p>
                   </div>
                 </div>
 
@@ -526,58 +424,28 @@ export const InfoPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* ⚠️ 重要なお知らせ Banner */}
+              {/* ⚠️ 直近のイベント情報 Banner */}
               <div className="bg-amber-50/90 border-2 border-amber-400/90 rounded-2.5xl p-4 md:p-5 text-left space-y-2 shadow-xs">
                 <div className="flex items-center gap-2 text-amber-900 font-black text-sm md:text-base">
-                  <span className="text-xl">⚠️</span>
-                  <span>【重要なお知らせ】</span>
+                  <span className="text-xl">🎪</span>
+                  <span>【直近のイベント協力情報】10/11(日) としょかんまつり 体験会！</span>
                 </div>
                 <p className="text-slate-800 text-xs md:text-sm font-bold leading-relaxed">
-                  第2回から<span className="bg-amber-200/90 text-slate-900 px-1.5 py-0.5 rounded font-black border border-amber-300">「会場」</span>と<span className="bg-amber-200/90 text-slate-900 px-1.5 py-0.5 rounded font-black border border-amber-300">「開催時間」</span>が変更になっております！お間違えのないようご確認の上、ご参加ください。
+                  阿波市立阿波図書館主催の「としょかんまつり」にて、AWABOがイベント協力として<span className="bg-amber-200/90 text-slate-900 px-1.5 py-0.5 rounded font-black border border-amber-300">ボードゲーム体験会</span>を開催いたします！会場は「阿波農村環境改善センター」、時間は10:00〜14:00です。
                 </p>
               </div>
 
-              <p className="text-xs md:text-sm text-slate-600 font-semibold leading-relaxed bg-teal-50/50 p-4 rounded-2xl border border-teal-100/40">
-                第3回となる今回は、会場を「阿波市立 土成図書館（土成中央公民館）」に変更し、13:00〜17:00にて開催いたします！<br className="hidden sm:inline" />
-                会場の土成中央公民館は<strong>とても広く開放的なスペース</strong>ですので、<strong>人数の心配はまったくありません！</strong>ゆったりと快適にお楽しみいただけます。<br className="hidden sm:inline" />
-                秋の休日にぴったりな室内イベントとして、子どもから大人・シニア・お一人様までどなたでもご参加いただけます。<br className="hidden sm:inline" />
-                たくさんの世界のボードゲームを体験していただけます。参加費無料・手ぶらOK、途中入退室も自由ですので、ぜひお気軽にお越しください。
-              </p>
-
-              {/* 行こうかな Interactive Banner */}
-              <div className="bg-gradient-to-r from-amber-50 via-orange-50 to-teal-50 border border-amber-200/80 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
-                <div className="flex items-center gap-3 text-left">
-                  <div className="w-10 h-10 rounded-2xl bg-amber-400/20 flex items-center justify-center text-xl shrink-0 shadow-inner">
-                    🙋‍♂️
-                  </div>
-                  <div>
-                    <p className="text-[11px] text-slate-500 font-bold">気軽に参加の気持ちを表明！</p>
-                    <p className="text-sm md:text-base font-black text-slate-800">
-                      「行こうかな」と思っている人が <span className="text-amber-600 text-lg font-black underline decoration-amber-400 decoration-2 underline-offset-2 mx-0.5">{interestedCount}</span> 組います
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={handleToggleInterested}
-                  title={hasInterested ? 'クリックで登録を取り消せます' : 'クリックして参加の気持ちを表明'}
-                  className={`w-full sm:w-auto px-5 py-2.5 rounded-xl font-extrabold text-xs md:text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-sm cursor-pointer active:scale-95 shrink-0 ${
-                    hasInterested
-                      ? 'bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 ring-2 ring-amber-400/50'
-                      : 'bg-gradient-to-r from-amber-400 via-amber-500 to-orange-400 text-slate-900 hover:brightness-105 shadow-orange-500/10'
-                  }`}
-                >
-                  {hasInterested ? (
-                    <>
-                      <CheckCircle2 className="w-4 h-4 text-amber-700 shrink-0" />
-                      <span>行こうかな！ (登録中・タップで取消)</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-4 h-4 text-slate-900 shrink-0" />
-                      <span>「行こうかなボタン」を押してみる</span>
-                    </>
-                  )}
-                </button>
+              <div className="text-xs md:text-sm text-slate-600 font-semibold leading-relaxed bg-teal-50/50 p-4 rounded-2xl border border-teal-100/40 space-y-2">
+                <p>
+                  10月4日(日)の「第3回 あわボ！」は雨の中34名の皆様にご来場いただき大盛況で終了いたしました！ご参加誠にありがとうございました。（
+                  <Link to="/history" className="text-[#0D9488] font-black underline underline-offset-2 hover:text-teal-800">
+                    第3回開催レポートはこちら
+                  </Link>
+                  ）
+                </p>
+                <p>
+                  次回本会というわけではありませんが、直近のイベント協力として10月11日(日)に「阿波図書館 としょかんまつり」に参加いたします。子どもから大人・シニアまで誰でも手ぶら・無料で様々な世界のボードゲームを体験していただけますので、ぜひお気軽にお立ち寄りください！
+                </p>
               </div>
 
               {/* 2-Column Grid for Table entries and Flyer Status */}
@@ -594,10 +462,10 @@ export const InfoPage: React.FC = () => {
                     <div className="space-y-2">
                       <div>
                         <p className="font-extrabold text-slate-900 text-base md:text-lg">
-                          10月4日(日) 13:00 〜 17:00
+                          10月11日(日) 10:00 〜 14:00
                         </p>
                         <p className="text-slate-500 text-xs leading-relaxed mt-0.5">
-                          ※途中参加、途中退室も自由です。
+                          ※阿波図書館「としょかんまつり」開催時間中、入退室自由です。
                         </p>
                       </div>
                       <a
@@ -620,14 +488,14 @@ export const InfoPage: React.FC = () => {
                     </div>
                     <div className="space-y-1">
                       <p className="font-extrabold text-slate-900 text-base">
-                        阿波市立 土成図書館（土成中央公民館）
+                        阿波農村環境改善センター
                       </p>
                       <p className="text-slate-600 text-sm">
-                        徳島県阿波市土成町土成字漆畑220
+                        徳島県阿波市阿波町東原173
                       </p>
                       <div className="flex flex-wrap gap-1.5 pt-1">
                         <span className="text-[10px] bg-emerald-100 text-emerald-900 border border-emerald-300 font-extrabold px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-2xs">
-                          🏢 会場が超広々！人数の心配なし
+                          🎪 阿波図書館「としょかんまつり」内ブース
                         </span>
                         <span className="text-[10px] bg-slate-100 text-slate-600 border border-slate-200 font-bold px-2.5 py-0.5 rounded-full">
                           🚗 駐車場あり（無料）
@@ -643,10 +511,10 @@ export const InfoPage: React.FC = () => {
                     </div>
                     <div>
                       <p className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
-                        <span>人数の心配はまったくありません！</span>
+                        <span>なし（自由参加・事前予約不要）</span>
                       </p>
                       <p className="text-slate-500 text-xs mt-0.5 leading-relaxed">
-                        会場の土成中央公民館は<strong>とても広いスペース</strong>が確保されており、満席の心配は一切ございません。ご家族・ご友人同士・お一人様でも安心してお越しください。
+                        開催時間中、入退室自由です。どなたでもお気軽にお越しください。
                       </p>
                     </div>
                   </div>
@@ -681,13 +549,13 @@ export const InfoPage: React.FC = () => {
                 {/* Right Column (Flyer Showcase) */}
                 <div className="md:col-span-5 space-y-3 flex flex-col items-center border-t border-slate-100 md:border-t-0 pt-5 md:pt-0">
                   <div className="w-full flex items-center justify-between">
-                    <p className="text-slate-500 text-xs font-black">公式イベントチラシ</p>
-                    <span className="bg-teal-500/15 text-[#0D9488] text-[10px] font-black px-2 py-0.5 rounded-full border border-teal-200/60 flex items-center gap-1">
-                      <Sparkles className="w-3 h-3 text-amber-500" /> 公開中
+                    <p className="text-slate-500 text-xs font-black">イベントチラシ</p>
+                    <span className="bg-amber-500/15 text-amber-800 text-[10px] font-black px-2 py-0.5 rounded-full border border-amber-300/60 flex items-center gap-1">
+                      <Sparkles className="w-3 h-3 text-amber-500" /> 最新告知
                     </span>
                   </div>
 
-                  <div className="bg-gradient-to-br from-teal-50/90 to-amber-50/90 border border-teal-200/80 rounded-2.5xl p-3.5 text-center shadow-xs w-full max-w-[260px] space-y-3">
+                  <div className="bg-gradient-to-br from-amber-50/90 to-teal-50/90 border border-amber-200/80 rounded-2.5xl p-3.5 text-center shadow-xs w-full max-w-[260px] space-y-3">
                     {/* Clickable Flyer Preview Thumbnail */}
                     <div 
                       onClick={() => setShowFlyerModal(true)}
@@ -695,16 +563,9 @@ export const InfoPage: React.FC = () => {
                       title="クリックして拡大表示"
                     >
                       <img
-                        src={flyer3ImgSrc}
-                        alt="第3回 AWABO イベントチラシ"
+                        src={flyerToshokanImgSrc}
+                        alt="としょかんまつり イベントチラシ"
                         className="w-full h-auto object-cover group-hover:scale-105 transition duration-300"
-                        onError={(e) => {
-                          const target = e.currentTarget;
-                          if (!target.dataset.fallbackCount) {
-                            target.dataset.fallbackCount = '1';
-                            target.src = '/images/flyer/flyer3.png';
-                          }
-                        }}
                       />
                       <div className="absolute inset-0 bg-slate-950/30 opacity-0 group-hover:opacity-100 transition duration-200 flex items-center justify-center backdrop-blur-[2px]">
                         <span className="bg-white/95 text-slate-900 text-xs font-black px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 transform translate-y-2 group-hover:translate-y-0 transition duration-200">
@@ -716,23 +577,22 @@ export const InfoPage: React.FC = () => {
 
                     <div className="space-y-1 text-left">
                       <p className="font-black text-slate-900 text-xs flex items-center gap-1">
-                        <span>第3回交流会 開催告知チラシ</span>
+                        <span>10/11 としょかんまつり チラシ</span>
                       </p>
                       <p className="text-[11px] text-slate-500 leading-tight">
-                        A4印刷用PDF・画像データを配布中！
+                        阿波図書館「としょかんまつり」公式告知
                       </p>
                     </div>
 
                     {/* Direct Action Buttons */}
                     <div className="space-y-2 pt-1 w-full">
                       <a
-                        href={flyer3PdfSrc}
-                        download="第3回あわボ！チラシ.pdf"
+                        href={flyerToshokanImgSrc}
+                        download="20261011_としょかんまつり.png"
                         className="w-full inline-flex items-center justify-center gap-2 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-sm cursor-pointer active:scale-98"
                       >
-                        <FileText className="w-3.5 h-3.5 shrink-0" />
-                        <span>PDFダウンロード</span>
-                        <Download className="w-3 h-3 ml-auto opacity-70" />
+                        <Download className="w-3.5 h-3.5 shrink-0" />
+                        <span>チラシ画像を保存</span>
                       </a>
                       
                       <div className="grid grid-cols-2 gap-2">
@@ -744,12 +604,13 @@ export const InfoPage: React.FC = () => {
                           <span>拡大表示</span>
                         </button>
                         <a
-                          href={flyer3ImgSrc}
-                          download="第3回あわボ！チラシ.png"
+                          href={flyerToshokanImgSrc}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="inline-flex items-center justify-center gap-1 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-extrabold text-[11px] py-1.5 px-2 rounded-xl transition shadow-2xs cursor-pointer"
                         >
-                          <Download className="w-3 h-3 text-[#0D9488]" />
-                          <span>画像保存</span>
+                          <ExternalLink className="w-3 h-3 text-[#0D9488]" />
+                          <span>別タブ</span>
                         </a>
                       </div>
                     </div>
@@ -795,7 +656,7 @@ export const InfoPage: React.FC = () => {
                 </div>
 
                 <p className="text-slate-300 text-xs leading-relaxed">
-                  「開催内容、その他ご不明な点などがあれば、お気軽に代表のInstagramのDMよりお声がけください！」
+                  公式LINEは行っておりません。今後の開催予定や最新情報は、当公式サイトおよび代表の公式Instagram（@hironanokamo）にて随時発信しております。開催内容やご不明な点などがございましたら、お気軽にInstagramのDMよりお声がけください！
                 </p>
 
                 {/* Instagram action */}
@@ -906,7 +767,9 @@ export const InfoPage: React.FC = () => {
               <div className="inline-block bg-emerald-500/10 text-emerald-800 border border-emerald-300/30 text-xs font-black px-3 py-1 rounded-full">
                 会場へのアクセス
               </div>
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight">阿波市立 土成図書館（土成中央公民館）（会場）</h3>
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">
+                阿波農村環境改善センター（10/11 としょかんまつり）
+              </h3>
 
               <div className="space-y-3.5 text-xs text-slate-600 pt-2 border-t border-slate-100">
                 <div className="space-y-0.5">
@@ -914,7 +777,8 @@ export const InfoPage: React.FC = () => {
                     <MapPin className="w-4 h-4 text-[#0D9488]" />
                     <span>📍 住所・所在地</span>
                   </p>
-                  <p className="pl-5 text-slate-500 font-medium">徳島県阿波市土成町土成字漆畑220</p>
+                  <p className="pl-5 text-slate-700 font-bold">徳島県阿波市阿波町東原173</p>
+                  <p className="pl-5 text-[11px] text-slate-500">（阿波市立阿波図書館主催「としょかんまつり」会場）</p>
                 </div>
 
                 <div className="space-y-0.5">
@@ -922,25 +786,22 @@ export const InfoPage: React.FC = () => {
                     <span>🚗 お車でのアクセス</span>
                   </p>
                   <p className="pl-5 text-slate-500 leading-normal">
-                    阿波市立 土成図書館（土成中央公民館）敷地内に無料の駐車場が広く完備されていますので安心してお車でお越しください。
+                    阿波農村環境改善センター敷地内に無料駐車場がございます。安心してお車でお越しください。
                   </p>
                 </div>
 
-                <div className="space-y-0.5">
-                  <p className="font-extrabold text-emerald-800 flex items-center gap-1">
-                    <span>🏢 会場の広さ・スペース</span>
-                  </p>
-                  <p className="pl-5 text-slate-600 font-medium leading-relaxed">
-                    土成中央公民館は<strong>会場がとても広く開放的</strong>で、ゆったりとテーブルを配置できます。<strong>人数の心配はまったくありません</strong>ので、大人数やお子様連れのご家族、お一人様も安心してお越しください！
+                <div className="space-y-0.5 pt-1 border-t border-slate-100">
+                  <p className="font-extrabold text-slate-700 text-[11px]">
+                    ※交流会本会（第3回等）の会場「阿波市立 土成中央公民館（阿波市土成町土成字漆畑220）」とは会場が異なりますのでご注意ください。
                   </p>
                 </div>
 
               </div>
 
               {/* Map quick external buttons */}
-              <div className="pt-4 flex flex-wrap gap-2">
+              <div className="pt-2 flex flex-wrap gap-2">
                 <a 
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('阿波市立土成図書館 徳島県阿波市土成町土成字漆畑220')}`}
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('阿波農村環境改善センター 徳島県阿波市阿波町東原173')}`}
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 bg-white border border-slate-200 hover:border-slate-400 text-slate-700 font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-xs"
@@ -955,14 +816,14 @@ export const InfoPage: React.FC = () => {
             {/* Map embed iframe Right */}
             <div className="lg:col-span-7 h-80 md:h-[380px] rounded-3xl overflow-hidden border-2 border-slate-200 shadow-inner relative bg-slate-50 shrink-0">
               <iframe 
-                src={`https://maps.google.com/maps?q=${encodeURIComponent('徳島県阿波市土成町土成字漆畑220 阿波市立土成図書館')}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
+                src={`https://maps.google.com/maps?q=${encodeURIComponent('徳島県阿波市阿波町東原173 阿波農村環境改善センター')}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
                 width="100%" 
                 height="100%" 
                 style={{ border: 0 }} 
                 allowFullScreen={true} 
                 loading="lazy" 
                 referrerPolicy="no-referrer-when-downgrade"
-                title="阿波市立土成図書館のGoogleマップ案内"
+                title="阿波農村環境改善センターのGoogleマップ案内"
                 className="absolute inset-0 w-full h-full"
               />
             </div>

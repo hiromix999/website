@@ -19,7 +19,9 @@ import {
   ZoomIn,
   BookOpen,
   Smile,
-  Award
+  Award,
+  Instagram,
+  Clock
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -33,6 +35,7 @@ const flyer2Photo = '/images/flyer/第2回あわボ！チラシs.png';
 const flyer2Pdf = '/images/flyer/第2回あわボ！チラシ.pdf';
 const flyer3Photo = '/images/flyer/第3回あわボ！チラシ.png';
 const flyer3Pdf = '/images/flyer/第3回あわボ！チラシ.pdf';
+const flyerToshokanPhoto = '/images/flyer/20261011_としょかんまつり.png';
 
 interface HistoryPageProps {
   setActiveTab?: (tab: 'info' | 'greetings' | 'rules' | 'history') => void;
@@ -49,10 +52,12 @@ interface PhotoItem {
 
 export const HistoryPage: React.FC<HistoryPageProps> = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoItem | null>(null);
-  const [activeSession, setActiveSession] = useState<'event2' | 'event1'>('event2');
+  const [activeSession, setActiveSession] = useState<'event3' | 'event2' | 'event1'>('event3');
 
   useEffect(() => {
-    if (activeSession === 'event2') {
+    if (activeSession === 'event3') {
+      document.title = '開催履歴・第3回レポート | 阿波市ボードゲーム交流会「AWABO（あわボ！）」';
+    } else if (activeSession === 'event2') {
       document.title = '開催履歴・第2回レポート | 阿波市ボードゲーム交流会「AWABO（あわボ！）」';
     } else {
       document.title = '開催履歴・第1回レポート | 阿波市ボードゲーム交流会「AWABO（あわボ！）」';
@@ -62,6 +67,45 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
+
+  // 第3回のスナップ写真（全5枚：会場風景、最新型アナログ集計システム、ナショナルエコノミー、ラミーキューブ、たんぐらむ）
+  const event3Photos: PhotoItem[] = [
+    {
+      src: '/images/event_archive/20261004_3/IMG_20261004_163703429_HDR_AE~3.jpg',
+      title: '🏛️ 会場の様子',
+      subtitle: '雨が降りしきる中でしたがたくさんの方にお越しいただきました',
+      description: '当日は雨が降りしきるあいにくの天候でしたが、足元の悪いなか34名ものたくさんの皆様にお越しいただきました！土成中央公民館の広々とした会場で、各テーブルごとに心地よい笑い声と真剣な熱戦が繰り広げられました。',
+      badge: '会場風景'
+    },
+    {
+      src: '/images/event_archive/20261004_3/IMG_20261004_170829034_HDR_AE.jpg',
+      title: '📊 最新型アナログ集計システム',
+      subtitle: '今回初導入！来場者数34名をセルフで記録した最新型アナログ集計システム',
+      description: '今回初導入となった最新型のアナログ集計システム！来場された皆様が自らセルフで記録する参加型システムで、子どもからシニアまで温かく記録していただきました。最終集計では「34名」の来場が記録され、第3回も大盛況の交流会となりました。',
+      badge: 'セルフ集計システム'
+    },
+    {
+      src: '/images/event_archive/20261004_3/IMG_20261004_150436437_AE.jpg',
+      title: '🏭 経済・雇用シミュレーション「ナショナルエコノミー」',
+      subtitle: '労働者を雇い事業を拡大！給料支払いに追われる本格ワーカープレイスメント',
+      description: 'ワーカーを配置して建物を建て、事業を発展させながら毎ラウンドの賃金を工面する日本発の傑作経済ゲーム。第2回に続き第3回でも熱烈なファンが集まり、綿密な経営戦略と思考戦で大いに盛り上がりました。',
+      badge: '経済・重量級'
+    },
+    {
+      src: '/images/event_archive/20261004_3/IMG_20261004_150424910_AE.jpg',
+      title: '🧩 頭脳派タイルゲーム「ラミーキューブ」',
+      subtitle: 'もはや定番。',
+      description: 'あわボ！でも「もはや定番」となった世界的人気タイルゲーム。数字の組み合わせや場のタイルの組み替え（アレンジ）に大人も子どもも熱中！一度始めると何戦も続けてプレイされる不動の人気卓でした。',
+      badge: '定番タイルゲーム'
+    },
+    {
+      src: '/images/event_archive/20261004_3/IMG_20261004_150411267_AE.jpg',
+      title: '🧩 図形パズル「たんぐらむ」',
+      subtitle: '小さいお子さんも絵合わせで遊んでいました。',
+      description: '木製ピースを組み合わせて様々なかたちを作る定番シルエットパズル「たんぐらむ」。小さいお子さんも夢中になって絵合わせで楽しそうに遊んでいました。',
+      badge: '知育・図形パズル'
+    }
+  ];
 
   // 第1回のスナップ写真
   const event1Photos: PhotoItem[] = [
@@ -217,7 +261,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
                     {selectedPhoto.badge}
                   </span>
                   <p className="text-xs font-bold text-slate-400">
-                    {activeSession === 'event2' ? '第2回あわボ！ 当日スナップ' : '第1回あわボ！ 当日スナップ'}
+                    {activeSession === 'event3' ? '第3回あわボ！ 当日スナップ' : activeSession === 'event2' ? '第2回あわボ！ 当日スナップ' : '第1回あわボ！ 当日スナップ'}
                   </p>
                 </div>
                 <h3 className="font-black text-slate-900 text-lg md:text-xl flex items-center gap-2">
@@ -250,7 +294,24 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
       </div>
 
       {/* Session Navigation Tabs */}
-      <div className="flex items-center justify-center gap-3">
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <button
+          onClick={() => setActiveSession('event3')}
+          className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-black text-sm md:text-base transition-all duration-200 cursor-pointer shadow-sm ${
+            activeSession === 'event3'
+              ? 'bg-[#0D9488] text-white shadow-md shadow-teal-700/20 ring-2 ring-teal-500 ring-offset-2'
+              : 'bg-white text-slate-700 hover:bg-teal-50/60 border border-slate-200'
+          }`}
+        >
+          <Sparkles className={`w-4 h-4 ${activeSession === 'event3' ? 'text-amber-300' : 'text-amber-500'}`} />
+          <span>第3回レポート</span>
+          <span className={`text-[10px] px-2 py-0.5 rounded-full font-extrabold ${
+            activeSession === 'event3' ? 'bg-amber-400 text-slate-900' : 'bg-amber-100 text-amber-800'
+          }`}>
+            NEW 34名来場
+          </span>
+        </button>
+
         <button
           onClick={() => setActiveSession('event2')}
           className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-black text-sm md:text-base transition-all duration-200 cursor-pointer shadow-sm ${
@@ -259,12 +320,12 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
               : 'bg-white text-slate-700 hover:bg-teal-50/60 border border-slate-200'
           }`}
         >
-          <Sparkles className={`w-4 h-4 ${activeSession === 'event2' ? 'text-amber-300' : 'text-amber-500'}`} />
+          <Calendar className="w-4 h-4" />
           <span>第2回レポート</span>
           <span className={`text-[10px] px-2 py-0.5 rounded-full font-extrabold ${
-            activeSession === 'event2' ? 'bg-amber-400 text-slate-900' : 'bg-amber-100 text-amber-800'
+            activeSession === 'event2' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
           }`}>
-            NEW 46名来場
+            46名来場
           </span>
         </button>
 
@@ -285,6 +346,372 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
           </span>
         </button>
       </div>
+
+      {/* ARTICLE: 第3回レポート */}
+      {activeSession === 'event3' && (
+        <article className="glass-panel rounded-3.5xl p-6 md:p-10 space-y-10 shadow-xl border-white/80 relative overflow-hidden bg-white/90">
+          {/* Article Meta Header */}
+          <header className="space-y-4 pb-6 border-b border-slate-200/80">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="inline-flex items-center gap-1.5 bg-slate-900 text-amber-400 text-xs font-black px-3.5 py-1 rounded-full shadow-sm">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <span>開催終了 公式レポート</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs font-extrabold text-slate-500">
+                <Calendar className="w-4 h-4 text-[#0D9488]" />
+                <span>2026年10月4日(日) 13:00〜17:00 開催</span>
+              </div>
+            </div>
+
+            <h2 className="text-2.5xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+              【第3回開催レポート】広々とした土成中央公民館で34名の皆様と熱戦！笑顔と知略が交差した充実の交流会
+            </h2>
+            <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed bg-teal-50/60 border-l-4 border-[#0D9488] p-4 rounded-r-2xl">
+              2026年10月4日(日)、阿波市立土成図書館（土成中央公民館）にて「第3回 あわボ！」を開催いたしました。当日は雨が降りしきる中でしたが、34名のたくさんの皆様にお越しいただきました！今回初導入となった「最新型アナログ集計システム」でのセルフ記録のもと、もはや定番となったラミーキューブ、小さいお子さんも絵合わせで楽しんだたんぐらむ、本格派ナショナルエコノミーまで笑顔と熱気に包まれた4時間となりました。
+            </p>
+          </header>
+
+          {/* Quick Key Stats Box */}
+          <section className="bg-gradient-to-br from-amber-500/10 via-orange-500/10 to-teal-500/10 border-2 border-amber-300/70 rounded-3xl p-5 md:p-6 shadow-sm grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+            <div className="flex items-center gap-4 bg-white/70 backdrop-blur-sm p-4 rounded-2xl border border-amber-200/80 shadow-sm">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center shrink-0 shadow-md">
+                <Users className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="text-[11px] font-black text-amber-900 uppercase tracking-wider">ご来場者数</p>
+                <div className="flex items-baseline gap-2">
+                  <p className="text-2xl md:text-3xl font-black text-[#0D9488]">
+                    34名
+                  </p>
+                  <span className="text-[11px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md">
+                    大好評！
+                  </span>
+                </div>
+                <p className="text-[11px] font-bold text-slate-500 mt-0.5">最新型アナログ集計システムでセルフ集計</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4 bg-white/70 backdrop-blur-sm p-4 rounded-2xl border border-amber-200/80 shadow-sm">
+              <div className="w-12 h-12 rounded-2xl bg-teal-500 text-white flex items-center justify-center shrink-0 shadow-md">
+                <MapPin className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="text-[11px] font-black text-amber-900 uppercase tracking-wider">開催場所</p>
+                <p className="text-base md:text-lg font-black text-slate-900">
+                  阿波市立 土成図書館（土成中央公民館）
+                </p>
+                <p className="text-[11px] font-bold text-slate-500 mt-0.5">ゆったり広々とした快適スペース</p>
+              </div>
+            </div>
+          </section>
+
+          {/* Section: Report Highlights & Flyer */}
+          <section className="space-y-6">
+            {/* Overview Card */}
+            <div className="bg-slate-50/80 rounded-3xl p-6 md:p-8 border border-slate-200/80 space-y-4">
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+                <div className="w-28 sm:w-36 shrink-0 rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-white">
+                  <a href={flyer3Photo} target="_blank" rel="noopener noreferrer" className="block">
+                    <img
+                      src={flyer3Photo}
+                      alt="第3回あわボ！チラシ"
+                      className="w-full h-auto object-cover hover:scale-105 transition duration-300"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (!target.dataset.fallbackTried) {
+                          target.dataset.fallbackTried = 'true';
+                          target.src = '/images/flyer/flyer3.png';
+                        }
+                      }}
+                    />
+                  </a>
+                </div>
+                <div className="space-y-3 text-left">
+                  <span className="bg-[#0D9488] text-white text-[11px] font-black px-3 py-1 rounded-full">
+                    第3回 開催概要
+                  </span>
+                  <h4 className="font-black text-slate-900 text-lg md:text-xl">
+                    土成中央公民館でのゆったり広々開催
+                  </h4>
+                  <p className="text-xs md:text-sm text-slate-600 leading-relaxed">
+                    第3回は会場を土成中央公民館（土成図書館）に移し、ゆとりのある大スペースを確保して開催いたしました。雨が降りしきるあいにくの空模様でしたが、足元の悪いなか34名ものたくさんの皆様にお越しいただき、今回初導入の最新型アナログ集計システムでセルフ記録を行いました。卓ごとの間隔を広く保てたことで、じっくり思考を巡らせる「ナショナルエコノミー」や定番の「ラミーキューブ」、小さいお子さんも絵合わせで夢中になった「たんぐらむ」など、それぞれのペースで快適にゲームを楽しんでいただきました！
+                  </p>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    <a
+                      href={flyer3Pdf}
+                      download="第3回あわボ！チラシ.pdf"
+                      className="inline-flex items-center gap-1.5 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-sm"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>チラシPDF保存</span>
+                    </a>
+                    <a
+                      href={flyer3Photo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-2xs"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5 text-[#0D9488]" />
+                      <span>チラシ拡大表示</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Photo Gallery Grid Article Highlight */}
+            <section className="space-y-6 pt-2">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                <h3 className="text-xl md:text-2xl font-black text-slate-900 flex items-center gap-2">
+                  <Camera className="w-6 h-6 text-[#0D9488]" />
+                  <span>当日のスナップ＆フォトギャラリー（全5枚）</span>
+                </h3>
+                <span className="text-xs text-slate-400 font-bold flex items-center gap-1">
+                  <ZoomIn className="w-3.5 h-3.5 text-[#0D9488]" />
+                  <span>タップで高画質拡大</span>
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {event3Photos.map((photo, index) => (
+                  <div
+                    key={index}
+                    onClick={() => setSelectedPhoto(photo)}
+                    className={`group relative bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-md hover:shadow-xl transition duration-300 cursor-pointer flex flex-col ${
+                      index === 0 ? 'md:col-span-2 border-teal-200/80 bg-gradient-to-b from-white to-teal-50/20' : ''
+                    }`}
+                  >
+                    <div className={`w-full overflow-hidden bg-slate-100 relative ${index === 0 ? 'aspect-[16/9] md:aspect-[21/10]' : 'aspect-[16/10]'}`}>
+                      <img
+                        src={photo.src}
+                        alt={photo.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (photo.fallbackSrc && !target.dataset.fallbackTried) {
+                            target.dataset.fallbackTried = 'true';
+                            target.src = photo.fallbackSrc;
+                          }
+                        }}
+                      />
+                      <div className="absolute top-3 left-3">
+                        <span className={`backdrop-blur-md text-[10px] font-black px-3 py-1 rounded-full shadow-md ${
+                          index === 0 
+                            ? 'bg-[#0D9488] text-white' 
+                            : 'bg-slate-900/80 text-amber-300'
+                        }`}>
+                          {photo.badge}
+                        </span>
+                      </div>
+                      <div className="absolute inset-0 bg-slate-950/30 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                        <span className="bg-white/95 text-slate-900 text-xs font-extrabold px-4 py-2 rounded-full shadow-lg flex items-center gap-1.5">
+                          <Camera className="w-4 h-4 text-[#0D9488]" />
+                          <span>高画質で見る</span>
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-5 md:p-6 space-y-2 flex-1 flex flex-col justify-between text-left">
+                      <div>
+                        <h4 className="font-black text-slate-900 text-base md:text-lg lg:text-xl leading-snug group-hover:text-[#0D9488] transition">
+                          {photo.title}
+                        </h4>
+                        <p className="text-xs font-bold text-amber-600 mt-0.5">
+                          {photo.subtitle}
+                        </p>
+                      </div>
+                      <p className="text-xs md:text-sm text-slate-600 leading-relaxed pt-1">
+                        {photo.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* Organizer Note */}
+            <div className="space-y-3 bg-slate-900 text-white p-6 md:p-8 rounded-3xl relative overflow-hidden shadow-lg">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-teal-500/10 rounded-full blur-2xl pointer-events-none"></div>
+              <div className="flex items-center gap-2 text-amber-400 text-xs font-black">
+                <Heart className="w-4 h-4 fill-amber-400" />
+                <span>主催者からのメッセージ</span>
+              </div>
+              <h4 className="text-lg md:text-xl font-black text-white">
+                雨の中、34名もの皆様にご来場いただき心より感謝申し上げます！
+              </h4>
+              <p className="text-slate-300 text-xs md:text-sm leading-relaxed">
+                当日はあいにくの雨模様でしたが、足元の悪いなかたくさんの皆様に土成中央公民館へお越しいただき本当にありがとうございました。
+                今回初導入となった最新型アナログ集計システムでのセルフ記録をはじめ、小さなお子様からシニアの方までが笑顔でボードゲームを囲む温かい時間に胸がいっぱいになりました。
+                次回開催もより楽しんでいただけるよう準備を進めてまいりますので、どうぞお楽しみに！
+              </p>
+            </div>
+
+          </section>
+
+          {/* Flyer Archive Section */}
+          <section className="space-y-6 pt-6 border-t border-slate-200/80">
+            <h3 className="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
+              <Layers className="w-5 h-5 text-[#0D9488]" />
+              <span>公式イベントチラシ・アーカイブ</span>
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* 3rd Flyer */}
+              <div className="bg-gradient-to-br from-teal-50/80 to-amber-50/80 rounded-3xl p-5 border border-teal-200/80 flex flex-col items-center gap-4 shadow-xs">
+                <div className="w-full max-w-[160px] rounded-2xl overflow-hidden border border-slate-200 shadow-md group relative bg-white">
+                  <a href={flyer3Photo} target="_blank" rel="noopener noreferrer" className="block">
+                    <img
+                      src={flyer3Photo}
+                      alt="第3回あわボ！チラシ"
+                      className="w-full h-auto object-cover group-hover:scale-105 transition duration-300"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (!target.dataset.fallbackTried) {
+                          target.dataset.fallbackTried = 'true';
+                          target.src = '/images/flyer/flyer3.png';
+                        }
+                      }}
+                    />
+                  </a>
+                </div>
+
+                <div className="space-y-2 text-left w-full">
+                  <span className="bg-[#0D9488] text-white text-[10px] font-black px-2.5 py-0.5 rounded-md">
+                    第3回 開催
+                  </span>
+                  <h4 className="font-black text-slate-900 text-sm md:text-base">
+                    第3回 開催告知チラシ
+                  </h4>
+                  <p className="text-slate-600 text-xs leading-relaxed">
+                    2026年10月4日(日) 土成図書館開催の公式チラシです。
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    <a
+                      href={flyer3Pdf}
+                      download="第3回あわボ！チラシ.pdf"
+                      className="inline-flex items-center gap-1 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-extrabold text-xs px-3 py-1.5 rounded-xl transition shadow-sm"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>PDF保存</span>
+                    </a>
+                    <a
+                      href={flyer3Photo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-2.5 py-1.5 rounded-xl transition shadow-2xs"
+                    >
+                      <ExternalLink className="w-3 h-3 text-[#0D9488]" />
+                      <span>別タブ</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* 2nd Flyer */}
+              <div className="bg-slate-50/80 rounded-3xl p-5 border border-slate-200/80 flex flex-col items-center gap-4 shadow-xs">
+                <div className="w-full max-w-[160px] rounded-2xl overflow-hidden border border-slate-200 shadow-md group relative bg-white">
+                  <a href={flyer2Photo} target="_blank" rel="noopener noreferrer" className="block">
+                    <img
+                      src={flyer2Photo}
+                      alt="第2回あわボ！チラシ"
+                      className="w-full h-auto object-cover group-hover:scale-105 transition duration-300"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (!target.dataset.fallbackTried) {
+                          target.dataset.fallbackTried = 'true';
+                          target.src = '/images/flyer/flyer2.png';
+                        }
+                      }}
+                    />
+                  </a>
+                </div>
+
+                <div className="space-y-2 text-left w-full">
+                  <span className="bg-slate-200 text-slate-700 text-[10px] font-black px-2.5 py-0.5 rounded-md">
+                    第2回 アーカイブ
+                  </span>
+                  <h4 className="font-black text-slate-900 text-sm md:text-base">
+                    第2回 開催告知チラシ
+                  </h4>
+                  <p className="text-slate-600 text-xs leading-relaxed">
+                    2026年9月20日(日) 市場図書館開催のチラシです。
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    <a
+                      href={flyer2Pdf}
+                      download="第2回あわボ！チラシ.pdf"
+                      className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-3 py-1.5 rounded-xl transition shadow-2xs"
+                    >
+                      <Download className="w-3.5 h-3.5 text-[#0D9488]" />
+                      <span>PDF保存</span>
+                    </a>
+                    <a
+                      href={flyer2Photo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-2.5 py-1.5 rounded-xl transition shadow-2xs"
+                    >
+                      <ExternalLink className="w-3 h-3 text-slate-500" />
+                      <span>別タブ</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* 1st Flyer */}
+              <div className="bg-slate-50/80 rounded-3xl p-5 border border-slate-200/80 flex flex-col items-center gap-4 shadow-xs">
+                <div className="w-full max-w-[160px] rounded-2xl overflow-hidden border border-slate-200 shadow-md group relative bg-white">
+                  <a href={flyerPhoto} target="_blank" rel="noopener noreferrer" className="block">
+                    <img
+                      src={flyerPhoto}
+                      alt="第1回あわボ！チラシ"
+                      className="w-full h-auto object-cover group-hover:scale-105 transition duration-300"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (!target.dataset.fallbackTried) {
+                          target.dataset.fallbackTried = 'true';
+                          target.src = '/images/flyer/flyer1.png';
+                        }
+                      }}
+                    />
+                  </a>
+                </div>
+
+                <div className="space-y-2 text-left w-full">
+                  <span className="bg-slate-200 text-slate-700 text-[10px] font-black px-2.5 py-0.5 rounded-md">
+                    第1回 アーカイブ
+                  </span>
+                  <h4 className="font-black text-slate-900 text-sm md:text-base">
+                    第1回 開催告知チラシ
+                  </h4>
+                  <p className="text-slate-600 text-xs leading-relaxed">
+                    2026年8月9日(日) 記念すべき第1回チラシです。
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    <a
+                      href={flyerPhoto}
+                      download="第1回あわボ！チラシ.png"
+                      className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-3 py-1.5 rounded-xl transition shadow-2xs"
+                    >
+                      <Download className="w-3.5 h-3.5 text-[#0D9488]" />
+                      <span>画像保存</span>
+                    </a>
+                    <a
+                      href={flyerPhoto}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-2.5 py-1.5 rounded-xl transition shadow-2xs"
+                    >
+                      <ExternalLink className="w-3 h-3 text-slate-500" />
+                      <span>別タブ</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </article>
+      )}
 
       {/* ARTICLE: 第2回レポート */}
       {activeSession === 'event2' && (
@@ -531,8 +958,8 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
                 </div>
 
                 <div className="space-y-2 text-left w-full">
-                  <span className="bg-teal-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded-md">
-                    第3回 次回告知
+                  <span className="bg-[#0D9488] text-white text-[10px] font-black px-2.5 py-0.5 rounded-md">
+                    第3回 アーカイブ
                   </span>
                   <h4 className="font-black text-slate-900 text-sm md:text-base">
                     第3回 開催告知チラシ
@@ -1021,21 +1448,101 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
         </article>
       )}
 
-      {/* Back button & Next Event Prompt */}
-      <div className="text-center space-y-4 no-print pt-4">
-        <div className="bg-gradient-to-r from-amber-400/20 via-orange-400/20 to-teal-400/20 rounded-2.5xl p-6 border border-amber-300/60 max-w-2xl mx-auto space-y-3">
-          <p className="text-xs font-black text-amber-800 uppercase tracking-wider">次回（第3回）のご案内</p>
-          <h4 className="text-lg md:text-xl font-black text-slate-900">
-            次回「AWABO（あわボ！）第3回交流会」は2026年 10月4日(日) に開催決定！
-          </h4>
-          <p className="text-xs md:text-sm text-slate-600 font-medium">
-            会場は「阿波市立 土成図書館（土成中央公民館）」！会場がとても広く人数の心配はまったくありません。時間：13:00〜17:00・途中入退室OK・参加費無料です。
-          </p>
+      {/* Event Cooperation & Next Event Prompt */}
+      <div className="space-y-6 no-print pt-4 max-w-2xl mx-auto">
+        {/* Toshokan Matsuri Event Cooperation Card */}
+        <div className="bg-gradient-to-br from-amber-500/15 via-teal-500/10 to-orange-500/15 rounded-3xl p-6 md:p-8 border-2 border-amber-300 shadow-md text-left space-y-5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="bg-amber-500 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full shadow-xs">
+              🎉 イベント協力・直近イベント情報
+            </span>
+            <span className="text-xs font-bold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-md">
+              参加費無料
+            </span>
+          </div>
+
+          <div>
+            <h4 className="text-xl md:text-2xl font-black text-slate-900 leading-snug">
+              10/11(日) 阿波図書館「としょかんまつり」にてボードゲーム体験会を開催！
+            </h4>
+            <p className="text-xs md:text-sm text-slate-600 font-medium leading-relaxed mt-2">
+              次回本会というわけではありませんが、イベント協力として阿波図書館主催の「としょかんまつり」に参加いたします！会場の「阿波農村環境改善センター」にて、10:00〜14:00にボードゲーム体験会を実施します。ぜひお気軽にお立ち寄りください！
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center gap-5 bg-white/80 p-4 rounded-2xl border border-amber-200/80 shadow-inner">
+            <div className="w-28 sm:w-32 shrink-0 rounded-xl overflow-hidden border border-slate-200 shadow-md group relative bg-white">
+              <a href={flyerToshokanPhoto} target="_blank" rel="noopener noreferrer" className="block">
+                <img
+                  src={flyerToshokanPhoto}
+                  alt="としょかんまつりチラシ"
+                  className="w-full h-auto object-cover group-hover:scale-105 transition duration-300"
+                />
+              </a>
+            </div>
+            <div className="space-y-2 text-left w-full text-xs md:text-sm">
+              <div className="flex items-center gap-2 text-slate-800 font-extrabold">
+                <Calendar className="w-4 h-4 text-rose-500 shrink-0" />
+                <span>2026年 10月11日(日)</span>
+              </div>
+              <div className="flex items-center gap-2 text-slate-800 font-extrabold">
+                <Clock className="w-4 h-4 text-teal-600 shrink-0" />
+                <span>10:00 〜 14:00</span>
+              </div>
+              <div className="flex items-start gap-2 text-slate-800 font-extrabold">
+                <MapPin className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                <span>阿波農村環境改善センター</span>
+              </div>
+              <p className="text-[11px] text-slate-500 pt-0.5 font-bold">
+                ※阿波市立阿波図書館主催の「としょかんまつり」内ブースです
+              </p>
+              <div className="flex flex-wrap gap-2 pt-1">
+                <a
+                  href={flyerToshokanPhoto}
+                  download="20261011_としょかんまつり.png"
+                  className="inline-flex items-center gap-1 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-extrabold text-xs px-3 py-1.5 rounded-xl transition shadow-sm"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>チラシ保存</span>
+                </a>
+                <a
+                  href={flyerToshokanPhoto}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-2.5 py-1.5 rounded-xl transition shadow-2xs"
+                >
+                  <ExternalLink className="w-3 h-3 text-[#0D9488]" />
+                  <span>拡大表示</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-2 border-t border-amber-200/60 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
+              <Instagram className="w-4 h-4 text-rose-500 shrink-0" />
+              <span>最新情報は公式Instagramにて随時発信中！</span>
+            </div>
+            <a
+              href="https://www.instagram.com/hironanokamo/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-extrabold text-xs px-4 py-2 rounded-xl transition shadow-sm cursor-pointer"
+            >
+              <Instagram className="w-4 h-4" />
+              <span>公式Instagram (@hironanokamo)</span>
+              <ExternalLink className="w-3 h-3 text-white/80" />
+            </a>
+          </div>
+        </div>
+
+        {/* Back button */}
+        <div className="text-center pt-2">
           <Link
             to="/"
-            className="mt-2 inline-flex items-center gap-2 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-black text-xs md:text-sm px-6 py-3 rounded-xl transition shadow-md active:scale-95 cursor-pointer"
+            className="inline-flex items-center gap-2 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-black text-xs md:text-sm px-6 py-3 rounded-xl transition shadow-md active:scale-95 cursor-pointer"
           >
-            <span>次回開催案内へ戻る</span>
+            <span>トップページへ戻る</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
