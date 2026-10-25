@@ -1497,7 +1497,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
                 <MapPin className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                 <div>
                   <p>阿波市立市場図書館</p>
-                  <p className="text-[11px] text-slate-500 font-normal">徳島県阿波市市場町市場字上野215-1</p>
+                  <p className="text-[11px] text-slate-500 font-normal">徳島県阿波市市場町市場字上野段212-2</p>
                 </div>
               </div>
               <div className="flex flex-wrap gap-2 pt-1">

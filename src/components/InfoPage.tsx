@@ -71,7 +71,7 @@ export const InfoPage: React.FC = () => {
     window.open(shareUrl, '_blank', 'width=600,height=400');
   };
 
-  const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('AWABO第4回交流会')}&dates=20261129T040000Z/20261129T080000Z&details=${encodeURIComponent('【AWABO第4回交流会 開催のお知らせ🎲】\n第4回となるAWABOの開催が決定しました！\n\n初心者の方からボードゲーム好きの方まで、どなたでも気軽に楽しめる交流会です。\n「ルールがわからない」「一人で参加しても大丈夫？」という方もご安心ください。スタッフや参加者の皆で分かりやすくルールを説明しながら遊びます✨\n\n日時：11月29日（日）13:00 〜 17:00\n場所：阿波市立市場図書館\n参加費：無料\n対象：どなたでも（※小学校低学年以下は保護者同伴となります）\n\nルールが簡単なゲームや短時間で盛り上がるゲームをたくさんご用意してお待ちしております。途中参加・途中退出もOKですので、お気軽にお立ち寄りください！\n\n🌐 公式サイト：https://awa-bo.com/\n✉️ メール：info@awa-bo.com\n📷 Instagram：@hironanokamo')}&location=${encodeURIComponent('阿波市立市場図書館（徳島県阿波市市場町市場字上野215-1）')}`;
+  const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('AWABO第4回交流会')}&dates=20261129T040000Z/20261129T080000Z&details=${encodeURIComponent('【AWABO第4回交流会 開催のお知らせ🎲】\n第4回となるAWABOの開催が決定しました！\n\n初心者の方からボードゲーム好きの方まで、どなたでも気軽に楽しめる交流会です。\n「ルールがわからない」「一人で参加しても大丈夫？」という方もご安心ください。スタッフや参加者の皆で分かりやすくルールを説明しながら遊びます✨\n\n日時：11月29日（日）13:00 〜 17:00\n場所：阿波市立市場図書館\n参加費：無料\n対象：どなたでも（※小学校低学年以下は保護者同伴となります）\n\nルールが簡単なゲームや短時間で盛り上がるゲームをたくさんご用意してお待ちしております。途中参加・途中退出もOKですので、お気軽にお立ち寄りください！\n\n🌐 公式サイト：https://awa-bo.com/\n✉️ メール：info@awa-bo.com\n📷 Instagram：@hironanokamo')}&location=${encodeURIComponent('阿波市立市場図書館（徳島県阿波市市場町市場字上野段212-2）')}`;
 
   const faqData = [
     {
@@ -511,7 +511,7 @@ export const InfoPage: React.FC = () => {
                         阿波市立市場図書館
                       </p>
                       <p className="text-slate-600 text-sm">
-                        徳島県阿波市市場町市場字上野215-1
+                        徳島県阿波市市場町市場字上野段212-2
                       </p>
                       <div className="flex flex-wrap gap-1.5 pt-1">
                         <span className="text-[10px] bg-emerald-100 text-emerald-900 border border-emerald-300 font-extrabold px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-2xs">
@@ -830,7 +830,7 @@ export const InfoPage: React.FC = () => {
                     <MapPin className="w-4 h-4 text-[#0D9488]" />
                     <span>📍 住所・所在地</span>
                   </p>
-                  <p className="pl-5 text-slate-800 font-bold">徳島県阿波市市場町市場字上野215-1</p>
+                  <p className="pl-5 text-slate-800 font-bold">徳島県阿波市市場町市場字上野段212-2</p>
                   <p className="pl-5 text-[11px] text-slate-500">（阿波市立市場図書館）</p>
                 </div>
 
@@ -854,7 +854,7 @@ export const InfoPage: React.FC = () => {
               {/* Map quick external buttons */}
               <div className="pt-2 flex flex-wrap gap-2">
                 <a 
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('阿波市立市場図書館 徳島県阿波市市場町市場字上野215-1')}`}
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('阿波市立市場図書館 徳島県阿波市市場町市場字上野段212-2')}`}
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 bg-white border border-slate-200 hover:border-slate-400 text-slate-700 font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-xs"
@@ -869,7 +869,7 @@ export const InfoPage: React.FC = () => {
             {/* Map embed iframe Right */}
             <div className="lg:col-span-7 h-80 md:h-[380px] rounded-3xl overflow-hidden border-2 border-slate-200 shadow-inner relative bg-slate-50 shrink-0">
               <iframe 
-                src={`https://maps.google.com/maps?q=${encodeURIComponent('徳島県阿波市市場町市場字上野215-1 阿波市立市場図書館')}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
+                src={`https://maps.google.com/maps?q=${encodeURIComponent('徳島県阿波市市場町市場字上野段212-2 阿波市立市場図書館')}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
                 width="100%" 
                 height="100%" 
                 style={{ border: 0 }} 
