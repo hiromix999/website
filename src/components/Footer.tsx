@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Instagram } from 'lucide-react';
+import { Instagram, Mail } from 'lucide-react';
 import { AwaboLogo } from './Logo';
 
 export const Footer: React.FC = () => {
@@ -92,18 +92,31 @@ export const Footer: React.FC = () => {
             <h4 className="font-extrabold text-white tracking-widest border-l-2 border-[#0D9488] pl-2.5">運営情報</h4>
             <p className="font-bold text-white mt-1">AWABO（あわボ！）実行委員会</p>
 
-            <p className="flex items-center gap-1.5 mt-2">
-              <span>代表者Instagram:</span>
-              <a 
-                href="https://www.instagram.com/hironanokamo/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-teal-400 hover:text-teal-300 font-bold flex items-center gap-1"
-              >
-                <Instagram className="w-3.5 h-3.5" />
-                <span>@hironanokamo</span>
-              </a>
-            </p>
+            <div className="space-y-1.5 mt-2">
+              <p className="flex items-center gap-1.5">
+                <span>お問い合わせ（メール）:</span>
+                <a 
+                  href="mailto:info@awa-bo.com" 
+                  className="text-teal-400 hover:text-teal-300 font-bold flex items-center gap-1"
+                >
+                  <Mail className="w-3.5 h-3.5" />
+                  <span>info@awa-bo.com</span>
+                </a>
+              </p>
+
+              <p className="flex items-center gap-1.5">
+                <span>代表者Instagram:</span>
+                <a 
+                  href="https://www.instagram.com/hironanokamo/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-teal-400 hover:text-teal-300 font-bold flex items-center gap-1"
+                >
+                  <Instagram className="w-3.5 h-3.5" />
+                  <span>@hironanokamo</span>
+                </a>
+              </p>
+            </div>
           </div>
 
         </div>

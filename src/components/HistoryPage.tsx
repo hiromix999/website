@@ -21,7 +21,9 @@ import {
   Smile,
   Award,
   Instagram,
-  Clock
+  Clock,
+  FileText,
+  Mail
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -36,6 +38,8 @@ const flyer2Pdf = '/images/flyer/第2回あわボ！チラシ.pdf';
 const flyer3Photo = '/images/flyer/第3回あわボ！チラシ.png';
 const flyer3Pdf = '/images/flyer/第3回あわボ！チラシ.pdf';
 const flyerToshokanPhoto = '/images/flyer/20261011_としょかんまつり.png';
+const flyer4Photo = '/images/flyer/第4回AWABOチラシ.png';
+const flyer4Pdf = '/images/flyer/第4回AWABOチラシ.pdf';
 
 interface HistoryPageProps {
   setActiveTab?: (tab: 'info' | 'greetings' | 'rules' | 'history') => void;
@@ -1448,34 +1452,34 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
         </article>
       )}
 
-      {/* Event Cooperation & Next Event Prompt */}
+      {/* Next Event Prompt */}
       <div className="space-y-6 no-print pt-4 max-w-2xl mx-auto">
-        {/* Toshokan Matsuri Event Cooperation Card */}
+        {/* 第4回 Event Announcement Card */}
         <div className="bg-gradient-to-br from-amber-500/15 via-teal-500/10 to-orange-500/15 rounded-3xl p-6 md:p-8 border-2 border-amber-300 shadow-md text-left space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="bg-amber-500 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full shadow-xs">
-              🎉 イベント協力・直近イベント情報
+              🎲 次回開催決定！
             </span>
             <span className="text-xs font-bold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-md">
-              参加費無料
+              参加費無料・手ぶらOK
             </span>
           </div>
 
           <div>
             <h4 className="text-xl md:text-2xl font-black text-slate-900 leading-snug">
-              10/11(日) 阿波図書館「としょかんまつり」にてボードゲーム体験会を開催！
+              AWABO第4回交流会 開催決定！
             </h4>
-            <p className="text-xs md:text-sm text-slate-600 font-medium leading-relaxed mt-2">
-              次回本会というわけではありませんが、イベント協力として阿波図書館主催の「としょかんまつり」に参加いたします！会場の「阿波農村環境改善センター」にて、10:00〜14:00にボードゲーム体験会を実施します。ぜひお気軽にお立ち寄りください！
+            <p className="text-xs md:text-sm text-slate-700 font-medium leading-relaxed mt-2">
+              初心者の方からボードゲーム好きの方まで、どなたでも気軽に楽しめる交流会です。スタッフや参加者の皆で分かりやすくルールを説明しながら遊びます✨ 途中参加・途中退出もOKですので、お気軽にお立ち寄りください！
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center gap-5 bg-white/80 p-4 rounded-2xl border border-amber-200/80 shadow-inner">
             <div className="w-28 sm:w-32 shrink-0 rounded-xl overflow-hidden border border-slate-200 shadow-md group relative bg-white">
-              <a href={flyerToshokanPhoto} target="_blank" rel="noopener noreferrer" className="block">
+              <a href={flyer4Photo} target="_blank" rel="noopener noreferrer" className="block">
                 <img
-                  src={flyerToshokanPhoto}
-                  alt="としょかんまつりチラシ"
+                  src={flyer4Photo}
+                  alt="第4回AWABOチラシ"
                   className="w-full h-auto object-cover group-hover:scale-105 transition duration-300"
                 />
               </a>
@@ -1483,36 +1487,44 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
             <div className="space-y-2 text-left w-full text-xs md:text-sm">
               <div className="flex items-center gap-2 text-slate-800 font-extrabold">
                 <Calendar className="w-4 h-4 text-rose-500 shrink-0" />
-                <span>2026年 10月11日(日)</span>
+                <span>2026年 11月29日(日)</span>
               </div>
               <div className="flex items-center gap-2 text-slate-800 font-extrabold">
                 <Clock className="w-4 h-4 text-teal-600 shrink-0" />
-                <span>10:00 〜 14:00</span>
+                <span>13:00 〜 17:00</span>
               </div>
               <div className="flex items-start gap-2 text-slate-800 font-extrabold">
                 <MapPin className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span>阿波農村環境改善センター</span>
+                <div>
+                  <p>阿波市立市場図書館</p>
+                  <p className="text-[11px] text-slate-500 font-normal">徳島県阿波市市場町市場字上野215-1</p>
+                </div>
               </div>
-              <p className="text-[11px] text-slate-500 pt-0.5 font-bold">
-                ※阿波市立阿波図書館主催の「としょかんまつり」内ブースです
-              </p>
               <div className="flex flex-wrap gap-2 pt-1">
                 <a
-                  href={flyerToshokanPhoto}
-                  download="20261011_としょかんまつり.png"
+                  href={flyer4Photo}
+                  download="第4回AWABOチラシ.png"
                   className="inline-flex items-center gap-1 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-extrabold text-xs px-3 py-1.5 rounded-xl transition shadow-sm"
                 >
                   <Download className="w-3.5 h-3.5" />
-                  <span>チラシ保存</span>
+                  <span>チラシ画像保存</span>
                 </a>
                 <a
-                  href={flyerToshokanPhoto}
+                  href={flyer4Pdf}
+                  download="第4回AWABOチラシ.pdf"
+                  className="inline-flex items-center gap-1 bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs px-3 py-1.5 rounded-xl transition shadow-sm"
+                >
+                  <FileText className="w-3.5 h-3.5" />
+                  <span>PDF保存</span>
+                </a>
+                <a
+                  href={flyer4Photo}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-2.5 py-1.5 rounded-xl transition shadow-2xs"
                 >
                   <ExternalLink className="w-3 h-3 text-[#0D9488]" />
-                  <span>拡大表示</span>
+                  <span>拡大</span>
                 </a>
               </div>
             </div>
@@ -1520,8 +1532,10 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
 
           <div className="pt-2 border-t border-amber-200/60 flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
-              <Instagram className="w-4 h-4 text-rose-500 shrink-0" />
-              <span>最新情報は公式Instagramにて随時発信中！</span>
+              <Mail className="w-4 h-4 text-teal-600 shrink-0" />
+              <a href="mailto:info@awa-bo.com" className="hover:underline">
+                <span>お問い合わせ：info@awa-bo.com</span>
+              </a>
             </div>
             <a
               href="https://www.instagram.com/hironanokamo/"
