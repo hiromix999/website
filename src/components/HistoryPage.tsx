@@ -214,6 +214,158 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
     }
   ];
 
+  // 過去の開催履歴一覧テーブル（アーカイブセクション用）
+  const PastEventsTable = () => (
+    <div className="space-y-3 pt-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1">
+        <div>
+          <h4 className="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2">
+            <History className="w-5 h-5 text-[#0D9488]" />
+            <span>過去の開催履歴一覧</span>
+          </h4>
+          <p className="text-xs text-slate-500 font-medium mt-0.5">
+            これまで開催された交流会の日時・場所・参加人数の一覧です
+          </p>
+        </div>
+        <span className="text-xs font-bold text-slate-700 bg-teal-50 border border-teal-200/80 px-2.5 py-1 rounded-lg w-fit">
+          累計参加者数：<strong className="text-[#0D9488] font-black">120名</strong>
+        </span>
+      </div>
+
+      <div className="overflow-x-auto rounded-2xl border border-slate-200 shadow-2xs bg-white">
+        <table className="min-w-[480px] w-full text-left border-collapse text-xs sm:text-sm">
+          <thead>
+            <tr className="bg-slate-50 text-slate-700 font-extrabold border-b border-slate-200">
+              <th className="py-2.5 px-2 sm:px-3 w-[48px] min-w-[48px] text-center whitespace-nowrap">回</th>
+              <th className="py-2.5 px-2 sm:px-3 w-[105px] min-w-[105px] whitespace-nowrap">日時</th>
+              <th className="py-2.5 px-3 sm:px-4 min-w-[185px] sm:min-w-[210px]">場所</th>
+              <th className="py-2.5 px-1.5 sm:px-2.5 w-[50px] min-w-[50px] text-center whitespace-nowrap">人数</th>
+              <th className="py-2.5 px-1.5 sm:px-2.5 w-[56px] min-w-[56px] text-center whitespace-nowrap">詳細</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
+            {/* 第3回 */}
+            <tr className="hover:bg-amber-50/40 transition">
+              <td className="py-2.5 px-2 sm:px-3 text-center font-black whitespace-nowrap">
+                <span className="bg-amber-100 text-amber-900 border border-amber-300 text-[11px] font-black px-1.5 py-0.5 rounded-md inline-block">
+                  第3回
+                </span>
+              </td>
+              <td className="py-2.5 px-2 sm:px-3 whitespace-nowrap leading-tight">
+                <div className="font-bold text-slate-900 text-[11px] sm:text-xs">2026.10.4(日)</div>
+                <div className="text-[10px] sm:text-[11px] text-slate-500 font-normal mt-0.5">13:00〜17:00</div>
+              </td>
+              <td className="py-2.5 px-3 sm:px-4 leading-snug min-w-[185px] sm:min-w-[210px]">
+                <div className="font-bold text-slate-900 text-xs sm:text-sm">土成図書館</div>
+                <div className="text-[11px] text-slate-500 font-normal">（中央公民館）</div>
+              </td>
+              <td className="py-2.5 px-1.5 sm:px-2.5 text-center whitespace-nowrap">
+                <span className="text-xs sm:text-sm font-black text-[#0D9488]">34名</span>
+              </td>
+              <td className="py-2.5 px-1.5 sm:px-2.5 text-center whitespace-nowrap">
+                <button
+                  onClick={() => {
+                    setActiveSession('event3');
+                    window.scrollTo({ top: 220, behavior: 'smooth' });
+                  }}
+                  className="inline-flex items-center gap-0.5 bg-[#0D9488] hover:bg-teal-700 text-white font-extrabold text-[10px] sm:text-xs px-2 py-1 rounded-lg shadow-2xs transition cursor-pointer"
+                >
+                  <span>写真</span>
+                  <ArrowRight className="w-2.5 h-2.5" />
+                </button>
+              </td>
+            </tr>
+
+            {/* イベント協力 */}
+            <tr className="hover:bg-slate-50 transition bg-slate-50/40">
+              <td className="py-2.5 px-2 sm:px-3 text-center font-bold whitespace-nowrap">
+                <span className="bg-slate-100 text-slate-700 border border-slate-300 text-[10px] font-bold px-1.5 py-0.5 rounded-md inline-block">
+                  協力
+                </span>
+              </td>
+              <td className="py-2.5 px-2 sm:px-3 whitespace-nowrap leading-tight">
+                <div className="font-medium text-slate-800 text-[11px] sm:text-xs">2026.10.11(日)</div>
+                <div className="text-[10px] sm:text-[11px] text-slate-500 font-normal mt-0.5">10:00〜14:00</div>
+              </td>
+              <td className="py-2.5 px-3 sm:px-4 leading-snug min-w-[185px] sm:min-w-[210px]">
+                <div className="font-medium text-slate-800 text-xs sm:text-sm">農村環境改善センター</div>
+                <div className="text-[10px] sm:text-[11px] text-slate-500 font-normal">（としょかん祭）</div>
+              </td>
+              <td className="py-2.5 px-1.5 sm:px-2.5 text-center whitespace-nowrap">
+                <span className="text-[10px] sm:text-xs font-bold text-slate-600 bg-slate-100 px-1 py-0.5 rounded">体験会</span>
+              </td>
+              <td className="py-2.5 px-1.5 sm:px-2.5 text-center whitespace-nowrap">
+                <span className="text-[10px] text-slate-400">体験</span>
+              </td>
+            </tr>
+
+            {/* 第2回 */}
+            <tr className="hover:bg-teal-50/40 transition">
+              <td className="py-2.5 px-2 sm:px-3 text-center font-black whitespace-nowrap">
+                <span className="bg-teal-100 text-teal-900 border border-teal-300 text-[11px] font-black px-1.5 py-0.5 rounded-md inline-block">
+                  第2回
+                </span>
+              </td>
+              <td className="py-2.5 px-2 sm:px-3 whitespace-nowrap leading-tight">
+                <div className="font-bold text-slate-900 text-[11px] sm:text-xs">2026.9.20(日)</div>
+                <div className="text-[10px] sm:text-[11px] text-slate-500 font-normal mt-0.5">13:00〜17:30</div>
+              </td>
+              <td className="py-2.5 px-3 sm:px-4 leading-snug min-w-[185px] sm:min-w-[210px]">
+                <div className="font-bold text-slate-900 text-xs sm:text-sm">市場図書館</div>
+              </td>
+              <td className="py-2.5 px-1.5 sm:px-2.5 text-center whitespace-nowrap">
+                <span className="text-xs sm:text-sm font-black text-[#0D9488]">46名</span>
+              </td>
+              <td className="py-2.5 px-1.5 sm:px-2.5 text-center whitespace-nowrap">
+                <button
+                  onClick={() => {
+                    setActiveSession('event2');
+                    window.scrollTo({ top: 220, behavior: 'smooth' });
+                  }}
+                  className="inline-flex items-center gap-0.5 bg-[#0D9488] hover:bg-teal-700 text-white font-extrabold text-[10px] sm:text-xs px-2 py-1 rounded-lg shadow-2xs transition cursor-pointer"
+                >
+                  <span>写真</span>
+                  <ArrowRight className="w-2.5 h-2.5" />
+                </button>
+              </td>
+            </tr>
+
+            {/* 第1回 */}
+            <tr className="hover:bg-slate-50 transition">
+              <td className="py-2.5 px-2 sm:px-3 text-center font-black whitespace-nowrap">
+                <span className="bg-slate-200 text-slate-800 border border-slate-300 text-[11px] font-black px-1.5 py-0.5 rounded-md inline-block">
+                  第1回
+                </span>
+              </td>
+              <td className="py-2.5 px-2 sm:px-3 whitespace-nowrap leading-tight">
+                <div className="font-bold text-slate-900 text-[11px] sm:text-xs">2026.8.9(日)</div>
+                <div className="text-[10px] sm:text-[11px] text-slate-500 font-normal mt-0.5">13:30〜16:00</div>
+              </td>
+              <td className="py-2.5 px-3 sm:px-4 leading-snug min-w-[185px] sm:min-w-[210px]">
+                <div className="font-bold text-slate-900 text-xs sm:text-sm">市場公民館</div>
+              </td>
+              <td className="py-2.5 px-1.5 sm:px-2.5 text-center whitespace-nowrap">
+                <span className="text-xs sm:text-sm font-black text-[#0D9488]">40名</span>
+              </td>
+              <td className="py-2.5 px-1.5 sm:px-2.5 text-center whitespace-nowrap">
+                <button
+                  onClick={() => {
+                    setActiveSession('event1');
+                    window.scrollTo({ top: 220, behavior: 'smooth' });
+                  }}
+                  className="inline-flex items-center gap-0.5 bg-[#0D9488] hover:bg-teal-700 text-white font-extrabold text-[10px] sm:text-xs px-2 py-1 rounded-lg shadow-2xs transition cursor-pointer"
+                >
+                  <span>写真</span>
+                  <ArrowRight className="w-2.5 h-2.5" />
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -298,7 +450,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
       </div>
 
       {/* Session Navigation Tabs */}
-      <div className="flex flex-wrap items-center justify-center gap-3">
+      <div id="report-detail" className="flex flex-wrap items-center justify-center gap-3 pt-2 scroll-mt-24">
         <button
           onClick={() => setActiveSession('event3')}
           className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-black text-sm md:text-base transition-all duration-200 cursor-pointer shadow-sm ${
@@ -346,7 +498,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
           <span className={`text-[10px] px-2 py-0.5 rounded-full font-extrabold ${
             activeSession === 'event1' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
           }`}>
-            約40名来場
+            40名来場
           </span>
         </button>
       </div>
@@ -553,10 +705,14 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
 
           {/* Flyer Archive Section */}
           <section className="space-y-6 pt-6 border-t border-slate-200/80">
-            <h3 className="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
-              <Layers className="w-5 h-5 text-[#0D9488]" />
-              <span>公式イベントチラシ・アーカイブ</span>
-            </h3>
+            {/* 過去の開催履歴一覧 */}
+            <PastEventsTable />
+
+            <div className="pt-6 border-t border-slate-200/60">
+              <h3 className="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2 mb-4">
+                <Layers className="w-5 h-5 text-[#0D9488]" />
+                <span>公式イベントチラシ・アーカイブ</span>
+              </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* 3rd Flyer */}
@@ -711,6 +867,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
                   </div>
                 </div>
               </div>
+            </div>
             </div>
           </section>
 
@@ -936,10 +1093,14 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
 
           {/* Flyer Archive Section */}
           <section className="space-y-6 pt-6 border-t border-slate-200/80">
-            <h3 className="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
-              <Layers className="w-5 h-5 text-[#0D9488]" />
-              <span>公式イベントチラシ・アーカイブ</span>
-            </h3>
+            {/* 過去の開催履歴一覧 */}
+            <PastEventsTable />
+
+            <div className="pt-6 border-t border-slate-200/60">
+              <h3 className="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2 mb-4">
+                <Layers className="w-5 h-5 text-[#0D9488]" />
+                <span>公式イベントチラシ・アーカイブ</span>
+              </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* 3rd Flyer (Next / Latest) */}
@@ -1095,6 +1256,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
                 </div>
               </div>
             </div>
+            </div>
           </section>
 
         </article>
@@ -1118,7 +1280,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
             </div>
 
             <h2 className="text-2.5xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
-              【第1回開催レポート】阿波市に笑顔と歓声が響いた夏休み！約40名の皆様と楽しんだボードゲーム交流会
+              【第1回開催レポート】阿波市に笑顔と歓声が響いた夏休み！40名の皆様と楽しんだボードゲーム交流会
             </h2>
             <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed bg-teal-50/60 border-l-4 border-[#0D9488] p-4 rounded-r-2xl">
               2026年8月9日(日)、阿波市市場公民館にて記念すべき第1回「あわボ！」を開催いたしました。親子連れから大人の方までたくさんの笑顔にあふれた当日の様子をお届けします！
@@ -1134,7 +1296,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
               <div>
                 <p className="text-[11px] font-black text-amber-900 uppercase tracking-wider">ご来場者数</p>
                 <p className="text-2xl md:text-3xl font-black text-[#0D9488]">
-                  約40名
+                  40名
                 </p>
                 <p className="text-[11px] font-bold text-slate-500 mt-0.5">予想を超える大盛況！</p>
               </div>
@@ -1288,10 +1450,14 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
 
           {/* Flyer Archive Section */}
           <section className="space-y-6 pt-6 border-t border-slate-200/80">
-            <h3 className="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2">
-              <Layers className="w-5 h-5 text-[#0D9488]" />
-              <span>公式イベントチラシ・アーカイブ</span>
-            </h3>
+            {/* 過去の開催履歴一覧 */}
+            <PastEventsTable />
+
+            <div className="pt-6 border-t border-slate-200/60">
+              <h3 className="text-lg md:text-xl font-black text-slate-900 flex items-center gap-2 mb-4">
+                <Layers className="w-5 h-5 text-[#0D9488]" />
+                <span>公式イベントチラシ・アーカイブ</span>
+              </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* 3rd Flyer (Latest) */}
@@ -1446,6 +1612,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
                   </div>
                 </div>
               </div>
+            </div>
             </div>
           </section>
 

@@ -24,7 +24,11 @@ import {
   ZoomIn,
   UserPlus,
   Mail,
-  ArrowRight
+  ArrowRight,
+  Users,
+  BookOpen,
+  Heart,
+  History
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { AwaboLogo, MeepleIcon } from './Logo';
@@ -212,7 +216,7 @@ export const InfoPage: React.FC = () => {
 
       {/* HERO SECTION */}
       <section className="relative pt-6 pb-12 md:pt-10 md:pb-20 overflow-hidden">
-        <div className="max-w-4xl mx-auto px-4 md:px-6 space-y-16 text-center flex flex-col items-center justify-center">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 space-y-12 text-center flex flex-col items-center justify-center">
           
           {/* Hero Left Content */}
           <div className="w-full text-center space-y-6 flex flex-col items-center justify-center">
@@ -224,56 +228,84 @@ export const InfoPage: React.FC = () => {
             
             <div className="inline-flex items-center gap-2 bg-amber-500/10 text-amber-800 border border-amber-300/40 text-xs font-black px-4 py-1.5 rounded-full shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-              <span>＼ 参加費無料・手ぶらOK！ ／</span>
+              <span>参加費無料・申込不要・手ぶらOK！</span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight">
-              徳島でみんなで遊ぼう！
-              <span className="block mt-2 bg-gradient-to-r from-orange-600 via-rose-500 to-[#0D9488] bg-clip-text text-transparent font-black relative">
-                阿波市ボードゲーム交流会
-                <span className="block text-2xl md:text-3.5xl lg:text-4xl text-[#0D9488] mt-1 font-bold">
-                  「AWABO（あわボ！）」公式サイト
+            {/* 1. トップ見出し */}
+            <div className="space-y-3">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5.5xl font-black text-slate-900 tracking-tight leading-tight">
+                徳島でみんなで遊ぼう！
+                <span className="block mt-2 bg-gradient-to-r from-orange-600 via-rose-500 to-[#0D9488] bg-clip-text text-transparent font-black relative text-xl sm:text-2xl md:text-3.5xl lg:text-4xl">
+                  阿波市ボードゲーム交流会「AWABO（あわボ！）」
                 </span>
-              </span>
-            </h1>
+              </h1>
 
-            <p className="text-slate-600 text-sm md:text-base leading-relaxed max-w-xl mx-auto">
-              「AWABO（あわボ！）」は、子どもからシニアまで、初めての方からボードゲームファンまで、誰もが温かくつながれる地域交流を目指しています。
-            </p>
+              <p className="text-slate-700 text-sm md:text-base leading-relaxed max-w-2xl mx-auto font-bold pt-1">
+                阿波市ボードゲーム交流会「AWABO（あわボ！）」は、ボードゲームを囲んで、自然に笑いが起こる交流会です。
+              </p>
+            </div>
 
-            {/* Apple style Highlights list */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 max-w-3xl mx-auto pt-2 w-full">
-              <div className="flex items-center gap-3 bg-white/50 backdrop-blur-sm border border-slate-200/60 p-3.5 rounded-2xl shadow-sm text-left">
-                <div className="w-8.5 h-8.5 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
-                  <Smile className="w-4.5 h-4.5" />
-                </div>
-                <div>
-                  <p className="font-extrabold text-slate-900 text-xs sm:text-xs md:text-sm">ルールがわからなくても安心</p>
-                </div>
+            {/* 2. ベネフィット4つ */}
+            <div className="w-full max-w-4xl mx-auto pt-3 space-y-3">
+              <div className="inline-flex items-center gap-2 bg-teal-500/10 text-[#0D9488] border border-teal-300/40 text-xs sm:text-sm font-black px-4 py-1.5 rounded-full">
+                <Smile className="w-4 h-4 text-[#0D9488]" />
+                <span>参加すると、こんな「いいこと」があります</span>
               </div>
 
-              <div className="flex items-center gap-3 bg-white/50 backdrop-blur-sm border border-slate-200/60 p-3.5 rounded-2xl shadow-sm text-left">
-                <div className="w-8.5 h-8.5 rounded-full bg-teal-100 text-[#0D9488] flex items-center justify-center shrink-0">
-                  <Compass className="w-4.5 h-4.5" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 text-left w-full">
+                <div className="bg-white/85 backdrop-blur-sm border border-orange-200/80 p-4 rounded-2.5xl shadow-sm hover:shadow-md transition space-y-1.5 flex flex-col justify-between">
+                  <div>
+                    <div className="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center shrink-0 mb-2">
+                      <Smile className="w-5 h-5" />
+                    </div>
+                    <h3 className="font-extrabold text-slate-900 text-sm sm:text-base leading-snug">初対面でも、笑って話せる</h3>
+                    <p className="text-slate-600 text-xs leading-relaxed mt-1">
+                      ルールはスタッフが説明します。5分も遊べば、知らない人とも自然に話せます。
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-extrabold text-slate-900 text-xs sm:text-xs md:text-sm">手ぶら・途中入退室OK</p>
-                </div>
-              </div>
 
-              <div className="flex items-center gap-3 bg-white/50 backdrop-blur-sm border border-slate-200/60 p-3.5 rounded-2xl shadow-sm text-left">
-                <div className="w-8.5 h-8.5 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
-                  <Coins className="w-4.5 h-4.5" />
+                <div className="bg-white/85 backdrop-blur-sm border border-teal-200/80 p-4 rounded-2.5xl shadow-sm hover:shadow-md transition space-y-1.5 flex flex-col justify-between">
+                  <div>
+                    <div className="w-9 h-9 rounded-xl bg-teal-100 text-[#0D9488] flex items-center justify-center shrink-0 mb-2">
+                      <Sparkles className="w-5 h-5" />
+                    </div>
+                    <h3 className="font-extrabold text-slate-900 text-sm sm:text-base leading-snug">頭も気分もすっきり</h3>
+                    <p className="text-slate-600 text-xs leading-relaxed mt-1">
+                      カードをめくって、考えて、笑って。帰るころには気分が軽くなります。
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-extrabold text-slate-900 text-xs sm:text-xs md:text-sm">参加費用は一切なし</p>
+
+                <div className="bg-white/85 backdrop-blur-sm border border-rose-200/80 p-4 rounded-2.5xl shadow-sm hover:shadow-md transition space-y-1.5 flex flex-col justify-between">
+                  <div>
+                    <div className="w-9 h-9 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 mb-2">
+                      <CheckCircle2 className="w-5 h-5" />
+                    </div>
+                    <h3 className="font-extrabold text-slate-900 text-sm sm:text-base leading-snug">顔見知りが増える</h3>
+                    <p className="text-slate-600 text-xs leading-relaxed mt-1">
+                      第2回は46名、第3回は34名が参加。次に会ったとき、声をかけ合える人が増えます。
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-white/85 backdrop-blur-sm border border-amber-200/80 p-4 rounded-2.5xl shadow-sm hover:shadow-md transition space-y-1.5 flex flex-col justify-between">
+                  <div>
+                    <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 mb-2">
+                      <Heart className="w-5 h-5 text-amber-700" />
+                    </div>
+                    <h3 className="font-extrabold text-slate-900 text-sm sm:text-base leading-snug">家族で楽しむ引き出しが増える</h3>
+                    <p className="text-slate-600 text-xs leading-relaxed mt-1">
+                      子どもに人気の簡単なゲームを覚えて帰れます。たとえば、次の家族の集まりで、お孫さんと一緒に遊べる引き出しが増えます。
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
 
           </div>
 
-          {/* Hero Bottom: Console & Details card */}
+          {/* 3. 最初の画面の直下に置く情報ボックス（日時・場所・無料） */}
           <div className="w-full max-w-xl relative mx-auto">
             
             <div className="absolute top-[-10px] right-[-10px] text-5xl select-none opacity-25 animate-float">🎲</div>
@@ -283,138 +315,223 @@ export const InfoPage: React.FC = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="glass-panel border-white/60 shadow-xl rounded-3.5xl p-6 md:p-8 relative overflow-hidden bg-white/80"
+              className="glass-panel border-white/60 shadow-xl rounded-3.5xl p-6 md:p-8 relative overflow-hidden bg-white/85 text-left space-y-5"
             >
               
               <div className="absolute top-0 right-0 bg-[#EAB308] text-slate-950 font-bold px-4 py-1.5 text-xs rounded-bl-2xl tracking-wider shadow">
                 次回開催決定！
               </div>
 
-              <div className="text-left space-y-5">
-                <div className="space-y-1">
-                  <span className="text-[10px] font-extrabold uppercase text-[#0D9488] tracking-widest block">NEXT EVENT</span>
-                  <h3 className="text-2xl font-black text-slate-900">AWABO第4回交流会</h3>
-                  <p className="text-[11px] font-black text-teal-800 bg-teal-50 border border-teal-200 px-2.5 py-1 rounded-lg flex items-center gap-1.5 mt-1">
-                    <span className="text-sm shrink-0">🎲</span>
-                    <span>11/29(日) 開催！初心者からボードゲーム好きまで大歓迎！ルール説明あり・途中参加/退出自由✨</span>
-                  </p>
-                </div>
+              <div className="space-y-1">
+                <span className="text-[10px] font-extrabold uppercase text-[#0D9488] tracking-widest block">NEXT EVENT</span>
+                <h2 className="text-2xl font-black text-slate-900">第4回交流会</h2>
+                <p className="text-[11px] font-black text-teal-800 bg-teal-50 border border-teal-200 px-2.5 py-1 rounded-lg flex items-center gap-1.5 mt-1">
+                  <span className="text-sm shrink-0">🎲</span>
+                  <span>初心者からボードゲーム好きまで大歓迎！ルール説明あり・途中参加/退出自由✨</span>
+                </p>
+              </div>
 
-                {/* 開催レポートへのリンクバナー */}
-                <Link
-                  to="/history"
-                  className="block bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-teal-500/10 border border-amber-300/80 hover:border-amber-400 p-3 rounded-2xl transition group cursor-pointer shadow-2xs"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className="bg-amber-500 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-full">
-                        開催レポート
-                      </span>
-                      <p className="text-xs font-black text-slate-800">
-                        第3回は雨のなか34名来場で大盛況！
+              {/* 開催レポートへのリンクバナー */}
+              <Link
+                to="/history"
+                className="block bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-teal-500/10 border border-amber-300/80 hover:border-amber-400 p-3 rounded-2xl transition group cursor-pointer shadow-2xs"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-amber-500 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-full">
+                      開催レポート
+                    </span>
+                    <p className="text-xs font-black text-slate-800">
+                      第2回は46名、第3回は34名が参加！
+                    </p>
+                  </div>
+                  <span className="text-xs font-bold text-[#0D9488] flex items-center gap-1 group-hover:translate-x-1 transition">
+                    過去の様子を見る <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+              </Link>
+
+              {/* Event core specifics */}
+              <div className="space-y-3 bg-white/70 border border-slate-200/60 p-4 rounded-2xl shadow-inner text-xs md:text-sm">
+                
+                {/* 日時 */}
+                <div className="flex items-start justify-between gap-2 flex-wrap">
+                  <div className="flex items-start gap-3">
+                    <Calendar className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-[10px] text-slate-400 leading-none">日時</p>
+                      <p className="font-extrabold text-slate-900 text-sm md:text-base mt-1">
+                        11月29日（日）13:00〜17:00
+                      </p>
+                      <p className="text-[11px] text-slate-500 font-bold mt-0.5">
+                        （途中参加・途中退出OK）
                       </p>
                     </div>
-                    <span className="text-xs font-bold text-[#0D9488] flex items-center gap-1 group-hover:translate-x-1 transition">
-                      過去の様子を見る <ArrowRight className="w-3.5 h-3.5" />
-                    </span>
                   </div>
-                </Link>
+                  <a
+                    href={googleCalendarUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-[11px] px-3.5 py-2 rounded-xl shadow-sm hover:shadow transition-all shrink-0 cursor-pointer"
+                    title="Googleカレンダーに予定を追加"
+                  >
+                    <Calendar className="w-3.5 h-3.5 text-white" />
+                    <span>Googleカレンダーに追加</span>
+                    <ExternalLink className="w-3 h-3 text-blue-200" />
+                  </a>
+                </div>
 
-                {/* Event core specifics */}
-                <div className="space-y-3 bg-white/60 border border-slate-200/50 p-4 rounded-2xl shadow-inner">
-                  <div className="flex items-center justify-between gap-2 flex-wrap">
-                    <div className="flex items-center gap-3">
-                      <Calendar className="w-5 h-5 text-rose-500 shrink-0" />
-                      <div>
-                        <p className="text-[10px] text-slate-400 leading-none">開催日程</p>
-                        <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">2026年 11月29日(日)</p>
-                      </div>
+                {/* 場所 */}
+                <div className="flex items-start gap-3 pt-2 border-t border-slate-100">
+                  <MapPin className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-[10px] text-slate-400 leading-none">場所</p>
+                    <div className="mt-1">
+                      <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('阿波市立市場図書館 徳島県阿波市市場町市場字上野段212-2')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-extrabold text-slate-900 hover:text-[#0D9488] transition inline-flex items-center gap-1 group underline decoration-[#0D9488]/40 underline-offset-2"
+                        title="Googleマップで場所を開く"
+                      >
+                        <span>阿波市立市場図書館</span>
+                        <ExternalLink className="w-3.5 h-3.5 text-[#0D9488] group-hover:translate-x-0.5 transition" />
+                      </a>
                     </div>
-                    <a
-                      href={googleCalendarUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-[11px] px-3 py-1.5 rounded-xl shadow-sm hover:shadow transition-all shrink-0 cursor-pointer"
-                      title="Googleカレンダーに予定を追加"
-                    >
-                      <Calendar className="w-3.5 h-3.5 text-white" />
-                      <span>カレンダーに追加</span>
-                      <ExternalLink className="w-3 h-3 text-blue-200" />
-                    </a>
+                    <p className="text-[11px] text-slate-600 mt-0.5">
+                      徳島県阿波市市場町市場字上野段212-2
+                    </p>
                   </div>
+                </div>
 
-                  <div className="flex items-center gap-3">
-                    <Clock className="w-5 h-5 text-teal-600 shrink-0" />
-                    <div>
-                      <p className="text-[10px] text-slate-400 leading-none">時間</p>
-                      <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">13:00 〜 17:00（途中入退室OK）</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <MapPin className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-[10px] text-slate-400 leading-none">会場場所</p>
-                      <p className="font-extrabold text-slate-800 text-xs md:text-sm mt-0.5">阿波市立市場図書館</p>
-                      <span className="inline-flex items-center gap-1 mt-1 text-[11px] bg-emerald-100/90 text-emerald-800 font-extrabold px-2 py-0.5 rounded-md border border-emerald-300 shadow-2xs">
-                        <span>📚</span> 阿波市立市場図書館 / 参加費無料・手ぶらOK
-                      </span>
-                    </div>
+                {/* 参加費・条件 */}
+                <div className="flex items-start gap-3 pt-2 border-t border-slate-100">
+                  <Coins className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-[10px] text-slate-400 leading-none">参加費・条件</p>
+                    <p className="font-black text-rose-600 text-sm mt-1">
+                      無料・申込不要・手ぶらOK・駐車場無料
+                    </p>
                   </div>
                 </div>
 
               </div>
+
             </motion.div>
           </div>
 
         </div>
       </section>
 
-      {/* QUICK SCROLL BAR */}
-      <div className="sticky top-16 bg-white/85 backdrop-blur-md border-y border-slate-200/50 z-30 shadow-xs no-print">
-        <div className="max-w-6xl mx-auto px-1.5 xs:px-3 md:px-6 flex items-center justify-center gap-1 xs:gap-2.5 md:gap-3 py-2 no-print overflow-x-auto">
-          
-          <button 
-            onClick={() => {
-              document.getElementById('section-info')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }}
-            className="px-3 py-1.5 rounded-lg text-[10px] xs:text-xs md:text-sm font-black shrink-0 transition-all flex items-center gap-1 bg-[#0D9488] text-white shadow-xs cursor-pointer"
-          >
-            <Info className="w-3.5 h-3.5 shrink-0" />
-            <span>開催案内</span>
-          </button>
+      {/* QUICK SCROLL BAR (4等分グリッド配置) */}
+      <div className="sticky top-16 bg-white/95 backdrop-blur-md border-y border-slate-200/60 z-30 shadow-xs no-print">
+        <div className="max-w-4xl mx-auto px-2 sm:px-4 py-1.5 no-print">
+          <div className="grid grid-cols-4 gap-1.5 sm:gap-2 text-center w-full">
+            
+            {/* 1. 開催案内 */}
+            <button 
+              onClick={() => {
+                document.getElementById('section-info')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className="py-1.5 px-1 sm:px-2.5 rounded-xl text-[11px] sm:text-xs md:text-sm font-black transition-all flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-[#0D9488] text-white shadow-2xs cursor-pointer active:scale-95"
+            >
+              <Info className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate">開催案内</span>
+            </button>
 
-          <button 
-            onClick={() => {
-              document.getElementById('section-register')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }}
-            className="px-3 py-1.5 rounded-lg text-[10px] xs:text-xs md:text-sm font-black shrink-0 transition-all flex items-center gap-1 bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 shadow-xs cursor-pointer"
-          >
-            <UserPlus className="w-3.5 h-3.5 text-amber-700 shrink-0" />
-            <span>会員登録</span>
-          </button>
+            {/* 2. 安心ポイント */}
+            <button 
+              onClick={() => {
+                document.getElementById('section-faq-quick')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className="py-1.5 px-1 sm:px-2.5 rounded-xl text-[11px] sm:text-xs md:text-sm font-black transition-all flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-200/80 shadow-2xs cursor-pointer active:scale-95"
+            >
+              <Smile className="w-3.5 h-3.5 text-teal-700 shrink-0" />
+              <span className="truncate">安心ポイント</span>
+            </button>
 
-          <button 
-            onClick={() => {
-              document.getElementById('section-access')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }}
-            className="px-3 py-1.5 rounded-lg text-[10px] xs:text-xs md:text-sm font-black shrink-0 transition-all flex items-center gap-1 text-slate-600 hover:bg-slate-100 cursor-pointer"
-          >
-            <MapPin className="w-3.5 h-3.5 shrink-0" />
-            <span>会場アクセス</span>
-          </button>
+            {/* 3. 会員登録 */}
+            <button 
+              onClick={() => {
+                document.getElementById('section-register')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className="py-1.5 px-1 sm:px-2.5 rounded-xl text-[11px] sm:text-xs md:text-sm font-black transition-all flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 shadow-2xs cursor-pointer active:scale-95"
+            >
+              <UserPlus className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+              <span className="truncate">会員登録</span>
+            </button>
 
-          <button 
-            onClick={() => {
-              document.getElementById('section-faq')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }}
-            className="px-3 py-1.5 rounded-lg text-[10px] xs:text-xs md:text-sm font-black shrink-0 transition-all flex items-center gap-1 text-slate-600 hover:bg-slate-100 cursor-pointer"
-          >
-            <HelpCircle className="w-3.5 h-3.5 shrink-0" />
-            <span>Ｑ＆Ａ</span>
-          </button>
+            {/* 4. Ｑ＆Ａ */}
+            <button 
+              onClick={() => {
+                document.getElementById('section-faq')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className="py-1.5 px-1 sm:px-2.5 rounded-xl text-[11px] sm:text-xs md:text-sm font-black transition-all flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 shadow-2xs cursor-pointer active:scale-95"
+            >
+              <HelpCircle className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+              <span className="truncate">Ｑ＆Ａ</span>
+            </button>
+
+          </div>
         </div>
       </div>
+
+      {/* 4. 常設紹介セクション「AWABOって、どんな会？」 */}
+      <section id="section-about" className="scroll-mt-28 max-w-3xl mx-auto px-4">
+        <div className="glass-panel rounded-3.5xl p-6 md:p-8 text-left space-y-6 bg-white/80 border border-teal-200/70 shadow-md">
+          <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+            <div className="p-2 bg-teal-500/15 text-[#0D9488] rounded-xl">
+              <BookOpen className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-[10px] font-black text-[#0D9488] uppercase tracking-wider block">ABOUT AWABO</span>
+              <h2 className="text-xl md:text-2xl font-black text-slate-900">AWABOって、どんな会？</h2>
+            </div>
+          </div>
+
+          <div className="space-y-4 text-slate-700 text-sm md:text-base leading-relaxed">
+            <p>
+              AWABO（あわボ！）は、徳島県阿波市で活動しているボードゲーム交流会です。主催は「ボードゲーム×教育」のテクちゃん（<a href="https://www.instagram.com/hironanokamo/" target="_blank" rel="noopener noreferrer" className="text-[#0D9488] font-bold hover:underline">@hironanokamo</a>）。子どもからシニアまで、初めての方も、ボードゲームが好きな方も、みんなで卓を囲みます。
+            </p>
+
+            {/* 5. 大人・お一人参加への一文 */}
+            <div className="bg-amber-50/80 border border-amber-300/80 rounded-2xl p-4 text-xs md:text-sm text-slate-800 space-y-1">
+              <p className="font-extrabold text-amber-950 flex items-center gap-1.5">
+                <Users className="w-4 h-4 text-amber-700 shrink-0" />
+                <span>お一人での参加も大歓迎です</span>
+              </p>
+              <p className="font-medium text-slate-700 leading-relaxed">
+                お一人での参加も多いです。スタッフが卓の人数を調整しますので、初めての方も一人で来ても大丈夫です。大人の方も、シニアの方も、どうぞお気軽に。
+              </p>
+            </div>
+
+            {/* 遊べるゲームの例 */}
+            <div className="pt-2 space-y-2">
+              <p className="text-xs font-black text-slate-900 flex items-center gap-1.5">
+                <span>🎲 遊べるゲームの例：</span>
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {['ドブル', 'アルゴ', 'ディクシット', 'ラミィキューブ', 'キングドミノ'].map((game) => (
+                  <span 
+                    key={game} 
+                    className="bg-teal-50 text-teal-900 border border-teal-200 text-xs font-black px-3 py-1 rounded-xl shadow-2xs"
+                  >
+                    {game}
+                  </span>
+                ))}
+                <span className="bg-slate-100 text-slate-700 text-xs font-bold px-3 py-1 rounded-xl">
+                  ほか多数！
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 pt-1">
+                ※ <a href="https://www.instagram.com/hironanokamo/" target="_blank" rel="noopener noreferrer" className="text-rose-600 font-bold hover:underline inline-flex items-center gap-1">
+                  <Instagram className="w-3.5 h-3.5" /> Instagram
+                </a> ではゲーム紹介シリーズも随時発信中です！
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* SECTION 1: DETAILED CONTENT */}
       <section id="section-info" className="scroll-mt-28">
@@ -457,14 +574,14 @@ export const InfoPage: React.FC = () => {
 
               <div className="text-xs md:text-sm text-slate-600 font-semibold leading-relaxed bg-teal-50/50 p-4 rounded-2xl border border-teal-100/40 space-y-1.5">
                 <p>
-                  10月4日(日)の「第3回 あわボ！」は雨の中34名の皆様にご来場いただき大盛況で終了いたしました！ご参加誠にありがとうございました。（
+                  第2回は46名、第3回は雨の中34名の皆様にご来場いただき大盛況でした！ご参加誠にありがとうございました。（
                   <Link to="/history" className="text-[#0D9488] font-black underline underline-offset-2 hover:text-teal-800">
-                    第3回開催レポートはこちら
+                    過去の開催レポート・履歴一覧はこちら
                   </Link>
                   ）
                 </p>
                 <p>
-                  10月11日(日)の阿波図書館「としょかんまつり」体験会も無事終了し、いよいよ待望の第4回交流会を<strong>「阿波市立市場図書館」</strong>にて開催いたします！
+                  第4回交流会は<strong>「阿波市立市場図書館」</strong>にて開催いたします！
                 </p>
               </div>
 
@@ -506,18 +623,34 @@ export const InfoPage: React.FC = () => {
                     <div className="bg-emerald-500/20 text-emerald-800 font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
                       場所
                     </div>
-                    <div className="space-y-1">
-                      <p className="font-extrabold text-slate-900 text-base">
-                        阿波市立市場図書館
-                      </p>
+                    <div className="space-y-1 flex-1">
+                      <div>
+                        <a
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('阿波市立市場図書館 徳島県阿波市市場町市場字上野段212-2')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-extrabold text-slate-900 hover:text-[#0D9488] text-base inline-flex items-center gap-1.5 group underline decoration-[#0D9488]/40 underline-offset-2 transition"
+                          title="Googleマップで場所を開く"
+                        >
+                          <span>阿波市立市場図書館</span>
+                          <ExternalLink className="w-4 h-4 text-[#0D9488] group-hover:translate-x-0.5 transition" />
+                        </a>
+                      </div>
                       <p className="text-slate-600 text-sm">
                         徳島県阿波市市場町市場字上野段212-2
                       </p>
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        <span className="text-[10px] bg-emerald-100 text-emerald-900 border border-emerald-300 font-extrabold px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-2xs">
-                          📚 阿波市立市場図書館
-                        </span>
-                        <span className="text-[10px] bg-slate-100 text-slate-600 border border-slate-200 font-bold px-2.5 py-0.5 rounded-full">
+                      <div className="flex flex-wrap items-center gap-2 pt-1">
+                        <a
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('阿波市立市場図書館 徳島県阿波市市場町市場字上野段212-2')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 font-extrabold px-2.5 py-1 rounded-xl shadow-2xs transition"
+                        >
+                          <MapPin className="w-3.5 h-3.5 text-emerald-700" />
+                          <span>Googleマップで開く</span>
+                          <ExternalLink className="w-3 h-3 text-emerald-600" />
+                        </a>
+                        <span className="text-[10px] bg-slate-100 text-slate-600 border border-slate-200 font-bold px-2.5 py-1 rounded-xl">
                           🚗 駐車場あり（無料）
                         </span>
                       </div>
@@ -556,12 +689,12 @@ export const InfoPage: React.FC = () => {
                     <div className="bg-teal-500/20 text-teal-800 font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
                       対象
                     </div>
-                    <div>
+                    <div className="space-y-1">
                       <p className="font-extrabold text-slate-900 text-sm">
                         どなたでも（※小学校低学年以下は保護者同伴となります）
                       </p>
-                      <p className="text-slate-500 text-xs mt-0.5 leading-relaxed">
-                        初心者からボードゲーム好きの方、お子様からシニアまでどなたでも大歓迎です！
+                      <p className="text-slate-500 text-xs leading-relaxed">
+                        子どもからシニアまで大歓迎！お一人での参加も多く、大人の方も安心してお越しいただけます。
                       </p>
                     </div>
                   </div>
@@ -665,18 +798,74 @@ export const InfoPage: React.FC = () => {
 
             </div>
 
-            {/* Recommended box */}
-            <div className="bg-amber-50/60 border border-amber-200/60 rounded-3xl p-6 text-left relative overflow-hidden shadow-xs">
-              <div className="absolute right-4 bottom-[-20px] opacity-15 pointer-events-none select-none">
-                <MeepleIcon className="w-28 h-28 text-amber-500" />
+            {/* 6. Q&Aを平文で（本文に置く3大疑問）＋ 参加する方へのお約束 */}
+            <div id="section-faq-quick" className="scroll-mt-28 space-y-4">
+              <div className="bg-gradient-to-br from-amber-50/90 via-orange-50/40 to-teal-50/50 border border-amber-300/80 rounded-3xl p-6 md:p-8 text-left space-y-6 shadow-sm relative overflow-hidden">
+                <div className="absolute right-4 bottom-[-20px] opacity-10 pointer-events-none select-none">
+                  <MeepleIcon className="w-36 h-36 text-amber-500" />
+                </div>
+
+                <div className="flex items-center justify-between gap-2 border-b border-amber-200/60 pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="p-1.5 bg-amber-500 text-slate-950 rounded-lg">
+                      <HelpCircle className="w-4 h-4" />
+                    </span>
+                    <h3 className="font-black text-slate-900 text-base md:text-lg">
+                      初めての方へ — よくある疑問にお答えします
+                    </h3>
+                  </div>
+                  <span className="text-[10px] font-bold bg-white text-slate-600 px-2.5 py-0.5 rounded-full border border-slate-200 hidden sm:inline-block">
+                    事前の不安解消
+                  </span>
+                </div>
+
+                {/* 3つのQ&A（平文） */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* Q1 */}
+                  <div className="bg-white/90 border border-amber-200/70 p-4 rounded-2xl shadow-2xs space-y-1.5">
+                    <p className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-[#0D9488]" />
+                      <span>一人で参加しても大丈夫？</span>
+                    </p>
+                    <p className="text-slate-600 text-xs leading-relaxed">
+                      <strong>大丈夫です。</strong>お一人で来る方も多く、皆さん混じって楽しんでいます。
+                    </p>
+                  </div>
+
+                  {/* Q2 */}
+                  <div className="bg-white/90 border border-amber-200/70 p-4 rounded-2xl shadow-2xs space-y-1.5">
+                    <p className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-rose-500" />
+                      <span>ルールが分からなくても遊べますか？</span>
+                    </p>
+                    <p className="text-slate-600 text-xs leading-relaxed">
+                      <strong>遊べます。</strong>スタッフや参加者の皆で説明しながら遊びます。ルールが簡単なゲームもたくさん用意しています。
+                    </p>
+                  </div>
+
+                  {/* Q3 */}
+                  <div className="bg-white/90 border border-amber-200/70 p-4 rounded-2xl shadow-2xs space-y-1.5">
+                    <p className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-indigo-500" />
+                      <span>遅れて行っても、早く帰ってもいいですか？</span>
+                    </p>
+                    <p className="text-slate-600 text-xs leading-relaxed">
+                      <strong>はい。</strong>開催時間中なら、都合のいい時間だけどうぞ。途中参加・途中退出OKです。
+                    </p>
+                  </div>
+                </div>
+
+                {/* 参加する方へのお約束 */}
+                <div className="bg-white/70 border border-amber-300/80 rounded-2xl p-4 text-xs space-y-1.5">
+                  <p className="font-black text-amber-950 flex items-center gap-1.5">
+                    <Smile className="w-4 h-4 text-amber-600 shrink-0" />
+                    <span>参加する方へのお約束</span>
+                  </p>
+                  <p className="text-slate-700 leading-relaxed font-medium">
+                    「負けても怒らない」「ゲームを優しく扱う」。勝ち負けよりも、みんなでおしゃべりしながら笑い合う時間を大切にしています。
+                  </p>
+                </div>
               </div>
-              <h3 className="font-black text-slate-900 text-base mb-3 flex items-center gap-1.5">
-                <Smile className="w-5 h-5 text-amber-600" />
-                <span>参加する方へのお約束</span>
-              </h3>
-              <p className="text-slate-600 text-xs leading-relaxed max-w-xl">
-                誰もが安心して楽しめるよう、AWABO（あわボ！）では「負けても怒らない」「ゲームを優しく扱う」などの思いやりマナーを大切にしています。勝ち負けよりも、みんなでおしゃべりしながら笑い合う時間そのものを楽しみましょう！
-              </p>
             </div>
 
           </div>
@@ -810,78 +999,20 @@ export const InfoPage: React.FC = () => {
         </div>
       </section>
 
-      {/* SECTION 2: ACCESS & GOOGLE MAP */}
-      <section id="section-access" className="scroll-mt-28">
-        <div className="glass-panel rounded-3.5xl p-6 md:p-8 shadow-xs bg-white/70">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            {/* Maps text Left */}
-            <div className="lg:col-span-5 text-left space-y-4">
-              <div className="inline-block bg-emerald-500/10 text-emerald-800 border border-emerald-300/30 text-xs font-black px-3 py-1 rounded-full">
-                会場へのアクセス
-              </div>
-              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">
-                阿波市立市場図書館（第4回 会場）
-              </h3>
-
-              <div className="space-y-3.5 text-xs text-slate-600 pt-2 border-t border-slate-100">
-                <div className="space-y-0.5">
-                  <p className="font-extrabold text-slate-800 flex items-center gap-1">
-                    <MapPin className="w-4 h-4 text-[#0D9488]" />
-                    <span>📍 住所・所在地</span>
-                  </p>
-                  <p className="pl-5 text-slate-800 font-bold">徳島県阿波市市場町市場字上野段212-2</p>
-                  <p className="pl-5 text-[11px] text-slate-500">（阿波市立市場図書館）</p>
-                </div>
-
-                <div className="space-y-0.5">
-                  <p className="font-extrabold text-slate-800 flex items-center gap-1">
-                    <span>🚗 お車でのアクセス</span>
-                  </p>
-                  <p className="pl-5 text-slate-600 leading-normal">
-                    阿波市立市場図書館の敷地内駐車場（無料）をご利用いただけます。安心してお車でお越しください。
-                  </p>
-                </div>
-
-                <div className="space-y-0.5 pt-1 border-t border-slate-100">
-                  <p className="font-extrabold text-slate-700 text-[11px]">
-                    ※これまでの土成中央公民館や阿波農村環境改善センターとは会場が異なりますのでご注意ください。
-                  </p>
-                </div>
-
-              </div>
-
-              {/* Map quick external buttons */}
-              <div className="pt-2 flex flex-wrap gap-2">
-                <a 
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('阿波市立市場図書館 徳島県阿波市市場町市場字上野段212-2')}`}
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 bg-white border border-slate-200 hover:border-slate-400 text-slate-700 font-extrabold text-xs px-3.5 py-2 rounded-xl transition shadow-xs"
-                >
-                  <ExternalLink className="w-3.5 h-3.5 text-[#0D9488]" />
-                  <span>Google Map で開く</span>
-                </a>
-              </div>
-
-            </div>
-
-            {/* Map embed iframe Right */}
-            <div className="lg:col-span-7 h-80 md:h-[380px] rounded-3xl overflow-hidden border-2 border-slate-200 shadow-inner relative bg-slate-50 shrink-0">
-              <iframe 
-                src={`https://maps.google.com/maps?q=${encodeURIComponent('徳島県阿波市市場町市場字上野段212-2 阿波市立市場図書館')}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
-                width="100%" 
-                height="100%" 
-                style={{ border: 0 }} 
-                allowFullScreen={true} 
-                loading="lazy" 
-                referrerPolicy="no-referrer-when-downgrade"
-                title="阿波市立市場図書館のGoogleマップ案内"
-                className="absolute inset-0 w-full h-full"
-              />
-            </div>
-
-          </div>
+      {/* SECTION 2: ACCESS MAP ONLY */}
+      <section id="section-access" className="scroll-mt-28 max-w-4xl mx-auto">
+        <div className="rounded-3xl md:rounded-3.5xl overflow-hidden border-2 border-slate-200/90 shadow-md h-80 sm:h-96 md:h-[420px] relative bg-slate-100">
+          <iframe 
+            src={`https://maps.google.com/maps?q=${encodeURIComponent('徳島県阿波市市場町市場字上野段212-2 阿波市立市場図書館')}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
+            width="100%" 
+            height="100%" 
+            style={{ border: 0 }} 
+            allowFullScreen={true} 
+            loading="lazy" 
+            referrerPolicy="no-referrer-when-downgrade"
+            title="阿波市立市場図書館（Googleマップ）"
+            className="w-full h-full"
+          />
         </div>
       </section>
 

@@ -6,7 +6,6 @@ import {
   History, 
   HelpCircle, 
   ShieldCheck, 
-  MapPin, 
   Share2, 
   Check,
   UserPlus 
@@ -131,15 +130,6 @@ export const Header: React.FC = () => {
               </>
             )}
           </button>
-
-          {/* Access Link */}
-          <Link
-            to="/#section-access"
-            className="hidden lg:flex items-center gap-1.5 bg-[#0D9488] hover:bg-[#0D9488]/90 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-xs transition duration-300 cursor-pointer shrink-0"
-          >
-            <MapPin className="w-4 h-4" />
-            <span>会場アクセス</span>
-          </Link>
         </div>
 
       </div>
