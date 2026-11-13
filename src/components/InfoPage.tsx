@@ -22,7 +22,6 @@ import {
   Download,
   FileText,
   ZoomIn,
-  UserPlus,
   Mail,
   ArrowRight,
   Users,
@@ -42,37 +41,60 @@ export const InfoPage: React.FC = () => {
   }, []);
 
   // FAQ Accordion states
-  const [openFaqs, setOpenFaqs] = useState<number[]>([]);
+  const [openFaqs, setOpenFaqs] = useState<number[]>([0]);
 
   // Flyer Modal state
   const [showFlyerModal, setShowFlyerModal] = useState<boolean>(false);
+
+  // Close flyer modal with Escape key
+  useEffect(() => {
+    if (!showFlyerModal) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setShowFlyerModal(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showFlyerModal]);
 
   // Share Notification Alert
   const [showShareAlert, setShowShareAlert] = useState(false);
   const [shareAlertText, setShareAlertText] = useState('');
 
-  const triggerCopyLink = () => {
-    navigator.clipboard.writeText('https://awa-bo.com/');
+  const triggerCopyLink = async () => {
+    const shareUrl = 'https://awa-bo.com/';
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+    } catch {
+      const textarea = document.createElement('textarea');
+      textarea.value = shareUrl;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
     setShareAlertText("公式ホームページのURL（https://awa-bo.com/）をクリップボードにコピーしました！");
     setShowShareAlert(true);
     setTimeout(() => setShowShareAlert(false), 3000);
   };
 
   const handleShareSNS = (platform: 'x' | 'line' | 'facebook') => {
-    const title = 'AWABO第4回交流会 公式サイト';
     const text = '【AWABO第4回交流会】11/29(日)13:00〜17:00 阿波市立市場図書館にて開催決定！初心者からボードゲーム好きまで大歓迎🎲 参加費無料・手ぶらOK！';
     const url = 'https://awa-bo.com/';
 
-    let shareUrl = '';
+    let targetUrl = '';
     if (platform === 'x') {
-      shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+      targetUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
     } else if (platform === 'line') {
-      shareUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+      targetUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
     } else if (platform === 'facebook') {
-      shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+      targetUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
     }
 
-    window.open(shareUrl, '_blank', 'width=600,height=400');
+    window.open(targetUrl, '_blank', 'width=600,height=400,noopener,noreferrer');
   };
 
   const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('AWABO第4回交流会')}&dates=20261129T040000Z/20261129T080000Z&details=${encodeURIComponent('【AWABO第4回交流会 開催のお知らせ🎲】\n第4回となるAWABOの開催が決定しました！\n\n初心者の方からボードゲーム好きの方まで、どなたでも気軽に楽しめる交流会です。\n「ルールがわからない」「一人で参加しても大丈夫？」という方もご安心ください。スタッフや参加者の皆で分かりやすくルールを説明しながら遊びます✨\n\n日時：11月29日（日）13:00 〜 17:00\n場所：阿波市立市場図書館\n参加費：無料\n対象：どなたでも（※小学校低学年以下は保護者同伴となります）\n\nルールが簡単なゲームや短時間で盛り上がるゲームをたくさんご用意してお待ちしております。途中参加・途中退出もOKですので、お気軽にお立ち寄りください！\n\n🌐 公式サイト：https://awa-bo.com/\n✉️ メール：info@awa-bo.com\n📷 Instagram：@hironanokamo')}&location=${encodeURIComponent('阿波市立市場図書館（徳島県阿波市市場町市場字上野段212-2）')}`;
@@ -241,7 +263,7 @@ export const InfoPage: React.FC = () => {
               </h1>
 
               <p className="text-slate-700 text-sm md:text-base leading-relaxed max-w-2xl mx-auto font-bold pt-1">
-                阿波市ボードゲーム交流会「AWABO（あわボ！）」は、ボードゲームを囲んで、自然に笑いが起こる交流会です。
+                ボードゲームを囲んで、自然に笑いが起こる地域の交流会です。
               </p>
             </div>
 
@@ -450,15 +472,15 @@ export const InfoPage: React.FC = () => {
               <span className="truncate">安心ポイント</span>
             </button>
 
-            {/* 3. 会員登録 */}
+            {/* 3. 配信登録 */}
             <button 
               onClick={() => {
                 document.getElementById('section-register')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }}
               className="py-1.5 px-1 sm:px-2.5 rounded-xl text-[11px] sm:text-xs md:text-sm font-black transition-all flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 shadow-2xs cursor-pointer active:scale-95"
             >
-              <UserPlus className="w-3.5 h-3.5 text-amber-700 shrink-0" />
-              <span className="truncate">会員登録</span>
+              <Mail className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+              <span className="truncate">配信登録</span>
             </button>
 
             {/* 4. Ｑ＆Ａ */}
@@ -588,40 +610,13 @@ export const InfoPage: React.FC = () => {
               {/* 2-Column Grid for Table entries and Flyer Status */}
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
                 
-                {/* Left Column (Table entries) */}
+                {/* Left Column (Table entries - streamlined without duplicating hero date/calendar/fee) */}
                 <div className="md:col-span-7 space-y-5">
                   
-                  {/* Item 1 */}
-                  <div className="flex items-start gap-4">
-                    <div className="bg-[#EAB308]/20 text-[#854D0E] font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
-                      日時
-                    </div>
-                    <div className="space-y-2">
-                      <div>
-                        <p className="font-extrabold text-slate-900 text-base md:text-lg">
-                          11月29日（日）13:00 〜 17:00
-                        </p>
-                        <p className="text-slate-500 text-xs leading-relaxed mt-0.5">
-                          ※開催時間中、途中参加・途中退出OKです。お気軽にお立ち寄りください！
-                        </p>
-                      </div>
-                      <a
-                        href={googleCalendarUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold text-xs px-3.5 py-2 rounded-xl shadow-xs transition-all group cursor-pointer"
-                      >
-                        <Calendar className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
-                        <span>Googleカレンダーに追加</span>
-                        <ExternalLink className="w-3.5 h-3.5 text-blue-200" />
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Item 2 */}
+                  {/* Item 1 (場所・駐車場) */}
                   <div className="flex items-start gap-4">
                     <div className="bg-emerald-500/20 text-emerald-800 font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
-                      場所
+                      会場
                     </div>
                     <div className="space-y-1 flex-1">
                       <div>
@@ -657,7 +652,7 @@ export const InfoPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Item 3 (定員) */}
+                  {/* Item 2 (定員・途中参加) */}
                   <div className="flex items-start gap-4">
                     <div className="bg-indigo-500/20 text-indigo-800 font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
                       定員
@@ -672,19 +667,7 @@ export const InfoPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Item 4 */}
-                  <div className="flex items-start gap-4">
-                    <div className="bg-rose-500/20 text-rose-800 font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
-                      参加費
-                    </div>
-                    <div>
-                      <p className="font-black text-rose-600 text-lg flex items-center gap-1.5">
-                        無料 
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Item 5 */}
+                  {/* Item 3 (対象) */}
                   <div className="flex items-start gap-4">
                     <div className="bg-teal-500/20 text-teal-800 font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
                       対象
@@ -699,7 +682,7 @@ export const InfoPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Item 6 */}
+                  {/* Item 4 (持ち物) */}
                   <div className="flex items-start gap-4">
                     <div className="bg-blue-500/20 text-blue-800 font-black text-xs px-3 py-1 rounded-lg shrink-0 mt-0.5 w-16 text-center">
                       持ち物
@@ -811,46 +794,50 @@ export const InfoPage: React.FC = () => {
                       <HelpCircle className="w-4 h-4" />
                     </span>
                     <h3 className="font-black text-slate-900 text-base md:text-lg">
-                      初めての方へ — よくある疑問にお答えします
+                      初めての方へ — 3つの安心ポイント
                     </h3>
                   </div>
-                  <span className="text-[10px] font-bold bg-white text-slate-600 px-2.5 py-0.5 rounded-full border border-slate-200 hidden sm:inline-block">
-                    事前の不安解消
-                  </span>
+                  <button
+                    onClick={() => document.getElementById('section-faq')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                    className="text-xs font-extrabold text-[#0D9488] hover:underline flex items-center gap-1 cursor-pointer shrink-0"
+                  >
+                    <span>詳しいQ&Aを見る</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
 
-                {/* 3つのQ&A（平文） */}
+                {/* 3つの安心ポイント（平文） */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* Q1 */}
+                  {/* Point 1 */}
                   <div className="bg-white/90 border border-amber-200/70 p-4 rounded-2xl shadow-2xs space-y-1.5">
                     <p className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-[#0D9488]" />
-                      <span>一人で参加しても大丈夫？</span>
+                      <span>お一人での参加も歓迎</span>
                     </p>
                     <p className="text-slate-600 text-xs leading-relaxed">
-                      <strong>大丈夫です。</strong>お一人で来る方も多く、皆さん混じって楽しんでいます。
+                      お一人で来る方も多く、スタッフが遊びやすい卓へご案内しますので安心して混ざれます。
                     </p>
                   </div>
 
-                  {/* Q2 */}
+                  {/* Point 2 */}
                   <div className="bg-white/90 border border-amber-200/70 p-4 rounded-2xl shadow-2xs space-y-1.5">
                     <p className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-rose-500" />
-                      <span>ルールが分からなくても遊べますか？</span>
+                      <span>ルールが分からなくてもOK</span>
                     </p>
                     <p className="text-slate-600 text-xs leading-relaxed">
-                      <strong>遊べます。</strong>スタッフや参加者の皆で説明しながら遊びます。ルールが簡単なゲームもたくさん用意しています。
+                      スタッフや参加者の皆で丁寧に説明しながら遊びます。簡単なゲームもたくさん用意しています。
                     </p>
                   </div>
 
-                  {/* Q3 */}
+                  {/* Point 3 */}
                   <div className="bg-white/90 border border-amber-200/70 p-4 rounded-2xl shadow-2xs space-y-1.5">
                     <p className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-indigo-500" />
-                      <span>遅れて行っても、早く帰ってもいいですか？</span>
+                      <span>途中参加・途中退出OK</span>
                     </p>
                     <p className="text-slate-600 text-xs leading-relaxed">
-                      <strong>はい。</strong>開催時間中なら、都合のいい時間だけどうぞ。途中参加・途中退出OKです。
+                      開催時間中（13:00〜17:00）なら、ご都合のいい時間だけふらっと参加できます。
                     </p>
                   </div>
                 </div>
@@ -924,39 +911,44 @@ export const InfoPage: React.FC = () => {
         </div>
       </section>
 
-      {/* SECTION: MEMBER REGISTRATION */}
+      {/* SECTION: NOTIFICATION REGISTRATION */}
       <section id="section-register" className="scroll-mt-28">
         <div className="max-w-3xl mx-auto">
           <div className="glass-panel rounded-3.5xl p-6 md:p-9 text-left space-y-6 bg-white/85 shadow-xl border-amber-200/80 relative overflow-hidden">
             
             {/* Header Accent */}
             <div className="absolute top-0 right-0 bg-[#EAB308] text-slate-950 font-black px-4 py-1 text-xs rounded-bl-2xl tracking-wider shadow">
-              無料・1分で登録完了
+              無料・1分で配信登録
             </div>
 
             <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
               <div className="p-2.5 bg-amber-400/20 text-amber-900 rounded-2xl">
-                <UserPlus className="w-6 h-6 text-amber-700" />
+                <Mail className="w-6 h-6 text-amber-700" />
               </div>
               <div>
                 <span className="text-[10px] font-black text-amber-700 uppercase tracking-widest block">
-                  AWABO OFFICIAL MEMBERSHIP
+                  AWABO EVENT NOTIFICATION
                 </span>
                 <h2 className="text-xl md:text-2xl font-black text-slate-900">
-                  AWABO（あわボ！） 会員登録フォーム
+                  AWABO（あわボ！） 開催お知らせ配信登録
                 </h2>
               </div>
             </div>
 
-            <p className="text-xs md:text-sm text-slate-700 leading-relaxed font-medium bg-amber-50/70 p-4 rounded-2xl border border-amber-200/60">
-              ご登録いただいたメールアドレス宛に、<strong>今後の交流会やイベントのお知らせ</strong>をお送りいたします。
-            </p>
+            <div className="text-xs md:text-sm text-slate-700 leading-relaxed font-medium bg-amber-50/70 p-4 rounded-2xl border border-amber-200/60 space-y-1">
+              <p>
+                ご登録いただいたメールアドレス宛に、<strong>今後の交流会やイベント開催のお知らせ</strong>をお送りいたします。
+              </p>
+              <p className="text-xs text-amber-900/90 font-bold">
+                ※配信は開催決定のときだけ（月1〜2回程度）です。いつでも簡単に配信停止できます。
+              </p>
+            </div>
 
             {/* Questions preview summary */}
             <div className="space-y-2.5 pt-1">
               <p className="text-xs font-black text-slate-800 flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#0D9488]" />
-                <span>ご登録いただく情報</span>
+                <span>入力いただく情報（2項目だけ）</span>
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div className="bg-slate-50 border border-slate-200/80 p-3.5 rounded-2xl space-y-1">
@@ -975,7 +967,7 @@ export const InfoPage: React.FC = () => {
                     <span>2. メールアドレス（必須）</span>
                   </p>
                   <p className="text-[11px] text-slate-500">
-                    交流会のお知らせを送付するメールアドレス
+                    交流会のお知らせを受け取るメールアドレス
                   </p>
                 </div>
               </div>
@@ -990,7 +982,7 @@ export const InfoPage: React.FC = () => {
                 className="w-full inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-slate-950 font-black text-sm md:text-base py-3.5 px-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 transform active:scale-98 cursor-pointer group"
               >
                 <Mail className="w-5 h-5 text-slate-950 group-hover:scale-110 transition-transform" />
-                <span>Googleフォームを開いて登録する</span>
+                <span>Googleフォームで配信登録する</span>
                 <ExternalLink className="w-4 h-4 text-slate-800" />
               </a>
             </div>
@@ -1018,13 +1010,27 @@ export const InfoPage: React.FC = () => {
 
       {/* SECTION 3: FAQ ACCORDION */}
       <section id="section-faq" className="scroll-mt-28 max-w-4xl mx-auto">
-        <div className="text-center space-y-3 mb-8">
+        <div className="text-center space-y-3 mb-6">
           <span className="text-xs font-extrabold bg-[#EAB308]/10 text-[#854D0E] border border-[#EAB308]/20 px-3 py-1 rounded-full">
             Q＆A・よくある質問
           </span>
           <p className="text-slate-500 text-sm">
             参加にあたって皆様から寄せられる代表的なご不安、ご質問をまとめました。
           </p>
+          <div>
+            <button
+              onClick={() => {
+                if (openFaqs.length === faqData.length) {
+                  setOpenFaqs([]);
+                } else {
+                  setOpenFaqs(faqData.map((_, idx) => idx));
+                }
+              }}
+              className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#0D9488] bg-teal-50 hover:bg-teal-100 border border-teal-200 px-3.5 py-1.5 rounded-xl transition cursor-pointer"
+            >
+              {openFaqs.length === faqData.length ? 'すべて閉じる' : 'すべて開く'}
+            </button>
+          </div>
         </div>
 
         <div className="bg-white border border-slate-200 rounded-3.5xl p-5 md:p-8 text-left space-y-4 shadow-sm">
@@ -1089,6 +1095,7 @@ export const InfoPage: React.FC = () => {
               
               {/* X Twitter */}
               <button 
+                type="button"
                 onClick={() => handleShareSNS('x')}
                 className="bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs py-2 px-3.5 rounded-xl flex items-center justify-center gap-1.5 transition duration-300 shadow-xs cursor-pointer"
               >
@@ -1098,6 +1105,7 @@ export const InfoPage: React.FC = () => {
 
               {/* LINE */}
               <button 
+                type="button"
                 onClick={() => handleShareSNS('line')}
                 className="bg-[#06C755] hover:bg-[#05b14c] font-extrabold text-xs py-2 px-3.5 rounded-xl flex items-center justify-center gap-1.5 transition duration-300 shadow-xs text-white cursor-pointer"
               >
@@ -1107,6 +1115,7 @@ export const InfoPage: React.FC = () => {
 
               {/* Facebook */}
               <button 
+                type="button"
                 onClick={() => handleShareSNS('facebook')}
                 className="bg-[#1877F2] hover:bg-[#166fe5] font-extrabold text-xs py-2 px-3.5 rounded-xl flex items-center justify-center gap-1.5 transition duration-300 shadow-xs text-white cursor-pointer"
               >

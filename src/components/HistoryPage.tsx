@@ -72,6 +72,25 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
 
+  // Close photo modal with Escape key
+  useEffect(() => {
+    if (!selectedPhoto) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedPhoto(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedPhoto]);
+
+  const scrollToReport = (session: 'event3' | 'event2' | 'event1') => {
+    setActiveSession(session);
+    setTimeout(() => {
+      document.getElementById('report-detail')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 60);
+  };
+
   // 第3回のスナップ写真（全5枚：会場風景、最新型アナログ集計システム、ナショナルエコノミー、ラミーキューブ、たんぐらむ）
   const event3Photos: PhotoItem[] = [
     {
@@ -150,7 +169,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
   // 第2回のスナップ写真（全9枚：会場風景＆当日のプレイゲーム紹介）
   const event2Photos: PhotoItem[] = [
     {
-      src: `${encodeURI('/images/event_archive/20260920_2/20260920_会場.jpg')}?t=${Date.now()}`,
+      src: encodeURI('/images/event_archive/20260920_2/20260920_会場.jpg'),
       title: '🏛️ 会場全体の熱気・大盛況の様子',
       subtitle: '46名が来場！机が足りなくなるほどの賑わいと笑顔',
       description: '子どもから大人、シニアの方まで46名もの皆様にお集まりいただき、会場の市場図書館は大盛況！どのテーブルも笑顔と歓声に包まれ、机が埋まるほどの熱気あふれる時間となりました。',
@@ -264,10 +283,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
               </td>
               <td className="py-2.5 px-1.5 sm:px-2.5 text-center whitespace-nowrap">
                 <button
-                  onClick={() => {
-                    setActiveSession('event3');
-                    window.scrollTo({ top: 220, behavior: 'smooth' });
-                  }}
+                  onClick={() => scrollToReport('event3')}
                   className="inline-flex items-center gap-0.5 bg-[#0D9488] hover:bg-teal-700 text-white font-extrabold text-[10px] sm:text-xs px-2 py-1 rounded-lg shadow-2xs transition cursor-pointer"
                 >
                   <span>写真</span>
@@ -295,7 +311,21 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
                 <span className="text-[10px] sm:text-xs font-bold text-slate-600 bg-slate-100 px-1 py-0.5 rounded">体験会</span>
               </td>
               <td className="py-2.5 px-1.5 sm:px-2.5 text-center whitespace-nowrap">
-                <span className="text-[10px] text-slate-400">体験</span>
+                <button
+                  onClick={() =>
+                    setSelectedPhoto({
+                      src: flyerToshokanPhoto,
+                      title: '📚 としょかん祭 ボードゲーム体験会（イベント協力）',
+                      subtitle: '2026年10月11日(日) 阿波市農村環境改善センター',
+                      description: '阿波市の「としょかん祭」にてイベント協力としてボードゲーム体験会を実施いたしました。子どもから大人まで多くの方にボードゲームの楽しさを体験していただきました。',
+                      badge: 'イベント協力チラシ'
+                    })
+                  }
+                  className="inline-flex items-center gap-0.5 bg-slate-700 hover:bg-slate-800 text-white font-extrabold text-[10px] sm:text-xs px-2 py-1 rounded-lg shadow-2xs transition cursor-pointer"
+                >
+                  <span>チラシ</span>
+                  <ZoomIn className="w-2.5 h-2.5" />
+                </button>
               </td>
             </tr>
 
@@ -318,10 +348,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
               </td>
               <td className="py-2.5 px-1.5 sm:px-2.5 text-center whitespace-nowrap">
                 <button
-                  onClick={() => {
-                    setActiveSession('event2');
-                    window.scrollTo({ top: 220, behavior: 'smooth' });
-                  }}
+                  onClick={() => scrollToReport('event2')}
                   className="inline-flex items-center gap-0.5 bg-[#0D9488] hover:bg-teal-700 text-white font-extrabold text-[10px] sm:text-xs px-2 py-1 rounded-lg shadow-2xs transition cursor-pointer"
                 >
                   <span>写真</span>
@@ -349,10 +376,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
               </td>
               <td className="py-2.5 px-1.5 sm:px-2.5 text-center whitespace-nowrap">
                 <button
-                  onClick={() => {
-                    setActiveSession('event1');
-                    window.scrollTo({ top: 220, behavior: 'smooth' });
-                  }}
+                  onClick={() => scrollToReport('event1')}
                   className="inline-flex items-center gap-0.5 bg-[#0D9488] hover:bg-teal-700 text-white font-extrabold text-[10px] sm:text-xs px-2 py-1 rounded-lg shadow-2xs transition cursor-pointer"
                 >
                   <span>写真</span>
@@ -714,7 +738,51 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
                 <span>公式イベントチラシ・アーカイブ</span>
               </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Toshokan Festival Cooperation Flyer */}
+              <div className="bg-slate-50/90 rounded-3xl p-5 border border-slate-200/80 flex flex-col items-center gap-4 shadow-xs">
+                <div className="w-full max-w-[160px] rounded-2xl overflow-hidden border border-slate-200 shadow-md group relative bg-white">
+                  <a href={flyerToshokanPhoto} target="_blank" rel="noopener noreferrer" className="block">
+                    <img
+                      src={flyerToshokanPhoto}
+                      alt="2026年10月11日 としょかん祭 体験会チラシ"
+                      className="w-full h-auto object-cover group-hover:scale-105 transition duration-300"
+                    />
+                  </a>
+                </div>
+
+                <div className="space-y-2 text-left w-full">
+                  <span className="bg-slate-700 text-white text-[10px] font-black px-2.5 py-0.5 rounded-md">
+                    イベント協力
+                  </span>
+                  <h4 className="font-black text-slate-900 text-sm md:text-base">
+                    としょかん祭 体験会
+                  </h4>
+                  <p className="text-slate-600 text-xs leading-relaxed">
+                    2026年10月11日(日) 農村環境改善センター開催のチラシです。
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    <a
+                      href={flyerToshokanPhoto}
+                      download="としょかん祭_ボードゲーム体験会.png"
+                      className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-3 py-1.5 rounded-xl transition shadow-2xs"
+                    >
+                      <Download className="w-3.5 h-3.5 text-[#0D9488]" />
+                      <span>画像保存</span>
+                    </a>
+                    <a
+                      href={flyerToshokanPhoto}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-2.5 py-1.5 rounded-xl transition shadow-2xs"
+                    >
+                      <ExternalLink className="w-3 h-3 text-slate-500" />
+                      <span>別タブ</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
               {/* 3rd Flyer */}
               <div className="bg-gradient-to-br from-teal-50/80 to-amber-50/80 rounded-3xl p-5 border border-teal-200/80 flex flex-col items-center gap-4 shadow-xs">
                 <div className="w-full max-w-[160px] rounded-2xl overflow-hidden border border-slate-200 shadow-md group relative bg-white">
@@ -1102,7 +1170,51 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
                 <span>公式イベントチラシ・アーカイブ</span>
               </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Toshokan Festival Cooperation Flyer */}
+              <div className="bg-slate-50/90 rounded-3xl p-5 border border-slate-200/80 flex flex-col items-center gap-4 shadow-xs">
+                <div className="w-full max-w-[160px] rounded-2xl overflow-hidden border border-slate-200 shadow-md group relative bg-white">
+                  <a href={flyerToshokanPhoto} target="_blank" rel="noopener noreferrer" className="block">
+                    <img
+                      src={flyerToshokanPhoto}
+                      alt="2026年10月11日 としょかん祭 体験会チラシ"
+                      className="w-full h-auto object-cover group-hover:scale-105 transition duration-300"
+                    />
+                  </a>
+                </div>
+
+                <div className="space-y-2 text-left w-full">
+                  <span className="bg-slate-700 text-white text-[10px] font-black px-2.5 py-0.5 rounded-md">
+                    イベント協力
+                  </span>
+                  <h4 className="font-black text-slate-900 text-sm md:text-base">
+                    としょかん祭 体験会
+                  </h4>
+                  <p className="text-slate-600 text-xs leading-relaxed">
+                    2026年10月11日(日) 農村環境改善センター開催のチラシです。
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    <a
+                      href={flyerToshokanPhoto}
+                      download="としょかん祭_ボードゲーム体験会.png"
+                      className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-3 py-1.5 rounded-xl transition shadow-2xs"
+                    >
+                      <Download className="w-3.5 h-3.5 text-[#0D9488]" />
+                      <span>画像保存</span>
+                    </a>
+                    <a
+                      href={flyerToshokanPhoto}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-2.5 py-1.5 rounded-xl transition shadow-2xs"
+                    >
+                      <ExternalLink className="w-3 h-3 text-slate-500" />
+                      <span>別タブ</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
               {/* 3rd Flyer (Next / Latest) */}
               <div className="bg-gradient-to-br from-teal-50/80 to-amber-50/80 rounded-3xl p-5 border border-teal-200/80 flex flex-col items-center gap-4 shadow-xs">
                 <div className="w-full max-w-[160px] rounded-2xl overflow-hidden border border-slate-200 shadow-md group relative bg-white">
@@ -1459,7 +1571,51 @@ export const HistoryPage: React.FC<HistoryPageProps> = () => {
                 <span>公式イベントチラシ・アーカイブ</span>
               </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Toshokan Festival Cooperation Flyer */}
+              <div className="bg-slate-50/90 rounded-3xl p-5 border border-slate-200/80 flex flex-col items-center gap-4 shadow-xs">
+                <div className="w-full max-w-[160px] rounded-2xl overflow-hidden border border-slate-200 shadow-md group relative bg-white">
+                  <a href={flyerToshokanPhoto} target="_blank" rel="noopener noreferrer" className="block">
+                    <img
+                      src={flyerToshokanPhoto}
+                      alt="2026年10月11日 としょかん祭 体験会チラシ"
+                      className="w-full h-auto object-cover group-hover:scale-105 transition duration-300"
+                    />
+                  </a>
+                </div>
+
+                <div className="space-y-2 text-left w-full">
+                  <span className="bg-slate-700 text-white text-[10px] font-black px-2.5 py-0.5 rounded-md">
+                    イベント協力
+                  </span>
+                  <h4 className="font-black text-slate-900 text-sm md:text-base">
+                    としょかん祭 体験会
+                  </h4>
+                  <p className="text-slate-600 text-xs leading-relaxed">
+                    2026年10月11日(日) 農村環境改善センター開催のチラシです。
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    <a
+                      href={flyerToshokanPhoto}
+                      download="としょかん祭_ボードゲーム体験会.png"
+                      className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-3 py-1.5 rounded-xl transition shadow-2xs"
+                    >
+                      <Download className="w-3.5 h-3.5 text-[#0D9488]" />
+                      <span>画像保存</span>
+                    </a>
+                    <a
+                      href={flyerToshokanPhoto}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-extrabold text-xs px-2.5 py-1.5 rounded-xl transition shadow-2xs"
+                    >
+                      <ExternalLink className="w-3 h-3 text-slate-500" />
+                      <span>別タブ</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
               {/* 3rd Flyer (Latest) */}
               <div className="bg-gradient-to-br from-teal-50/80 to-amber-50/80 rounded-3xl p-5 border border-teal-200/80 flex flex-col items-center gap-4 shadow-xs">
                 <div className="w-full max-w-[160px] rounded-2xl overflow-hidden border border-slate-200 shadow-md group relative bg-white">

@@ -6,13 +6,23 @@ import { AwaboLogo } from './Logo';
 export const Footer: React.FC = () => {
   const location = useLocation();
 
-  const handleScrollToRegister = (e: React.MouseEvent) => {
+  const handleScrollToSection = (e: React.MouseEvent, sectionId: string, hash: string) => {
     if (location.pathname === '/') {
       e.preventDefault();
-      const elem = document.getElementById('section-register');
+      const elem = document.getElementById(sectionId);
       if (elem) {
         elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        window.history.pushState(null, '', '/#section-register');
+        window.history.pushState(null, '', `/${hash}`);
+      }
+    }
+  };
+
+  const handleHomeClick = (e: React.MouseEvent) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (location.hash) {
+        window.history.pushState(null, '', '/');
       }
     }
   };
@@ -46,6 +56,7 @@ export const Footer: React.FC = () => {
               <li>
                 <Link 
                   to="/"
+                  onClick={handleHomeClick}
                   className="hover:text-white transition cursor-pointer text-left inline-block"
                 >
                   開催案内（次回イベント概要）
@@ -62,6 +73,7 @@ export const Footer: React.FC = () => {
               <li>
                 <Link 
                   to="/#section-faq"
+                  onClick={(e) => handleScrollToSection(e, 'section-faq', '#section-faq')}
                   className="hover:text-white transition cursor-pointer text-left inline-block"
                 >
                   よくある質問（Q&A）
@@ -78,10 +90,10 @@ export const Footer: React.FC = () => {
               <li>
                 <Link 
                   to="/#section-register"
-                  onClick={handleScrollToRegister}
+                  onClick={(e) => handleScrollToSection(e, 'section-register', '#section-register')}
                   className="text-amber-400 hover:text-amber-300 font-bold transition cursor-pointer text-left inline-flex items-center gap-1"
                 >
-                  <span>✨ 会員登録（お知らせ配信）</span>
+                  <span>✨ 配信登録（お知らせ配信）</span>
                 </Link>
               </li>
             </ul>

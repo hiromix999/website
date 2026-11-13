@@ -246,7 +246,7 @@ export const GreetingsPage: React.FC<GreetingsPageProps> = () => {
               to="/#section-register"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#EAB308] hover:bg-amber-500 text-slate-950 font-black text-xs md:text-sm px-5 py-3 rounded-2xl shadow-sm transition cursor-pointer"
             >
-              <span>✨ 会員登録（お知らせ配信）はこちら</span>
+              <span>✨ 配信登録（お知らせ配信）はこちら</span>
             </Link>
             <Link
               to="/"

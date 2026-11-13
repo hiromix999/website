@@ -7,8 +7,7 @@ import {
   HelpCircle, 
   ShieldCheck, 
   Share2, 
-  Check,
-  UserPlus 
+  Check
 } from 'lucide-react';
 import { AwaboLogo } from './Logo';
 
@@ -23,19 +22,41 @@ export const Header: React.FC = () => {
     return location.pathname === path;
   };
 
-  const handleCopyCurrentUrl = () => {
-    navigator.clipboard.writeText(window.location.href);
+  const handleCopyCurrentUrl = async () => {
+    const url = window.location.href;
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      const textarea = document.createElement('textarea');
+      textarea.value = url;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleScrollToRegister = (e: React.MouseEvent) => {
+  const handleScrollToSection = (e: React.MouseEvent, sectionId: string, hash: string) => {
     if (location.pathname === '/') {
       e.preventDefault();
-      const elem = document.getElementById('section-register');
+      const elem = document.getElementById(sectionId);
       if (elem) {
         elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        window.history.pushState(null, '', '/#section-register');
+        window.history.pushState(null, '', `/${hash}`);
+      }
+    }
+  };
+
+  const handleHomeClick = (e: React.MouseEvent) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (location.hash) {
+        window.history.pushState(null, '', '/');
       }
     }
   };
@@ -63,6 +84,7 @@ export const Header: React.FC = () => {
 
           <Link
             to="/"
+            onClick={handleHomeClick}
             className={`text-[10px] xs:text-xs md:text-sm font-black transition flex items-center gap-1 cursor-pointer tracking-tight ${
               isActive('/') ? 'text-[#0D9488]' : 'text-slate-600 hover:text-teal-600'
             }`}
@@ -83,7 +105,12 @@ export const Header: React.FC = () => {
 
           <Link
             to="/#section-faq"
-            className={`text-[10px] xs:text-xs md:text-sm font-black transition flex items-center gap-1 cursor-pointer tracking-tight text-slate-600 hover:text-teal-600`}
+            onClick={(e) => handleScrollToSection(e, 'section-faq', '#section-faq')}
+            className={`text-[10px] xs:text-xs md:text-sm font-black transition flex items-center gap-1 cursor-pointer tracking-tight ${
+              location.pathname === '/' && location.hash === '#section-faq'
+                ? 'text-[#0D9488]'
+                : 'text-slate-600 hover:text-teal-600'
+            }`}
           >
             <HelpCircle className="w-3.5 h-3.5 text-teal-600 shrink-0" />
             <span>よくある質問</span>
@@ -102,16 +129,6 @@ export const Header: React.FC = () => {
 
         {/* Action Buttons */}
         <div className="flex items-center gap-2">
-          {/* Member Register Link to scroll to registration section */}
-          <Link
-            to="/#section-register"
-            onClick={handleScrollToRegister}
-            className="hidden sm:inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs px-3 py-2 md:px-3.5 md:py-2 rounded-xl shadow-xs transition duration-200 cursor-pointer shrink-0"
-          >
-            <UserPlus className="w-3.5 h-3.5 text-slate-950" />
-            <span>会員登録</span>
-          </Link>
-
           {/* Share / Copy URL button */}
           <button
             onClick={handleCopyCurrentUrl}
